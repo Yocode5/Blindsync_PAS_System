@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Blindsync_PAS_System.Data;
 using Blindsync_PAS_System.Models;
@@ -72,6 +72,14 @@ namespace Blindsync_PAS_System.Controllers
             }
 
             return RedirectToAction("Dashboard");
+        }
+
+        public IActionResult Proposals()
+        {
+           
+            var myProjects = new List<Project>();
+        
+            return View(myProjects);
         }
     }
 }
