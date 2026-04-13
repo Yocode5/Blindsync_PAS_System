@@ -4,7 +4,7 @@ namespace Blindsync_PAS_System.Controllers
 {
     public class AdminController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Overview()
         {
             return View();
         }
