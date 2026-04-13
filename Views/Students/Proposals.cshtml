@@ -1,5 +1,68 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<Blindsync_PAS_System.Models.Project>
+
 @{
+    ViewData["Title"] = "My Proposals";
+}
+
+
+<div class="proposals-page">
+    <div class="dashboard-content">
+        <h1 class="welcome-text">Welcome, [FirstName]</h1>
+
+        <div class="status-card">
+            <h2 class="card-title">Submission History</h2>
+
+            <div class="proposals-list">
+                <div class="proposal-row">
+                    <div class="proposal-icon-box">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="proposal-details">
+                        <h3>[Project Proposal Name]</h3>
+                        <p>Research Area: <span class="sub-text">[Research Area]</span></p>
+                        <p>Date of Submission: <span class="sub-text">[Date of Submission]</span></p>
+                    </div>
+                    <div class="proposal-status-section">
+                        <span class="status-badge pending">Pending</span>
+                        <a href="#" class="view-abstract">View Original Abstract</a>
+                    </div>
+                </div>
+
+                <div class="proposal-row">
+                    <div class="proposal-icon-box">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="proposal-details">
+                        <h3>[Project Proposal Name]</h3>
+                        <p>Research Area: <span class="sub-text">[Research Area]</span></p>
+                        <p>Date of Submission: <span class="sub-text">[Date of Submission]</span></p>
+                    </div>
+                    <div class="proposal-status-section">
+                        <span class="status-badge withdrawn">Withdrawn</span>
+                        <a href="#" class="view-abstract">View Original Abstract</a>
+                    </div>
+                </div>
+
+                <div class="proposal-row">
+                    <div class="proposal-icon-box">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="proposal-details">
+                        <h3>[Project Proposal Name]</h3>
+                        <p>Research Area: <span class="sub-text">[Research Area]</span></p>
+                        <p>Date of Submission: <span class="sub-text">[Date of Submission]</span></p>
+                    </div>
+                    <div class="proposal-status-section">
+                        <span class="status-badge accepted">Accepted</span>
+                        <a href="#" class="view-abstract">View Original Abstract</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/Student/MyProposals.js" asp-append-version="true"></script>
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Blindsync_PAS_System.Models; 
 
 namespace Blindsync_PAS_System.Controllers
 {
@@ -6,7 +7,16 @@ namespace Blindsync_PAS_System.Controllers
     {
         public IActionResult Dashboard()
         {
-            return View(); 
+            return View();
+        }
+
+      
+        public IActionResult Proposals()
+        {
+           
+            var myProjects = new List<Project>();
+
+            return View(myProjects);
         }
     }
 }
