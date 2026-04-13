@@ -1,24 +1,33 @@
-﻿<nav class="custom-navbar">
+﻿@{
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+}
+
+<nav class="custom-navbar">
     <div class="nav-brand">
         <strong>BlindSync</strong>
     </div>
 
     <div class="nav-links">
-        <a asp-controller="Students" asp-action="Dashboard" class="nav-item active">
+        <a asp-controller="Students" asp-action="Dashboard"
+           class="nav-item @(currentAction == "Dashboard" ? "active" : "")">
             <i class="fas fa-th-large"></i> Dashboard
         </a>
 
-        <a asp-controller="Students" asp-action="Proposals" class="nav-item">
+        <a asp-controller="Students" asp-action="Proposals"
+           class="nav-item @(currentAction == "Proposals" ? "active" : "")">
             <i class="fas fa-book"></i> My Proposals
         </a>
     </div>
 
     <div class="nav-actions">
-        <button class="btn btn-profile">
+        <a asp-controller="Admin" asp-action="Profile" class="btn btn-profile" style="text-decoration: none;">
             <i class="fas fa-user-circle"></i> Profile
-        </button>
-        <button class="btn btn-logout">
-            <i class="fas fa-sign-out-alt"></i> Logout
-        </button>
+        </a>
+
+        <form asp-controller="Home" asp-action="Logout" method="post" style="margin: 0;">
+            <button type="submit" class="btn btn-logout">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </form>
     </div>
 </nav>
