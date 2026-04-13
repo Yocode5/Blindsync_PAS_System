@@ -1,0 +1,33 @@
+name: BlindSync CI Pipeline
+
+# This workflow is triggered on pushes and pull requests to the main branch.
+on:
+    push:
+        branches: [ main ]
+    pull_request:
+        branches: [ main ]
+
+jobs:
+    build:
+        name: Build ASP .NET Core
+        runs-on: ubuntu-latest
+
+        steps:
+
+        # Checkout the code from the repository
+        - name: Checkout Code
+          uses: actions/checkout@v4
+
+        # Set up .NET Core SDK
+        - name: Setup .NET
+          uses: actions/setup-dotnet@v3
+          with:
+            dotnet-version: '8.0.x'
+        
+        # Downloading NuGet dependencies
+        - name: Restore Dependencies
+          run: dotnet restore
+
+        # Build the project and catch any build errors
+        - name: Build Project
+          run: dotnet build --no-restore --configuration Release 
