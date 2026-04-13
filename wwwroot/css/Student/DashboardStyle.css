@@ -11,6 +11,9 @@
     --btn-profile-hover: #2a3e57;
     --btn-logout: #e06666;
     --btn-logout-hover: #c45555;
+    --modal-bg: #ffffff;
+    --input-soft-gray: #e9e9e9;
+    --btn-add-blue: #5b93d3;
 }
 
 body {
@@ -39,7 +42,7 @@ main, .container {
 .welcome-text {
     color: var(--text-light);
     font-family: var(--font-body);
-    font-weight: 500; 
+    font-weight: 500;
     margin-bottom: 20px;
     font-size: 1.5rem;
 }
@@ -55,7 +58,7 @@ main, .container {
 
 .card-title {
     color: var(--text-light);
-    font-family: var(--font-body); 
+    font-family: var(--font-body);
     font-weight: bold;
     font-size: 1.25rem;
     margin-bottom: 30px;
@@ -76,9 +79,9 @@ main, .container {
     transition: background-color 0.3s;
 }
 
-.add-project-zone:hover {
-    background-color: rgba(56, 163, 165, 0.1);
-}
+    .add-project-zone:hover {
+        background-color: rgba(56, 163, 165, 0.1);
+    }
 
 .icon-circle {
     background-color: var(--accent-teal);
@@ -99,4 +102,3 @@ main, .container {
     font-size: 1.2rem;
     margin: 0;
 }
-

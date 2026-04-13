@@ -1,5 +1,31 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿<nav class="custom-navbar">
+    <div class="nav-brand">
+        <strong>BlindSync</strong>
+    </div>
+
+    <div class="nav-links">
+        <a asp-controller="Admin" asp-action="Overview" class="nav-item active">
+            <i class="fas fa-th-large"></i> Overview
+        </a>
+
+        <a asp-controller="Admin" asp-action="Users" class="nav-item">
+            <i class="fas fa-user"></i> Users
+        </a>
+
+        <a asp-controller="Admin" asp-action="ResearchAreas" class="nav-item">
+            <i class="fas fa-book-open"></i> Research Areas
+        </a>
+    </div>
+
+    <div class="nav-actions">
+        <a asp-controller="Admin" asp-action="Profile" class="btn btn-profile" style="text-decoration: none;">
+            <i class="fas fa-user-circle"></i> Profile
+        </a>
+
+        <form asp-controller="Home" asp-action="Logout" method="post" style="margin: 0;">
+            <button type="submit" class="btn btn-logout">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </form>
+    </div>
+</nav>
