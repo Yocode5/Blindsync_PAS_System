@@ -1,13 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Blindsync_PAS_System.ViewModels;
 using System.Collections.Generic;
 
 namespace Blindsync_PAS_System.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         public IActionResult Overview()
         {
+            ViewBag.UserName = User.Identity?.Name?.Split('@')[0] ?? "Guest";
+
             var viewModel = new AdminOverviewVM
             {
                 TotalStudents = 300,
@@ -21,7 +25,18 @@ namespace Blindsync_PAS_System.Controllers
                     new ProjectOverviewDto { ProjectId = 3, ProjectTitle = "Crypto Wallet", StudentId = "ST103", StudentName = "Sam Wilson", SupervisorName = "Dr. Silva", Status = "Under Review" }
                 }
             };
+
             return View(viewModel);
+        }
+
+        public IActionResult Users()
+        {
+            return View();
+        }
+
+        public IActionResult ResearchAreas()
+        {
+            return View();
         }
     }
 }
