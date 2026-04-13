@@ -22,7 +22,7 @@ namespace Blindsync_PAS_System.Models
         public string Title { get; set; }
 
         [Required]
-        public List<string> TechStack { get; set; } = new();
+        public string TechStack { get; set; } = string.Empty;
 
         [Required]
         public string Abstract { get; set; }
