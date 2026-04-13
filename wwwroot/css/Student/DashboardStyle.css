@@ -1,2 +1,102 @@
-﻿body {
+﻿:root {
+    --bg-gradient-top: #3b6b9e;
+    --bg-gradient-bottom: #1a365d;
+    --card-bg: #162f4b;
+    --navbar-bg: #ffffff;
+    --text-dark: #000000;
+    --text-light: #ffffff;
+    --accent-teal: #38a3a5;
+    --navbar-hover: #0b141d;
+    --btn-profile: #3a5475;
+    --btn-profile-hover: #2a3e57;
+    --btn-logout: #e06666;
+    --btn-logout-hover: #c45555;
 }
+
+body {
+    background: linear-gradient(to bottom, var(--bg-gradient-top), var(--bg-gradient-bottom));
+    background-attachment: fixed;
+}
+
+main, .container {
+    width: 97.5% !important;
+    max-width: 1800px !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+}
+
+.footer {
+    background-color: transparent !important;
+    color: var(--text-light) !important;
+    border-top: none !important;
+}
+
+.dashboard-page {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.welcome-text {
+    color: var(--text-light);
+    font-family: var(--font-body);
+    font-weight: 500; 
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.status-card {
+    background-color: var(--card-bg);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.card-title {
+    color: var(--text-light);
+    font-family: var(--font-body); 
+    font-weight: bold;
+    font-size: 1.25rem;
+    margin-bottom: 30px;
+    margin-top: 0;
+}
+
+.add-project-zone {
+    width: 100%;
+    box-sizing: border-box;
+    border: 2px dashed var(--accent-teal);
+    border-radius: 10px;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-project-zone:hover {
+    background-color: rgba(56, 163, 165, 0.1);
+}
+
+.icon-circle {
+    background-color: var(--accent-teal);
+    color: var(--text-light);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+.add-project-zone p {
+    color: var(--accent-teal);
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin: 0;
+}
+
