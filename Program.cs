@@ -43,6 +43,22 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Students}/{action=Dashboard}/{id?}");
+    pattern: "{controller=Home}/{action=Login}/{id?}");
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<AppDbContext>();
+        context.Database.Migrate();
+        Console.WriteLine("Database migration completed successfully.");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"An error occurred during migration: {ex.Message}");
+        throw;
+    }
+}
 
 app.Run();
