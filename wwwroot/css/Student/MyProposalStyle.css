@@ -1,2 +1,102 @@
-﻿body {
+﻿.proposals-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-height: 500px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+
+.proposal-row {
+    background-color: #0d2339; 
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s;
+}
+
+    .proposal-row:hover {
+        transform: translateY(-2px);
+        background-color: #112a45;
+    }
+
+.proposal-icon-box {
+    font-size: 2.2rem;
+    color: var(--accent-teal);
+    margin-right: 25px;
+}
+
+.proposal-details {
+    flex-grow: 1;
+}
+
+    .proposal-details h3 {
+        color: var(--text-light);
+        font-size: 1.25rem;
+        margin: 0 0 5px 0;
+        font-weight: bold;
+    }
+
+    .proposal-details p {
+        color: #a0aec0;
+        font-size: 0.9rem;
+        margin: 2px 0;
+    }
+
+.sub-text {
+    color: #718096;
+}
+
+
+.proposal-status-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+}
+
+.status-badge {
+    padding: 6px 20px;
+    border-radius: 20px;
+    color: white;
+    font-weight: bold;
+    font-size: 0.9rem;
+    min-width: 110px;
+    text-align: center;
+}
+
+.pending {
+    background-color: #e67e22;
+}
+
+.withdrawn {
+    background-color: #e06666;
+}
+
+.accepted {
+    background-color: #38a3a5;
+}
+
+.view-abstract {
+    color: var(--text-light);
+    text-decoration: underline;
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
+
+    .view-abstract:hover {
+        opacity: 1;
+        color: var(--accent-teal);
+    }
+
+
+.proposals-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.proposals-list::-webkit-scrollbar-thumb {
+    background: var(--accent-teal);
+    border-radius: 10px;
 }

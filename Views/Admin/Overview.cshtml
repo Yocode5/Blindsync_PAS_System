@@ -1,5 +1,91 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model Blindsync_PAS_System.ViewModels.AdminOverviewVM
+
 @{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = null; 
 }
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BlindSync</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    
+    <link rel="stylesheet" href="~/css/Navbar.css" />
+    
+    <link rel="stylesheet" href="~/css/Admin/OverviewStyle.css" />
+    
+</head>
+<body>
+    
+    <partial name="_AdminNavbar" />
+
+    <div class="admin-container">
+        
+        <h1 class="welcome-text">Welcome, Admin!</h1>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-title">👥 Students</div>
+                <div class="stat-value">@Model.TotalStudents</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">🔄 Total Matched</div>
+                <div class="stat-value">@Model.TotalMatched</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">👨‍🏫 Supervisors</div>
+                <div class="stat-value">@Model.TotalSupervisors</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">⏳ Pending</div>
+                <div class="stat-value">@Model.TotalPending</div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <h2>System Overview</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Project Title</th>
+                        <th>Student ID</th>
+                        <th>Student Name</th>
+                        <th>Supervisor Name</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if(Model.Projects != null && Model.Projects.Any())
+                    {
+                        foreach(var project in Model.Projects)
+                        {
+                            <tr>
+                                <td>@project.ProjectTitle</td>
+                                <td>@project.StudentId</td>
+                                <td>@project.StudentName</td>
+                                <td>@project.SupervisorName</td>
+                                <td>
+                                    <span class="status-badge status-@project.Status.Replace(" ", "-")">
+                                        @project.Status
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="action-icons">
+                                        <span>✏️</span> 
+                                        <span>❌</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
