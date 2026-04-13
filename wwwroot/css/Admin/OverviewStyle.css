@@ -1,2 +1,57 @@
-﻿body {
+﻿/* E:\NSBM\SDA\Blindsync_PAS_System\wwwroot\css\Admin\OverviewStyle.css */
+
+:root {
+       --navbar-bg: #e2e8f0;
+    --text-dark: #1e293b;
+    --text-light: #ffffff;
+    --font-heading: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --navbar-hover: #0077cc;
+    --btn-profile: #475569;
+    --btn-profile-hover: #334155;
+    --btn-logout: #ef4444;
+    --btn-logout-hover: #dc2626;
+   
+    --bg-gradient: linear-gradient(135deg, #2b5876 0%, #4e4376 100%);
+    --card-bg: rgba(255, 255, 255, 0.1);
+    --status-matched: #10b981;
+    --status-pending: #f59e0b;
+    --status-review: #ef4444;
 }
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--bg-gradient);
+    color: var(--text-light);
+    min-height: 100vh;
+    padding-bottom: 2rem; 
+}
+
+/* Dashboard Content Container */
+.admin-container { 
+    width: 95%; 
+    max-width: 1800px; 
+    margin: 0 auto; 
+    padding-top: 1rem;
+}
+
+/* Stats & Table Styles */
+.welcome-text { font-size: 1.8rem; margin-top: 0.5rem; margin-bottom: 1.5rem; text-decoration: underline; text-decoration-color: #3b82f6;font-weight: bold; }
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 2rem; }
+.stat-card { background: var(--card-bg); backdrop-filter: blur(10px); padding: 1.5rem; border-radius: 15px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+.stat-title { font-size: 1rem; color: #cbd5e1; display: flex; align-items: center; gap: 0.5rem; }
+.stat-value { font-size: 2.5rem; font-weight: bold; margin-top: 0.5rem; }
+
+.table-container { background: rgba(15, 23, 42, 0.6); border-radius: 15px; padding: 1.5rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+.table-container h2 { margin-top: 0; margin-bottom: 1rem; }
+.data-table { width: 100%; border-collapse: separate; border-spacing: 0 0.5rem; }
+.data-table th { text-align: left; padding: 1rem; color: #94a3b8; font-weight: 600; }
+.data-table td { background: rgba(255, 255, 255, 0.05); padding: 1rem; }
+.data-table tr td:first-child { border-top-left-radius: 8px; border-bottom-left-radius: 8px; }
+.data-table tr td:last-child { border-top-right-radius: 8px; border-bottom-right-radius: 8px; }
+
+.status-badge { padding: 0.3rem 0.8rem; border-radius: 12px; font-weight: bold; font-size: 0.8rem; }
+.status-Matched { background: var(--status-matched); color: white;}
+.status-Pending { background: var(--status-pending); color: white;}
+.status-Under-Review { background: var(--status-review); color: white;}
+.action-icons { display: flex; gap: 0.5rem; cursor: pointer; color: #94a3b8; }
