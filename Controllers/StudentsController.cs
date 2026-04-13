@@ -1,11 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-<<<<<<< dilshan/feature/student-myproposal
-using Blindsync_PAS_System.Models; 
-=======
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Blindsync_PAS_System.Data;
 using Blindsync_PAS_System.Models;
->>>>>>> master
 
 namespace Blindsync_PAS_System.Controllers
 {
@@ -19,18 +15,6 @@ namespace Blindsync_PAS_System.Controllers
 
         public IActionResult Dashboard()
         {
-<<<<<<< dilshan/feature/student-myproposal
-            return View();
-        }
-
-      
-        public IActionResult Proposals()
-        {
-           
-            var myProjects = new List<Project>();
-
-            return View(myProjects);
-=======
             var userEmail = User.Identity?.Name;
 
             if (string.IsNullOrEmpty(userEmail))
@@ -88,7 +72,14 @@ namespace Blindsync_PAS_System.Controllers
             }
 
             return RedirectToAction("Dashboard");
->>>>>>> master
+        }
+
+        public IActionResult Proposals()
+        {
+           
+            var myProjects = new List<Project>();
+        
+            return View(myProjects);
         }
     }
 }
