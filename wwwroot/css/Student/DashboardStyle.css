@@ -102,3 +102,155 @@ main, .container {
     font-size: 1.2rem;
     margin: 0;
 }
+
+.matching-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.status-badge {
+    padding: 6px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: white;
+}
+
+    .status-badge.pending {
+        background-color: #df7b3e; 
+    }
+
+    .status-badge.accepted {
+        background-color: #38a3a5;
+    }
+
+    .status-badge.underreview {
+        background-color: #5b93d3;
+    }
+
+.matching-body {
+    display: flex;
+    gap: 30px;
+    align-items: stretch;
+}
+
+.proposal-details-box {
+    flex: 1; 
+    background-color: #2b4f6b; 
+    border-radius: 15px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+}
+
+.proposal-title-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.proposal-icon {
+    font-size: 2.5rem;
+    color: #4bd2d6; 
+}
+
+.proposal-title-row h4 {
+    color: white;
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.detail-row {
+    color: white;
+    margin-bottom: 15px;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+    .detail-row strong {
+        font-weight: 600;
+    }
+
+.readonly-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tech-tag.readonly {
+    background-color: #123145; 
+    padding: 5px 12px;
+    font-size: 0.8rem;
+    cursor: default; 
+}
+
+.view-details-link {
+    color: #a3c4d1;
+    text-decoration: underline;
+    font-size: 0.9rem;
+    margin-bottom: 25px;
+    align-self: flex-start;
+}
+
+    .view-details-link:hover {
+        color: white;
+    }
+
+.proposal-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: auto; 
+}
+
+.btn-action {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+    .btn-action:hover {
+        opacity: 0.85;
+    }
+
+    .btn-action.edit {
+        background-color: #488f9e; 
+    }
+
+    .btn-action.withdraw {
+        background-color: #8c3f44; 
+    }
+
+.matching-divider {
+    width: 2px;
+    background-color: var(--accent-teal);
+    margin: 10px 0;
+}
+
+.supervisor-status-box {
+    flex: 1; 
+    border: 3px dashed var(--accent-teal);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+    .supervisor-status-box p {
+        color: white;
+        font-size: 1.4rem;
+        font-weight: bold;
+        line-height: 1.4;
+        margin: 0;
+    }

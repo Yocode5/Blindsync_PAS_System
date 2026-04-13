@@ -1,4 +1,4 @@
-﻿@model Blindsync_PAS_System.Models.User
+﻿@model Blindsync_PAS_System.Models.Student
 
 @{
     ViewData["Title"] = "Student Dashboard";
@@ -14,17 +14,79 @@
 
 <div class="dashboard-page">
     <div class="dashboard-content">
-        <h1 class="welcome-text">Welcome, @Model.FirstName</h1>
+        <h1 class="welcome-text">Welcome, @Model.UserAccount.FirstName</h1>
 
         <div class="status-card">
-            <h2 class="card-title">Matching Status</h2>
+            @if (ViewBag.ActiveProject != null)
+            {
+                var project = ViewBag.ActiveProject as Project;
 
-            <div class="add-project-zone" onclick="openModal()">
-                <div class="icon-circle">
-                    <i class="fas fa-plus"></i>
+                <div class="matching-header">
+                    <h3 class="card-title" style="margin-bottom: 0;">Matching Status</h3>
+                    <span class="status-badge pending">@project.Status</span>
                 </div>
-                <p>Click To Add Project</p>
-            </div>
+
+                <div class="matching-body">
+                    <div class="proposal-details-box">
+                        <div class="proposal-title-row">
+                            <i class="fas fa-file-alt proposal-icon"></i>
+                            <h4>@project.Title</h4>
+                        </div>
+
+                        <p class="detail-row"><strong>Research Area:</strong> @project.Area.Name</p>
+
+                        <div class="detail-row tech-stack-display">
+                            <strong>Tech Stack:</strong>
+                            <div class="readonly-tags">
+                                @if (!string.IsNullOrEmpty(project.TechStack))
+                                {
+                                    @foreach (var tech in project.TechStack.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                                    {
+                                        <span class="tech-tag readonly">@tech</span>
+                                    }
+                                }
+                            </div>
+                        </div>
+
+                        <a href="#" class="view-details-link">View More Details</a>
+
+                        <div class="proposal-actions">
+                            <button class="btn-action edit">Edit Submission</button>
+
+                            <form asp-action="WithdrawProposal" method="post" style="flex: 1; display: flex;">
+                                <input type="hidden" name="projectId" value="@project.Id" />
+                                <button type="submit" class="btn-action withdraw"
+                                        onclick="return confirm('Are you sure you want to withdraw this proposal?')">
+                                    Withdraw
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="matching-divider"></div>
+
+                    <div class="supervisor-status-box">
+                        @if (project.SupervisorId == null)
+                        {
+                            <p>No Supervisor<br>Assigned yet</p>
+                        }
+                        else
+                        {
+                            <p>Supervisor Assigned!</p>
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                <h3 class="card-title">Matching Status</h3>
+                <div class="add-project-zone" onclick="openModal()">
+                    <div class="icon-circle">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <p>Create a Proposal</p>
+                </div>
+            }
         </div>
     </div>
 </div>
@@ -46,7 +108,6 @@
                     <label>Research Area</label>
 
                     <div class="custom-dropdown-container" id="researchDropdown">
-
                         <div class="custom-dropdown-trigger" onclick="toggleDropdown(event)">
                             <span id="selectedResearchText">Select Research Area</span>
                             <i class="fas fa-chevron-down dropdown-icon"></i>
@@ -63,20 +124,15 @@
                                 }
                             }
                         </ul>
-
                     </div>
                 </div>
             </div>
 
             <div class="form-group">
                 <label>Tech Stack</label>
-
                 <input type="text" id="techInput" placeholder="e.g. React, Node.js (Press Enter)" class="soft-input">
-
                 <input type="hidden" name="TechStack" id="hiddenTechStack">
-
-                <div class="tag-container" id="techTagContainer">
-                </div>
+                <div class="tag-container" id="techTagContainer"></div>
             </div>
 
             <div class="form-group">
