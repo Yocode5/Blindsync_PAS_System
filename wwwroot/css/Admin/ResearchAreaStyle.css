@@ -1,2 +1,107 @@
-﻿body {
+﻿/* wwwroot/css/Admin/ResearchAreaStyle.css */
+:root {
+    --navbar-bg: #e2e8f0;
+    --text-dark: #1e293b;
+    --font-heading: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --navbar-hover: #0077cc;
+    --btn-profile: #475569;
+    --btn-profile-hover: #334155;
+    --btn-logout: #ef4444;
+    --btn-logout-hover: #dc2626;
+
+    --bg-gradient: linear-gradient(135deg, #2b5876 0%, #4e4376 100%);
+    --card-bg-dark: #1e293b; 
+    --text-light: #ffffff;
+    --cyan-color: #2dd4bf; 
+    --cyan-hover: #14b8a6;
+    --text-dark: #0f172a;
 }
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: var(--bg-gradient);
+    color: var(--text-light);
+    min-height: 100vh;
+    padding-bottom: 2rem;
+}
+
+.admin-container {
+    width: 95%;
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+.welcome-text { font-size: 1.8rem; margin-top: 0.5rem; margin-bottom: 1.5rem; font-weight: bold; }
+
+/* Input Section */
+.input-group-container {
+    background: var(--card-bg-dark);
+    padding: 1.5rem 2rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.custom-input {
+    width: 300px; /* UI eke wage fixed width ekak */
+    background: #475569;
+    border: none;
+    padding: 0.8rem 1.2rem;
+    border-radius: 10px;
+    color: white;
+    font-size: 1rem;
+}
+.custom-input::placeholder { color: #94a3b8; }
+.btn-add {
+    background: var(--cyan-color);
+    color: var(--text-dark);
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    transition: 0.2s;
+}
+.btn-add:hover { background: var(--cyan-hover); transform: translateY(-2px); }
+/*(Active Research Areas) */
+.tags-container {
+    background: var(--card-bg-dark);
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.tags-container h2 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+.areas-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* UI eke wage columns 3k */
+    gap: 1.5rem;
+}
+.area-tag {
+    background: var(--cyan-color);
+    color: var(--text-dark);
+    padding: 0.8rem 1.2rem;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+.btn-delete-tag {
+    color: var(--text-dark);
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: 0.2s;
+}
+.btn-delete-tag:hover { transform: scale(1.2); }
