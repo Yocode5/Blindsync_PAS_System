@@ -1,76 +1,43 @@
-﻿@model IEnumerable<Blindsync_PAS_System.Models.Project>
+﻿@using System.Text.Encodings.Web
+@model IEnumerable<Blindsync_PAS_System.Models.Project>
 
-@{
-    ViewData["Title"] = "My Proposals";
-}
-
-<div class="proposals-page">
-    <div class="dashboard-content">
-        <h1 class="welcome-text">Welcome, [FirstName]</h1>
-
-        <div class="status-card">
-            <h2 class="card-title">Submission History</h2>
-
-            <div class="proposals-list">            
-                <div class="proposal-row">
-                    <div class="proposal-icon-box">
-                        <i class="fas fa-book"></i>
-                    </div>
-                    <div class="proposal-details">
-                        <h3>[Project Proposal Name]</h3>
-                        <p>Research Area: <span class="sub-text">[Research Area]</span></p>
-                        <p>Date of Submission: <span class="sub-text">[Date of Submission]</span></p>
-                    </div>
-                    <div class="proposal-status-section">
-                        <span class="status-badge pending">Pending</span>
-                        <a href="javascript:void(0)" class="view-abstract"
-                           onclick="openViewModal('Smart Bus System', 'Internet of Things', 'Node.js, Express, MySQL', 'This is a sample abstract for the Smart Bus System. It monitors location and ticketing in real-time.')">
-                            View Original Abstract
-                        </a>
-                    </div>
-                </div>
-          
-                <div class="proposal-row">
-                    <div class="proposal-icon-box">
-                        <i class="fas fa-book"></i>
-                    </div>
-                    <div class="proposal-details">
-                        <h3>[Project Proposal Name]</h3>
-                        <p>Research Area: <span class="sub-text">[Research Area]</span></p>
-                        <p>Date of Submission: <span class="sub-text">[Date of Submission]</span></p>
-                    </div>
-                    <div class="proposal-status-section">
-                        <span class="status-badge withdrawn">Withdrawn</span>
-                        <a href="javascript:void(0)" class="view-abstract"
-                           onclick="openViewModal('Mental Wellness App', 'Health Tech', 'Flutter, Firebase', 'A mobile application designed to help university students manage stress and anxiety through guided meditation.')">
-                            View Original Abstract
-                        </a>
-                    </div>
+<div class="proposals-list">
+    @if (Model != null && Model.Any())
+    {
+        @foreach (var project in Model)
+        {
+            <div class="proposal-row">
+                <div class="proposal-details">
+                    <h3>@project.Title</h3>
+                    <p>Research Area: <span class="sub-text">@(project.Area?.Name ?? "General")</span></p>
+                    <p>Date of Submission: <span class="sub-text">@project.CreatedAt.ToString("dd MMM yyyy")</span></p>
                 </div>
 
-                <div class="proposal-row">
-                    <div class="proposal-icon-box">
-                        <i class="fas fa-book"></i>
-                    </div>
-                    <div class="proposal-details">
-                        <h3>[Project Proposal Name]</h3>
-                        <p>Research Area: <span class="sub-text">[Research Area]</span></p>
-                        <p>Date of Submission: <span class="sub-text">[Date of Submission]</span></p>
-                    </div>
-                    <div class="proposal-status-section">
-                        <span class="status-badge accepted">Accepted</span>
-                        <a href="javascript:void(0)" class="view-abstract"
-                           onclick="openViewModal('Academy Connect', 'Education', 'Flutter, Dart, ASP.NET Core', 'A collaborative platform for students to share notes and join instant tutoring sessions using AI.')">
-                            View Original Abstract
-                        </a>
-                    </div>
-                </div>
+                <div class="proposal-status-section">                  
+                   <span class="status-badge @project.Status.ToString().ToLower()">
+                        @project.Status.ToString()
+                    </span>
 
+                   
+                    <a href="javascript:void(0)" class="view-abstract"
+                       onclick="openViewModal(
+                                   '@Html.Raw(JavaScriptEncoder.Default.Encode(project.Title))',
+                                   '@(project.Area?.Name ?? "N/A")',
+                                   '@Html.Raw(JavaScriptEncoder.Default.Encode(project.TechStack ?? ""))',
+                                   '@Html.Raw(JavaScriptEncoder.Default.Encode(project.Abstract ?? ""))')">
+                        View Original Abstract
+                    </a>
+                </div>
             </div>
+        }
+    }
+    else
+    {
+        <div class="no-data">
+            <p>You haven't submitted any proposals yet.</p>
         </div>
-    </div>
+    }
 </div>
-
 <div id="viewAbstractModal" class="modal-overlay" onclick="closeViewModalOutside(event)">
     <div class="modal-container">
         <div class="modal-header">
