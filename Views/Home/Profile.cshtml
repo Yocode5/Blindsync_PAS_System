@@ -1,0 +1,90 @@
+﻿@model Blindsync_PAS_System.ViewModels.UserProfileVM
+
+@{
+    ViewData["Title"] = "My Profile";
+    Layout = "_Layout"; 
+
+    bool hasSecurityError = !ViewData.ModelState.IsValid &&
+        (ViewData.ModelState.ContainsKey("CurrentPassword") ||
+        ViewData.ModelState.ContainsKey("NewPassword") ||
+        ViewData.ModelState.ContainsKey("ConfirmNewPassword"));
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Home/ProfileStyle.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+}
+
+<div class="modal-backdrop">
+    <div class="profile-modal-container">
+        <div class="profile-header">
+            <h2>My Profile</h2>
+            <button class="close-btn" onclick="location.href='@Url.Action("Dashboard", "Students")'"><i class="fas fa-times"></i></button>
+        </div>
+
+        <div class="profile-tabs">
+            <button type="button" class="tab-btn @(hasSecurityError ? "" : "active")" onclick="switchTab('basic', this)">Basic Details</button>
+            <button type="button" class="tab-btn @(hasSecurityError ? "active" : "")" onclick="switchTab('security', this)">Security</button>
+        </div>
+
+        <form asp-controller="Home" asp-action="Profile" method="post" class="profile-form">
+
+            <div id="tab-basic" class="tab-content @(hasSecurityError ? "" : "active")">
+                <div class="form-group">
+                    <label asp-for="FirstName">FIRST NAME</label>
+                    <input asp-for="FirstName" class="form-input" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="LastName">LAST NAME</label>
+                    <input asp-for="LastName" class="form-input" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email">EMAIL ADDRESS</label>
+                    <input asp-for="Email" class="form-input" type="email" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div id="tab-security" class="tab-content @(hasSecurityError ? "active" : "")">
+                <div class="form-group">
+                    <label asp-for="CurrentPassword">CURRENT PASSWORD</label>
+                    <div class="password-wrapper">
+                        <input asp-for="CurrentPassword" class="form-input" type="password" id="currentPw" value="@Model?.CurrentPassword" />
+                        <i class="fas fa-eye toggle-password" onclick="toggleVisibility('currentPw', this)"></i>
+                    </div>
+                    <span asp-validation-for="CurrentPassword" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="NewPassword">NEW PASSWORD</label>
+                    <div class="password-wrapper">
+                        <input asp-for="NewPassword" class="form-input" type="password" id="newPw" value="@Model?.NewPassword" />
+                        <i class="fas fa-eye toggle-password" onclick="toggleVisibility('newPw', this)"></i>
+                    </div>
+                    <span asp-validation-for="NewPassword" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ConfirmNewPassword">CONFIRM NEW PASSWORD</label>
+                    <div class="password-wrapper">
+                        <input asp-for="ConfirmNewPassword" class="form-input" type="password" id="confirmPw" value="@Model?.ConfirmNewPassword" />
+                        <i class="fas fa-eye toggle-password" onclick="toggleVisibility('confirmPw', this)"></i>
+                    </div>
+                    <span asp-validation-for="ConfirmNewPassword" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="profile-actions">
+                <button type="submit" class="btn-save">Save Changes</button>
+                <button type="button" class="btn-cancel" onclick="location.href='@Url.Action("Dashboard", "Students")'">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/Home/Profile.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+}
