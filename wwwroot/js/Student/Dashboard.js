@@ -87,3 +87,20 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 3500);
     }
 });
+
+function confirmWithdrawal() {
+    Swal.fire({
+        title: 'Withdraw Proposal?',
+        text: "Are you sure you want to withdraw this proposal? You will have to submit a new one.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#b03d3d', 
+        cancelButtonColor: '#2b4f6b',  
+        confirmButtonText: 'Yes, withdraw it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('withdrawForm').submit();
+        }
+    });
+}

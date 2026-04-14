@@ -23,10 +23,26 @@
 
                 <div class="matching-header">
                     <h3 class="card-title" style="margin-bottom: 0;">Matching Status</h3>
-                    <span class="status-badge pending">@project.Status</span>
+
+                    @switch (project.Status)
+                    {
+                        case Blindsync_PAS_System.Models.ProjectStatus.Matched:
+                            <span class="status-badge accepted" style="background-color: #2e9f6b;">Matched</span>
+                            break;
+
+                        case Blindsync_PAS_System.Models.ProjectStatus.UnderReview:
+                            <span class="status-badge review" style="background-color: #3498db; color: white;">Under Review</span>
+                            break;
+
+                        case Blindsync_PAS_System.Models.ProjectStatus.Pending:
+                        default:
+                            <span class="status-badge pending">Pending</span>
+                            break;
+                    }
                 </div>
 
                 <div class="matching-body">
+
                     <div class="proposal-details-box">
                         <div class="proposal-title-row">
                             <i class="fas fa-file-alt proposal-icon"></i>
@@ -53,10 +69,9 @@
                         <div class="proposal-actions">
                             <button class="btn-action edit">Edit Submission</button>
 
-                            <form asp-action="WithdrawProposal" method="post" style="flex: 1; display: flex;">
+                            <form id="withdrawForm" asp-action="WithdrawProposal" method="post" style="flex: 1; display: flex;">
                                 <input type="hidden" name="projectId" value="@project.Id" />
-                                <button type="submit" class="btn-action withdraw"
-                                        onclick="return confirm('Are you sure you want to withdraw this proposal?')">
+                                <button type="button" class="btn-action withdraw" onclick="confirmWithdrawal()">
                                     Withdraw
                                 </button>
                             </form>
@@ -65,16 +80,41 @@
 
                     <div class="matching-divider"></div>
 
-                    <div class="supervisor-status-box">
-                        @if (project.SupervisorId == null)
-                        {
+                    @if (project.SupervisorId == null)
+                    {
+                        <div class="supervisor-status-box dashed">
                             <p>No Supervisor<br>Assigned yet</p>
-                        }
-                        else
-                        {
-                            <p>Supervisor Assigned!</p>
-                        }
-                    </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="supervisor-status-box filled">
+                            <div class="supervisor-title-row">
+                                <i class="fas fa-user-friends supervisor-icon"></i>
+                                <h4>@project.AssignedSupervisor.UserAccount.FirstName @project.AssignedSupervisor.UserAccount.LastName</h4>
+                            </div>
+
+                            <p class="detail-row">
+                                <strong>Supervisor Email:</strong>
+                                <span style="margin-left: 8px;">@project.AssignedSupervisor.UserAccount.Email</span>
+                            </p>
+
+                            <div class="detail-row assign-date-display">
+                                <strong>Date of Assigning:</strong>
+                                <div class="readonly-tags" style="margin-top: 8px;">
+                                    <span class="tech-tag readonly" style="background-color: #123145;">
+                                        @(project.AssignedAt?.ToString("dd/MM/yyyy") ?? "N/A")
+                                    </span>
+                                </div>
+                            </div>
+
+                            <a href="mailto:@project.AssignedSupervisor.UserAccount.Email?subject=Regarding Project Proposal: @project.Title"
+                               class="btn-collaborate"
+                               style="text-decoration: none; width: fit-content;">
+                                <i class="fas fa-comment-dots"></i> Collaborate
+                            </a>
+                        </div>
+                    }
                 </div>
             }
             else
