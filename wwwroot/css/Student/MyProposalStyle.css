@@ -7,9 +7,8 @@
     padding-right: 10px;
 }
 
-
 .proposal-row {
-    background-color: #0d2339; 
+    background-color: #0d2339;
     border-radius: 12px;
     padding: 20px;
     display: flex;
@@ -49,13 +48,13 @@
     color: #718096;
 }
 
-
 .proposal-status-section {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     gap: 12px;
 }
+
 
 .status-badge {
     padding: 6px 20px;
@@ -65,19 +64,20 @@
     font-size: 0.9rem;
     min-width: 110px;
     text-align: center;
+    display: inline-block; 
 }
 
-.pending {
-    background-color: #e67e22;
-}
+    
+    .status-badge.pending {
+        background-color: #e67e22 !important; 
+    }
 
-.withdrawn {
-    background-color: #e06666;
-}
+    .status-badge.withdrawn {
+        background-color: #dc3545 !important; 
+        color: white;
+    }
 
-.accepted {
-    background-color: #38a3a5;
-}
+ 
 
 .view-abstract {
     color: var(--text-light);
@@ -99,4 +99,15 @@
 .proposals-list::-webkit-scrollbar-thumb {
     background: var(--accent-teal);
     border-radius: 10px;
+}
+
+
+.status-badge.matched {
+    background-color: #28a745 !important;
+    color: white !important;
+}
+
+.status-badge.underreview {
+    background-color: #4a90e2 !important;
+    color: white !important;
 }

@@ -96,13 +96,21 @@ namespace Blindsync_PAS_System.Controllers
 
             return RedirectToAction("Dashboard");
         }
-        
+
         public IActionResult Proposals()
         {
-           
-            var myProjects = new List<Project>();
-        
-            return View(myProjects);
+            
+            var userEmail = User.Identity?.Name;
+
+            
+            var myProposals = _context.Projects
+                .Include(p => p.Area)
+                .Where(p => p.Creator.UserAccount.Email == userEmail)
+                .OrderByDescending(p => p.CreatedAt)
+                .ToList();
+
+            
+            return View(myProposals);
         }
     }
 }
