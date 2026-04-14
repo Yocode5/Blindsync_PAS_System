@@ -22,7 +22,9 @@ html {
 body {
     margin-bottom: 60px;
     font-family: var(--font-body);
-    background-color: var(--light-bg); 
+    background: linear-gradient(to bottom, #4684C3, #031425) !important;
+    background-attachment: fixed !important;
+    min-height: 100vh;
     color: #333;
 }
 

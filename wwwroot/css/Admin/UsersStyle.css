@@ -1,2 +1,138 @@
-﻿body {
+﻿.btn-add-user {
+    background-color: #1C3353;
+    color: white;
+    border-radius: 18px;
+    padding: 12px 34px;
+    font-weight: 600;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.btn-add-user:hover {
+    background-color: #12243d;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.directory-card {
+    background-color: rgba(8, 28, 51, 0.66);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+.directory-filter {
+    background-color: #1DC3C6;
+    color: #031425;
+    border: none;
+    border-radius: 15px;
+    width: 250px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: none;
+    transition: background-color 0.2s ease;
+}
+
+.directory-filter:hover {
+    background-color: #2c8c87;
+}
+
+.directory-table {
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    width: 100%;
+    color: white;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.directory-table thead tr {
+    background-color: rgba(255, 255, 255, 0.08); 
+}
+
+.directory-table thead th {
+    border-bottom: none; 
+    padding: 12px 15px; 
+    color: #FFFFFF; 
+    font-weight: 700;
+    font-size: 0.95rem; 
+}
+
+.directory-table thead th:first-child {
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+
+.directory-table thead th:last-child {
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.directory-row {
+    background-color: rgba(217, 217, 217, 0.21);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.directory-row:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.directory-row td {
+    padding: 8px 15px;
+    font-size: 0.95rem;
+}
+
+        
+.directory-row td:first-child {
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+    font-weight: bold;
+    text-align: left;
+    padding-left: 25px;
+}
+
+.directory-row td:last-child {
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+.status-badge {
+    padding: 6px 25px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.badge-active {
+    background-color: #238A63;
+    color: white;
+}
+
+.badge-inactive {
+    background-color: #E27272;
+    color: white;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    padding: 0 6px;
+    transition: transform 0.1s ease;
+}
+
+.action-btn:hover {
+    transform: scale(1.2);
+}
+
+.icon-edit {
+    color: #38B2AC;
+}
+
+.icon-delete {
+    color: #E53E3E;
+}
+
+.d-none {
+    display: none !important;
 }

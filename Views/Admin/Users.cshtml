@@ -1,5 +1,134 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Manage Users";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Admin/UsersStyle.css" asp-append-version="true" />
+}
+
+<div class="dashboard-wrapper mt-2">
+    <h2 class="text-white mb-4" style="font-family: var(--font-heading);">
+        Welcome, <span class="text-capitalize">@ViewBag.UserName</span>
+    </h2>
+
+    <div class="mb-4">
+        <button class="btn-add-user d-flex align-items-center gap-2">
+            <i class="fas fa-plus"></i> Add User
+        </button>
+    </div>
+
+    <div class="directory-card">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="text-white fw-bold m-0" style="font-family: var(--font-heading);">User Directory</h3>
+
+            <select id="userRoleFilter" class="form-select directory-filter shadow-none">
+                <option value="students" selected>Students</option>
+                <option value="supervisors">Supervisors</option>
+                <option value="admins">Admin</option>
+            </select>
+        </div>
+
+        <div class="table-responsive">
+
+            <table id="table-students" class="directory-table">
+                <thead>
+                    <tr>
+                        <th class="text-start px-4">Student ID</th>
+                        <th>Student Name</th>
+                        <th>Email Address</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="directory-row">
+                        <td>[ID]</td>
+                        <td>[Name]</td>
+                        <td>[Email]</td>
+                        <td><span class="status-badge badge-active">[Status]</span></td>
+                        <td>
+                            <button class="action-btn icon-edit"><i class="fas fa-file-alt"></i></button>
+                            <button class="action-btn icon-delete"><i class="fas fa-times"></i></button>
+                        </td>
+                    </tr>
+                    <tr class="directory-row">
+                        <td>[ID]</td>
+                        <td>[Name]</td>
+                        <td>[Email]</td>
+                        <td><span class="status-badge badge-inactive">[Status]</span></td>
+                        <td>
+                            <button class="action-btn icon-edit"><i class="fas fa-file-alt"></i></button>
+                            <button class="action-btn icon-delete"><i class="fas fa-times"></i></button>
+                        </td>
+                    </tr>
+                    <tr class="directory-row">
+                        <td>[ID]</td>
+                        <td>[Name]</td>
+                        <td>[Email]</td>
+                        <td><span class="status-badge badge-active">[Status]</span></td>
+                        <td>
+                            <button class="action-btn icon-edit"><i class="fas fa-file-alt"></i></button>
+                            <button class="action-btn icon-delete"><i class="fas fa-times"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table id="table-supervisors" class="directory-table d-none">
+                <thead>
+                    <tr>
+                        <th class="text-start px-4">Supervisor ID</th>
+                        <th>Supervisor Name</th>
+                        <th>Email Address</th>
+                        <th>Project Quota</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="directory-row">
+                        <td>[ID]</td>
+                        <td>[Name]</td>
+                        <td>[Email]</td>
+                        <td>[Quota]</td>
+                        <td><span class="status-badge badge-active">[Status]</span></td>
+                        <td>
+                            <button class="action-btn icon-edit"><i class="fas fa-file-alt"></i></button>
+                            <button class="action-btn icon-delete"><i class="fas fa-times"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table id="table-admins" class="directory-table d-none">
+                <thead>
+                    <tr>
+                        <th class="text-start px-4">Admin ID</th>
+                        <th>Admin Name</th>
+                        <th>Email Address</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="directory-row">
+                        <td>[ID]</td>
+                        <td>[Name]</td>
+                        <td>[Email]</td>
+                        <td><span class="status-badge badge-active">[Status]</span></td>
+                        <td>
+                            <button class="action-btn icon-edit"><i class="fas fa-file-alt"></i></button>
+                            <button class="action-btn icon-delete"><i class="fas fa-times"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/Admin/Users.js" asp-append-version="true"></script>
 }
