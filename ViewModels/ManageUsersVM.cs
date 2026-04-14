@@ -9,13 +9,19 @@
 
     public class StudentVM
     {
+        public int UserId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public string StudentId { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public bool IsActive { get; set; }
     }
 
-    public class SupervisorVM { 
+    public class SupervisorVM {
+        public int UserId { get; set; }
+        public string FirstName { get; set; } 
+        public string LastName { get; set; }
         public string SupervisorId { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
@@ -25,6 +31,9 @@
 
     public class AdminVM
     {
+        public int UserId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public string AdminId { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
