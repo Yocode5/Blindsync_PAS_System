@@ -17,5 +17,7 @@ namespace Blindsync_PAS_System.Models
 
         [ForeignKey("UserId")]
         public User UserAccount { get; set; }
+
+        public ICollection<Project> Projects { get; set; } = new List<Project>();
     }
 }

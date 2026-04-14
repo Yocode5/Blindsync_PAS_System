@@ -17,17 +17,18 @@ namespace Blindsync_PAS_System.Controllers
         {
             var userEmail = User.Identity?.Name;
 
-            if (string.IsNullOrEmpty(userEmail))
-            {
-                return RedirectToAction("Login", "Home");
-            }
+            var student = _context.Students
+                .Include(s => s.UserAccount) 
+                .Include(s => s.Projects)
+                    .ThenInclude(p => p.Area)
+                .FirstOrDefault(s => s.UserAccount.Email == userEmail); 
 
-            var student = _context.Users.FirstOrDefault(s => s.Email == userEmail);
+            if (student == null) return RedirectToAction("Login", "Home");
 
-            if (student == null)
-            {
-                return RedirectToAction("Login", "Home");
-            }
+            var activeProject = student.Projects
+                .FirstOrDefault(p => p.Status != ProjectStatus.Withdrawn);
+
+            ViewBag.ActiveProject = activeProject;
 
             ViewBag.ResearchAreas = _context.ResearchAreas
                 .Select(r => new { r.Id, r.Name })
@@ -55,12 +56,8 @@ namespace Blindsync_PAS_System.Controllers
                     Title = Title,
                     ResearchAreaId = ResearchAreaId,
                     Abstract = Abstract,
-                    StudentId = student.Id, 
-
-                    TechStack = string.IsNullOrWhiteSpace(TechStack)
-                        ? new List<string>()
-                        : TechStack.Split(',').Select(t => t.Trim()).ToList(),
-
+                    StudentId = student.Id,
+                    TechStack = TechStack ?? "",
                     CreatedAt = DateTime.Now,
                     Status = ProjectStatus.Pending
                 };
@@ -74,6 +71,29 @@ namespace Blindsync_PAS_System.Controllers
             return RedirectToAction("Dashboard");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> WithdrawProposal(int projectId)
+        {
+            var userEmail = User.Identity?.Name;
+
+            var project = await _context.Projects
+                .Include(p => p.Creator)
+                    .ThenInclude(s => s.UserAccount)
+                .FirstOrDefaultAsync(p => p.Id == projectId && p.Creator.UserAccount.Email == userEmail);
+
+            if (project != null)
+            {
+                project.Status = ProjectStatus.Withdrawn;
+
+                _context.Projects.Update(project);
+                await _context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = "Proposal withdrawn successfully.";
+            }
+
+            return RedirectToAction("Dashboard");
+        }
+        
         public IActionResult Proposals()
         {
            
