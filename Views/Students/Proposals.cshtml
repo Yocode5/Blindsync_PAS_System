@@ -4,7 +4,6 @@
     ViewData["Title"] = "My Proposals";
 }
 
-
 <div class="proposals-page">
     <div class="dashboard-content">
         <h1 class="welcome-text">Welcome, [FirstName]</h1>
@@ -12,7 +11,7 @@
         <div class="status-card">
             <h2 class="card-title">Submission History</h2>
 
-            <div class="proposals-list">
+            <div class="proposals-list">            
                 <div class="proposal-row">
                     <div class="proposal-icon-box">
                         <i class="fas fa-book"></i>
@@ -24,10 +23,13 @@
                     </div>
                     <div class="proposal-status-section">
                         <span class="status-badge pending">Pending</span>
-                        <a href="#" class="view-abstract">View Original Abstract</a>
+                        <a href="javascript:void(0)" class="view-abstract"
+                           onclick="openViewModal('Smart Bus System', 'Internet of Things', 'Node.js, Express, MySQL', 'This is a sample abstract for the Smart Bus System. It monitors location and ticketing in real-time.')">
+                            View Original Abstract
+                        </a>
                     </div>
                 </div>
-
+          
                 <div class="proposal-row">
                     <div class="proposal-icon-box">
                         <i class="fas fa-book"></i>
@@ -39,7 +41,10 @@
                     </div>
                     <div class="proposal-status-section">
                         <span class="status-badge withdrawn">Withdrawn</span>
-                        <a href="#" class="view-abstract">View Original Abstract</a>
+                        <a href="javascript:void(0)" class="view-abstract"
+                           onclick="openViewModal('Mental Wellness App', 'Health Tech', 'Flutter, Firebase', 'A mobile application designed to help university students manage stress and anxiety through guided meditation.')">
+                            View Original Abstract
+                        </a>
                     </div>
                 </div>
 
@@ -54,7 +59,10 @@
                     </div>
                     <div class="proposal-status-section">
                         <span class="status-badge accepted">Accepted</span>
-                        <a href="#" class="view-abstract">View Original Abstract</a>
+                        <a href="javascript:void(0)" class="view-abstract"
+                           onclick="openViewModal('Academy Connect', 'Education', 'Flutter, Dart, ASP.NET Core', 'A collaborative platform for students to share notes and join instant tutoring sessions using AI.')">
+                            View Original Abstract
+                        </a>
                     </div>
                 </div>
 
@@ -63,6 +71,33 @@
     </div>
 </div>
 
-@section Scripts {
-    <script src="~/js/Student/MyProposals.js" asp-append-version="true"></script>
-}
+<div id="viewAbstractModal" class="modal-overlay" onclick="closeViewModalOutside(event)">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h2 id="modalTitle">[Project Title]</h2>
+            <span class="close-btn" onclick="closeViewModal()">&times;</span>
+        </div>
+
+        <div class="modal-body">
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label>Research Area</label>
+                <div id="modalArea" class="soft-input" style="height: auto; background: #f0f0f0;"></div>
+            </div>
+
+            <div class="form-group">
+                <label>Tech Stack</label>
+                <div id="modalTechStack" class="tag-container">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Abstract</label>
+                <div id="modalAbstractText" class="soft-input" style="min-height: 160px; background: #E0E0E0; overflow-y: auto;"></div>
+            </div>
+        </div>
+
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="closeViewModal()" style="width: 100%;">Close</button>
+        </div>
+    </div>
+</div>
