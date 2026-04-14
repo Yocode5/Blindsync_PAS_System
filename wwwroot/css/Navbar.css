@@ -1,5 +1,5 @@
 ﻿.custom-navbar {
-    background-color: var(--navbar-bg);
+    background-color: rgba(253, 253, 253, 0.9);
     border-radius: 20px;
     margin: 20px auto;
     width: 95%;
@@ -7,13 +7,13 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 30px;
+    padding: 20px 30px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
 }
 
 .nav-brand strong {
-    font-size: 1.5rem;
+    font-size: 2rem;
     color: var(--text-dark);
     font-family: var(--font-heading);
 }
@@ -35,31 +35,31 @@
     transition: all 0.2s ease;
 }
 
-    .nav-item:hover {
-        color: var(--navbar-hover);
-        background-color: #f0f0f0;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    }
+.nav-item:hover {
+    color: var(--navbar-hover);
+    background-color: #f0f0f0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
 
-    .nav-item.active {
-        color: var(--navbar-hover) !important;
-        font-weight: 700;
-        background-color: rgba(0, 0, 0, 0.05);
-        position: relative; 
-    }
+.nav-item.active {
+    color: var(--navbar-hover) !important;
+    font-weight: 700;
+    background-color: rgba(0, 0, 0, 0.05);
+    position: relative; 
+}
 
-        .nav-item.active::after {
-            content: "";
-            position: absolute;
-            bottom: 4px; 
-            left: 50%;
-            transform: translateX(-50%);
-            width: 70px; 
-            height: 2px;
-            background-color: var(--navbar-hover);
-            border-radius: 2px;
-        }
+.nav-item.active::after {
+    content: "";
+    position: absolute;
+    bottom: 4px; 
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70px; 
+    height: 2px;
+    background-color: var(--navbar-hover);
+    border-radius: 2px;
+}
 
 .nav-actions {
     display: flex;
@@ -79,24 +79,24 @@
     transition: all 0.2s ease; 
 }
 
-    .btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-        color: var(--text-light) !important;
-    }
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    color: var(--text-light) !important;
+}
 
 .btn-profile {
     background-color: var(--btn-profile);
 }
 
-    .btn-profile:hover {
-        background-color: var(--btn-profile-hover);
-    }
+.btn-profile:hover {
+    background-color: var(--btn-profile-hover);
+}
 
 .btn-logout {
     background-color: var(--btn-logout);
 }
 
-    .btn-logout:hover {
-        background-color: var(--btn-logout-hover);
-    }
+.btn-logout:hover {
+    background-color: var(--btn-logout-hover);
+}
