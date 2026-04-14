@@ -21,7 +21,10 @@ namespace Blindsync_PAS_System.Controllers
                 .Include(s => s.UserAccount) 
                 .Include(s => s.Projects)
                     .ThenInclude(p => p.Area)
-                .FirstOrDefault(s => s.UserAccount.Email == userEmail); 
+                .Include(s => s.Projects)
+                    .ThenInclude(p => p.AssignedSupervisor)
+                        .ThenInclude(sup => sup.UserAccount)
+                .FirstOrDefault(s => s.UserAccount.Email == userEmail);
 
             if (student == null) return RedirectToAction("Login", "Home");
 

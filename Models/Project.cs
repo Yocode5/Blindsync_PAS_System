@@ -7,7 +7,7 @@ namespace Blindsync_PAS_System.Models
     public enum ProjectStatus
     {
         Pending,
-        Accepted,
+        Matched,
         UnderReview,
         Withdrawn,
     }
@@ -45,5 +45,7 @@ namespace Blindsync_PAS_System.Models
         public int? SupervisorId { get; set; }
         [ForeignKey("SupervisorId")]
         public Supervisor? AssignedSupervisor { get; set; }
+
+        public DateTime? AssignedAt { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using Blindsync_PAS_System.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Blindsync_PAS_System.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260414142039_AddAssignedAtDate")]
+    partial class AddAssignedAtDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -208,7 +211,7 @@ namespace Blindsync_PAS_System.Migrations
                             FirstName = "System",
                             IsActive = true,
                             LastName = "Admin",
-                            PasswordHash = "AQAAAAIAAYagAAAAEDzoTLf/Ki8UBW8aQxACDxMu4parDLvSR6xpCN/U43PYmk7nfsmFMqK1UfS5YWLgkw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEEttODngrG85GttERO6AjO9KgT37sPNWou+iquPledkfhmreG0FcmEGKp2lCCyp6Dw==",
                             Role = "Admin"
                         },
                         new
@@ -219,7 +222,7 @@ namespace Blindsync_PAS_System.Migrations
                             FirstName = "Test",
                             IsActive = true,
                             LastName = "Student",
-                            PasswordHash = "AQAAAAIAAYagAAAAELd+wuFgQqhQfivKtRvzQC1ymjBy/vm65AtIKMSVyT+DeM7PVUxxcnsxjaLliivCpQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEEfn+Al3BpwuRBE25RxFMUsxj2xE2XA/a1Ej5jkFMqw1Nc46TxOBwoI0Xpz2rHk+Jg==",
                             Role = "Student"
                         },
                         new
@@ -230,7 +233,7 @@ namespace Blindsync_PAS_System.Migrations
                             FirstName = "Test",
                             IsActive = true,
                             LastName = "Supervisor",
-                            PasswordHash = "AQAAAAIAAYagAAAAEBD/Gf7sUq3HOFOjEL10iqzr/exSAaktZT/yTdS+v7pd3AvkwPbQM3eghbeQs+Srdw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEPtfiBTIq5tME0Z2DISITCNN/ZBy+nIt9uzSux6uql+z4TBo54PNGXK285j2YQ3TsQ==",
                             Role = "Supervisor"
                         });
                 });
