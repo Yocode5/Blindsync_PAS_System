@@ -1,5 +1,43 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model List<Blindsync_PAS_System.Models.ResearchArea>
+
 @{
+    ViewData["Title"] = "Research Areas";
+    Layout = null;
 }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] - BlindSync</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    
+    <link rel="stylesheet" href="~/css/Navbar.css" />
+    <link rel="stylesheet" href="~/css/Admin/ResearchAreaStyle.css" asp-append-version="true" />
+</head>
+<body>    
+    <partial name="_AdminNavbar" />
+    <div class="admin-container">        
+        <h1 class="welcome-text">Welcome, Admin!</h1>
+        <div class="input-group-container">
+            <input type="text" id="newAreaInput" class="custom-input" />
+            <button class="btn-add" onclick="addNewArea()">
+                <i class="fas fa-plus"></i> Add Research Area
+            </button>
+        </div>
+        <div class="tags-container">
+            <h2>Active Research Areas</h2>            
+            <div class="areas-grid" id="areasContainer">
+                @if(Model != null) {
+                    foreach (var area in Model) {
+                        <div class="area-tag" id="area-@area.Id">
+                            <span>@area.Name</span>
+                            <i class="fas fa-times btn-delete-tag" onclick="deleteArea(@area.Id)"></i>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+    <script src="~/js/Admin/ResearchArea.js" asp-append-version="true"></script>
+</body>
+</html>
