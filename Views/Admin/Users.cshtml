@@ -53,10 +53,27 @@
 							<td>@student.Name</td>
 							<td>@student.Email</td>
 							<td><span class="status-badge @badgeClass">@statusText</span></td>
-							<td>
-								<button class="action-btn icon-edit"><i class="fas fa-file-alt"></i></button>
-								<button class="action-btn icon-delete"><i class="fas fa-times"></i></button>
-							</td>
+                            <td>
+                                <button class="action-btn icon-edit"
+                                        data-userid="@student.UserId"
+                                        data-firstname="@student.FirstName"
+                                        data-lastname="@student.LastName"
+                                        data-email="@student.Email"
+                                        data-role="Student"
+                                        data-studentid="@student.StudentId">
+                                    <i class="fas fa-file-alt"></i>
+                                </button>
+                                <button class="action-btn icon-toggle" data-userid="@student.UserId" data-name="@student.Name" data-isactive="@student.IsActive.ToString().ToLower()">
+                                    @if (student.IsActive)
+                                    {
+                                        <i class="fas fa-times text-danger" title="Deactivate User"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fas fa-undo text-success" title="Reactivate User"></i>
+                                    }
+                                </button>
+                            </td>
                         </tr>
                     }
                 </tbody>
@@ -86,8 +103,26 @@
                             <td>@sup.ProjectQuota</td>
                             <td><span class="status-badge @badgeClass">@statusText</span></td>
                             <td>
-                                <button class="action-btn icon-edit"><i class="fas fa-file-alt"></i></button>
-                                <button class="action-btn icon-delete"><i class="fas fa-times"></i></button>
+                                <button class="action-btn icon-edit"
+                                        data-userid="@sup.UserId"
+                                        data-firstname="@sup.FirstName"
+                                        data-lastname="@sup.LastName"
+                                        data-email="@sup.Email"
+                                        data-role="Supervisor"
+                                        data-supervisorid="@sup.SupervisorId"
+                                        data-quota="@sup.ProjectQuota">
+                                    <i class="fas fa-file-alt"></i>
+                                </button>
+                                <button class="action-btn icon-toggle" data-userid="@sup.UserId" data-name="@sup.Name" data-isactive="@sup.IsActive.ToString().ToLower()">
+                                    @if (sup.IsActive)
+                                    {
+                                        <i class="fas fa-times text-danger" title="Deactivate User"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fas fa-undo text-success" title="Reactivate User"></i>
+                                    }
+                                </button>
                             </td>
                         </tr>
                     }
@@ -116,8 +151,24 @@
                             <td>@admin.Email</td>
                             <td><span class="status-badge @badgeClass">@statusText</span></td>
                             <td>
-                                <button class="action-btn icon-edit"><i class="fas fa-file-alt"></i></button>
-                                <button class="action-btn icon-delete"><i class="fas fa-times"></i></button>
+                                <button class="action-btn icon-edit"
+                                        data-userid="@admin.UserId"
+                                        data-firstname="@admin.FirstName"
+                                        data-lastname="@admin.LastName"
+                                        data-email="@admin.Email"
+                                        data-role="Admin">
+                                    <i class="fas fa-file-alt"></i>
+                                </button>
+                                <button class="action-btn icon-toggle" data-userid="@admin.UserId" data-name="@admin.Name" data-isactive="@admin.IsActive.ToString().ToLower()">
+                                    @if (admin.IsActive)
+                                    {
+                                        <i class="fas fa-times text-danger" title="Deactivate User"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fas fa-undo text-success" title="Reactivate User"></i>
+                                    }
+                                </button>
                             </td>
                         </tr>
                     }
@@ -138,21 +189,21 @@
             </div>
 
             <div class="custom-modal-body">
+                <input type="hidden" id="editUserId" value="">
                 <form id="addUserForm">
                     <div class="row g-3">
-
                         <div class="col-6">
                             <label class="custom-label">First Name</label>
-                            <input type="text" class="form-control custom-input-pill shadow-none" required>
+                            <input type="text" id="addFirstName" class="form-control custom-input-pill shadow-none" required>
                         </div>
                         <div class="col-6">
                             <label class="custom-label">Last Name</label>
-                            <input type="text" class="form-control custom-input-pill shadow-none" required>
+                            <input type="text" id="addLastName" class="form-control custom-input-pill shadow-none" required>
                         </div>
 
                         <div class="col-6">
                             <label class="custom-label">Email</label>
-                            <input type="email" class="form-control custom-input-pill shadow-none" required>
+                            <input type="email" id="addEmail" class="form-control custom-input-pill shadow-none" required>
                         </div>
                         <div class="col-6">
                             <label class="custom-label">Role</label>
@@ -173,16 +224,16 @@
 
                         <div class="col-12 dynamic-field d-none" id="field-student">
                             <label class="custom-label">Student ID</label>
-                            <input type="text" class="form-control custom-input-pill shadow-none">
+                            <input type="text" id="addStudentId" class="form-control custom-input-pill shadow-none">
                         </div>
 
                         <div class="col-6 dynamic-field d-none" id="field-supervisor-id">
                             <label class="custom-label">Supervisor ID</label>
-                            <input type="text" class="form-control custom-input-pill shadow-none">
+                            <input type="text" id="addSupervisorId" class="form-control custom-input-pill shadow-none">
                         </div>
                         <div class="col-6 dynamic-field d-none" id="field-supervisor-quota">
                             <label class="custom-label">Project Quota</label>
-                            <input type="number" class="form-control custom-input-pill shadow-none">
+                            <input type="number" id="addQuota" class="form-control custom-input-pill shadow-none">
                         </div>
                     </div>
 
