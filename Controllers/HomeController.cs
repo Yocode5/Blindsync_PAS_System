@@ -78,10 +78,12 @@ namespace Blindsync_PAS_System.Controllers
             return RedirectToAction("Login", "Home");
         }
 
-        [Authorize] 
+        [Authorize]
         [HttpGet]
-        public IActionResult Profile()
+        public IActionResult Profile(string returnUrl = null)
         {
+            ViewData["ReturnUrl"] = returnUrl;
+
             var userEmail = User.Identity.Name;
             var user = _context.Users.FirstOrDefault(u => u.Email == userEmail);
 
@@ -100,7 +102,7 @@ namespace Blindsync_PAS_System.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Profile(UserProfileVM model)
+        public async Task<IActionResult> Profile(UserProfileVM model, string returnUrl = null)
         {
             if (!ModelState.IsValid)
             {
@@ -152,6 +154,11 @@ namespace Blindsync_PAS_System.Controllers
             }
 
             TempData["SuccessMessage"] = "Profile updated successfully!";
+
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
 
             if (user.Role == "Admin") return RedirectToAction("Overview", "Admin");
             if (user.Role == "Student") return RedirectToAction("Dashboard", "Students");
