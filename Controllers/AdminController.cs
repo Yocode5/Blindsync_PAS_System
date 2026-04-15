@@ -21,25 +21,40 @@ namespace Blindsync_PAS_System.Controllers
             _context = context;
         }
 
-        public IActionResult Overview()
+       public async Task<IActionResult> Overview()
         {
+            //  username from the email to display 
             ViewBag.UserName = User.Identity?.Name?.Split('@')[0] ?? "Guest";
 
-            var viewModel = new AdminOverviewVM
+            var overviewData = new AdminOverviewVM
             {
-                TotalStudents = 300,
-                TotalMatched = 200,
-                TotalSupervisors = 150,
-                TotalPending = 100,
-                Projects = new List<ProjectOverviewDto>
-                {
-                    new ProjectOverviewDto { ProjectId = 1, ProjectTitle = "AI Diagnosis", StudentId = "ST101", StudentName = "John Doe", SupervisorName = "Dr. Smith", Status = "Matched" },
-                    new ProjectOverviewDto { ProjectId = 2, ProjectTitle = "Web Scraper", StudentId = "ST102", StudentName = "Jane Roe", SupervisorName = "Pending", Status = "Pending" },
-                    new ProjectOverviewDto { ProjectId = 3, ProjectTitle = "Crypto Wallet", StudentId = "ST103", StudentName = "Sam Wilson", SupervisorName = "Dr. Silva", Status = "Under Review" }
-                }
+                // Retrieve total counts for the top statistical cards
+                TotalStudents = await _context.Students.CountAsync(), 
+                TotalSupervisors = await _context.Supervisors.CountAsync(),
+                TotalMatched = await _context.Projects.CountAsync(p => p.Status == ProjectStatus.Matched),
+                TotalPending = await _context.Projects.CountAsync(p => p.Status == ProjectStatus.Pending),
+
+                // Retrieve a list of recent projects to display in the overview data table
+                Projects = await _context.Projects
+                    .Include(p => p.Creator) // Join the Student (Creator) table
+                        .ThenInclude(s => s.UserAccount) 
+                    .Include(p => p.AssignedSupervisor) 
+                        .ThenInclude(s => s.UserAccount) 
+                    .Select(p => new ProjectOverviewDto
+                    {
+                        ProjectId = p.Id, 
+                        ProjectTitle = p.Title,
+                        StudentId = p.Creator.StudentId,                      
+                        StudentName = p.Creator.UserAccount.FirstName + " " + p.Creator.UserAccount.LastName,                      
+                        SupervisorName = p.AssignedSupervisor != null ? p.AssignedSupervisor.UserAccount.FirstName + " " + p.AssignedSupervisor.UserAccount.LastName : "Not Assigned",
+                         Status = p.Status.ToString() 
+                    })
+                    .OrderByDescending(p => p.ProjectId) 
+                    .Take(10) // Limit the table to 10 rows
+                    .ToListAsync()
             };
 
-            return View(viewModel);
+            return View(overviewData);
         }
 
         public async Task<IActionResult> Users()
@@ -204,5 +219,7 @@ namespace Blindsync_PAS_System.Controllers
             return Json(new { success = true, message = $"User Had been {newStatusText}" });
 
         }
+        
+        
     }
 }
