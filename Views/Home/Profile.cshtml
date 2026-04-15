@@ -19,7 +19,7 @@
     <div class="profile-modal-container">
         <div class="profile-header">
             <h2>My Profile</h2>
-            <button class="close-btn" onclick="location.href='@Url.Action("Dashboard", "Students")'"><i class="fas fa-times"></i></button>
+            <button class="close-btn" onclick="location.href='@(ViewData["ReturnUrl"] ?? "/")'"><i class="fas fa-times"></i></button>
         </div>
 
         <div class="profile-tabs">
