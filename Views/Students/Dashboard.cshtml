@@ -43,46 +43,53 @@
 
                 <div class="matching-body">
 
-                    <div class="proposal-details-box">
-                        <div class="proposal-title-row">
-                            <i class="fas fa-file-alt proposal-icon"></i>
-                            <h4>@project.Title</h4>
+                    <div class="proposal-details-box" style="display: flex; gap: 25px; align-items: flex-start;">
+
+                        <div class="proposal-icon-column" style="padding-top: 5px;">
+                            <i class="fas fa-clipboard-list" style="font-size: 4rem; color: #17cfc3;"></i>
                         </div>
 
-                        <p class="detail-row"><strong>Research Area:</strong> @project.Area.Name</p>
-
-                        <div class="detail-row tech-stack-display">
-                            <strong>Tech Stack:</strong>
-                            <div class="readonly-tags">
-                                @if (!string.IsNullOrEmpty(project.TechStack))
-                                {
-                                    @foreach (var tech in project.TechStack.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-                                    {
-                                        <span class="tech-tag readonly">@tech</span>
-                                    }
-                                }
+                        <div class="proposal-content-column" style="flex: 1;">
+                            <div class="proposal-title-row" style="margin-bottom: 12px;">
+                                <h4 style="margin: 0; font-size: 1.6rem;">@project.Title</h4>
                             </div>
-                        </div>
 
-                        <a href="#" class="view-details-link">View More Details</a>
+                            <p class="detail-row"><strong>Research Area:</strong> @project.Area.Name</p>
 
-                        <div class="proposal-actions">
-                            <button class="btn-action edit" onclick="openEditModal(
-                                             '@project.Id', 
-                                             '@Html.Raw(System.Web.HttpUtility.JavaScriptStringEncode(project.Title))', 
-                                             '@project.ResearchAreaId', 
-                                             '@project.TechStack', 
-                                             '@Html.Raw(System.Web.HttpUtility.JavaScriptStringEncode(project.Abstract))'
-                                              )">
-                                        Edit Submission </button>
+                            <div class="detail-row tech-stack-display">
+                                <strong>Tech Stack:</strong>
+                                <div class="readonly-tags">
+                                    @if (!string.IsNullOrEmpty(project.TechStack))
+                                    {
+                                        @foreach (var tech in project.TechStack.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                                        {
+                                            <span class="tech-tag readonly">@tech</span>
+                                        }
+                                    }
+                                </div>
+                            </div>
 
+                            <a href="#" class="view-details-link" style="display: inline-block; margin-top: 10px;">View More Details</a>
 
-                            <form id="withdrawForm" asp-action="WithdrawProposal" method="post" style="flex: 1; display: flex;">
-                                <input type="hidden" name="projectId" value="@project.Id" />
-                                <button type="button" class="btn-action withdraw" onclick="confirmWithdrawal()">
-                                    Withdraw
+                            <div class="proposal-actions" style="margin-top: 20px;">
+                                <button class="btn-action edit" onclick="openEditModal(
+                                                 '@project.Id',
+                                                 '@Html.Raw(System.Web.HttpUtility.JavaScriptStringEncode(project.Title))',
+                                                 '@project.ResearchAreaId',
+                                                 '@project.TechStack',
+                                                 '@Html.Raw(System.Web.HttpUtility.JavaScriptStringEncode(project.Abstract))'
+                                                  )">
+                                    Edit Submission
                                 </button>
-                            </form>
+
+
+                                <form id="withdrawForm" asp-action="WithdrawProposal" method="post" style="flex: 1; display: flex;">
+                                    <input type="hidden" name="projectId" value="@project.Id" />
+                                    <button type="button" class="btn-action withdraw" onclick="confirmWithdrawal()">
+                                        Withdraw
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
 
@@ -146,11 +153,12 @@
             <span class="close-btn" onclick="closeModal()">&times;</span>
         </div>
 
-        <form asp-controller="Students" asp-action="CreateProposal" method="post" class="modal-form">
+        <form id="createProposalForm" asp-controller="Students" asp-action="CreateProposal" method="post" class="modal-form" onsubmit="return validateCreateForm()">
             <div class="form-row">
                 <div class="form-group">
                     <label>Project Title</label>
-                    <input type="text" name="Title" placeholder="Enter title..." class="soft-input" required>
+                    <input type="text" name="Title" id="createTitle" placeholder="Enter title..." class="soft-input">
+                    <span id="titleError" class="error-msg" style="color: #e74c3c; font-size: 0.8rem; display: none; margin-top: 4px;">Project Title is required.</span>
                 </div>
                 <div class="form-group">
                     <label>Research Area</label>
@@ -161,7 +169,7 @@
                             <i class="fas fa-chevron-down dropdown-icon"></i>
                         </div>
 
-                        <input type="hidden" name="ResearchAreaId" id="hiddenResearchAreaId" required>
+                        <input type="hidden" name="ResearchAreaId" id="hiddenResearchAreaId">
 
                         <ul class="custom-dropdown-options" id="dropdownOptions">
                             @if (ViewBag.ResearchAreas != null)
@@ -173,19 +181,24 @@
                             }
                         </ul>
                     </div>
+                    <span id="researchAreaError" class="error-msg" style="color: #e74c3c; font-size: 0.8rem; display: none; margin-top: 4px;">Please select a Research Area.</span>
                 </div>
             </div>
 
             <div class="form-group">
                 <label>Tech Stack</label>
                 <input type="text" id="techInput" placeholder="e.g. React, Node.js (Press Enter)" class="soft-input">
+
+                <span id="techStackError" class="error-msg" style="color: #e74c3c; font-size: 0.8rem; display: none; margin-top: 4px;">Please add at least one technology.</span>
+
                 <input type="hidden" name="TechStack" id="hiddenTechStack">
                 <div class="tag-container" id="techTagContainer"></div>
             </div>
 
             <div class="form-group">
                 <label>Abstract</label>
-                <textarea name="Abstract" rows="5" class="soft-input" placeholder="Enter abstract..." required></textarea>
+                <textarea name="Abstract" id="createAbstract" rows="5" class="soft-input" placeholder="Enter abstract..."></textarea>
+                <span id="abstractError" class="error-msg" style="color: #e74c3c; font-size: 0.8rem; display: none; margin-top: 4px;">Abstract is required.</span>
             </div>
 
             <div class="modal-actions">
@@ -206,12 +219,14 @@
         <div class="modal-body">
             <input type="hidden" id="editFieldProjectId">
 
-            <div class="form-row"> 
+            <div class="form-row">
                 <div class="form-group">
                     <label>Project Title</label>
                     <input type="text" id="editFieldProjectTitle" class="soft-input" placeholder="Enter title...">
+
+                    <span id="editTitleError" class="error-msg" style="color: #e74c3c; font-size: 0.8rem; display: none; margin-top: 4px;">Project Title is required.</span>
                 </div>
-                
+
                 <div class="form-group">
                     <label>Research Area</label>
                     <div class="custom-dropdown-container" id="editResearchDropdown">
@@ -232,23 +247,31 @@
                             }
                         </ul>
                     </div>
+
+                    <span id="editResearchAreaError" class="error-msg" style="color: #e74c3c; font-size: 0.8rem; display: none; margin-top: 4px;">Please select a Research Area.</span>
                 </div>
             </div>
 
             <div class="form-group">
                 <label>Tech Stack</label>
                 <input type="text" id="editFieldTechStack" class="soft-input" placeholder="e.g. React, Node.js (Press Enter)">
+
+                <span id="editTechStackError" class="error-msg" style="color: #e74c3c; font-size: 0.8rem; display: none; margin-top: 4px;">Please add at least one technology.</span>
+
+                <input type="hidden" name="TechStack" id="hiddenEditTechStack">
                 <div class="tag-container" id="editTagContainerElement"></div>
             </div>
 
             <div class="form-group">
                 <label>Abstract</label>
                 <textarea id="editFieldAbstract" class="soft-input" rows="5" placeholder="Enter abstract..."></textarea>
+
+                <span id="editAbstractError" class="error-msg" style="color: #e74c3c; font-size: 0.8rem; display: none; margin-top: 4px;">Abstract is required.</span>
             </div>
         </div>
 
         <div class="modal-actions">
-            <button type="button" class="btn-add" onclick="submitEdit()">Edit</button>
+            <button type="button" class="btn-add" onclick="submitEdit()">Update</button>
             <button type="button" class="btn-cancel" onclick="closeEditModal()">Cancel</button>
         </div>
     </div>

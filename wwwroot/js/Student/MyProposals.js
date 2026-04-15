@@ -22,8 +22,6 @@
     
     document.getElementById('viewAbstractModal').style.display = 'flex';
 }
-
-
 function closeViewModal() {
     console.log("Close button clicked");
     const modal = document.getElementById('viewAbstractModal');
@@ -31,8 +29,6 @@ function closeViewModal() {
         modal.style.display = 'none';
     }
 }
-
-
 function closeViewModalOutside(event) {
     const modal = document.getElementById('viewAbstractModal');
    
