@@ -106,6 +106,8 @@
             document.getElementById('modalPasswordInput').required = false;
             document.getElementById('modalPasswordInput').placeholder = '(Leave blank to keep current)';
 
+            document.getElementById('modalPasswordInput').value = '';
+
             document.querySelector('.custom-modal-header h2').innerText = 'Edit User';
             document.querySelector('#addUserForm button[type="submit"]').innerText = 'Update';
 
