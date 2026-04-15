@@ -6,17 +6,21 @@ function closeModal() {
     document.getElementById('proposalModal').style.display = 'none';
 }
 
-window.onclick = function (event) {
+function closeCreateModalOutside(event) {
     let modal = document.getElementById('proposalModal');
-    if (event.target == modal) {
+    if (event.target === modal) {
         closeModal();
     }
-
-    if (!event.target.closest('.custom-dropdown-container')) {
-        document.getElementById('researchDropdown').classList.remove('open');
-        document.getElementById('dropdownOptions').classList.remove('show');
-    }
 }
+
+window.onclick = function (event) {
+    if (!event.target.closest('.custom-dropdown-container')) {
+        const options = document.querySelectorAll('.custom-dropdown-options');
+        const containers = document.querySelectorAll('.custom-dropdown-container');
+        options.forEach(opt => opt.classList.remove('show'));
+        containers.forEach(cont => cont.classList.remove('open'));
+    }
+};
 
 let techTags = [];
 const techInput = document.getElementById('techInput');
@@ -26,30 +30,25 @@ const tagContainer = document.getElementById('techTagContainer');
 techInput.addEventListener('keydown', function (e) {
     if (e.key === 'Enter' || e.key === ',') {
         e.preventDefault();
-
         let tagText = techInput.value.trim().replace(',', '');
 
         if (tagText !== '' && !techTags.includes(tagText)) {
             techTags.push(tagText);
             renderTags();
-
             document.getElementById("techStackError").style.display = "none";
         }
-
         techInput.value = '';
     }
 });
 
 function renderTags() {
     tagContainer.innerHTML = '';
-
     techTags.forEach((tag, index) => {
         let tagElement = document.createElement('span');
         tagElement.className = 'tech-tag';
         tagElement.innerHTML = `${tag} <i class="fas fa-times" style="cursor: pointer;" onclick="removeTag(${index})"></i>`;
         tagContainer.appendChild(tagElement);
     });
-
     hiddenTechStack.value = techTags.join(',');
 }
 
@@ -57,6 +56,7 @@ function removeTag(index) {
     techTags.splice(index, 1);
     renderTags();
 }
+
 function toggleDropdown(event) {
     event.stopPropagation();
     const container = document.getElementById('researchDropdown');
@@ -72,6 +72,7 @@ function selectResearchArea(id, name) {
     document.getElementById('dropdownOptions').classList.remove('show');
     document.getElementById("researchAreaError").style.display = "none";
 }
+
 function validateCreateForm() {
     let isValid = true;
 
@@ -82,7 +83,7 @@ function validateCreateForm() {
             techTags.push(tagText);
             renderTags();
         }
-        techInputBox.value = ''; 
+        techInputBox.value = '';
     }
 
     const titleValue = document.getElementById("createTitle").value.trim();
@@ -157,6 +158,7 @@ function confirmWithdrawal() {
         }
     });
 }
+
 function openEditModal(id, title, areaId, techStack, abstract) {
     document.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
 
@@ -207,6 +209,7 @@ function closeEditModalOutside(event) {
         closeEditModal();
     }
 }
+
 function submitEdit() {
     let isValid = true;
 
@@ -297,11 +300,11 @@ document.getElementById("editFieldProjectTitle").addEventListener("input", funct
 document.getElementById("editFieldAbstract").addEventListener("input", function () {
     if (this.value.trim() !== "") document.getElementById("editAbstractError").style.display = "none";
 });
+
 function toggleEditDropdown(event) {
     event.stopPropagation();
     const container = document.getElementById('editResearchDropdown');
     const options = document.getElementById('editDropdownOptions');
-
     container.classList.toggle('open');
     options.classList.toggle('show');
 }
@@ -318,15 +321,6 @@ function selectEditResearchArea(id, name) {
     document.getElementById("editResearchAreaError").style.display = "none";
 }
 
-window.onclick = function (event) {
-    if (!event.target.closest('.custom-dropdown-container')) {
-        const options = document.querySelectorAll('.custom-dropdown-options');
-        const containers = document.querySelectorAll('.custom-dropdown-container');
-        options.forEach(opt => opt.classList.remove('show'));
-        containers.forEach(cont => cont.classList.remove('open'));
-    }
-};
-
 document.getElementById('editFieldTechStack').addEventListener('keyup', function (e) {
     if (e.key === ',' || e.key === 'Enter') {
         let val = this.value.trim();
@@ -336,7 +330,6 @@ document.getElementById('editFieldTechStack').addEventListener('keyup', function
         if (val.length > 0) {
             addTechTag(val);
             this.value = '';
-
             document.getElementById("editTechStackError").style.display = "none";
         }
     }
@@ -344,7 +337,6 @@ document.getElementById('editFieldTechStack').addEventListener('keyup', function
 
 function addTechTag(name) {
     const container = document.getElementById('editTagContainerElement');
-
     const isDuplicate = Array.from(container.querySelectorAll('.tech-tag'))
         .some(tag => tag.innerText.replace('×', '').trim().toLowerCase() === name.toLowerCase());
 
@@ -353,5 +345,41 @@ function addTechTag(name) {
         span.className = 'tech-tag';
         span.innerHTML = `${name} <i onclick="this.parentElement.remove()">&times;</i>`;
         container.appendChild(span);
+    }
+}
+
+function openViewModal(title, area, tech, abstract) {
+    document.getElementById('modalTitle').innerText = title;
+    document.getElementById('modalArea').innerText = area;
+    document.getElementById('modalAbstractText').innerText = abstract;
+
+    const techContainer = document.getElementById('modalTechStack');
+    techContainer.innerHTML = '';
+
+    if (tech) {
+        tech.split(',').forEach(t => {
+            if (t.trim() !== "") {
+                const span = document.createElement('span');
+                span.className = 'tech-tag';
+                span.innerText = t.trim();
+                techContainer.appendChild(span);
+            }
+        });
+    }
+
+    document.getElementById('viewAbstractModal').style.display = 'flex';
+}
+
+function closeViewModal() {
+    const modal = document.getElementById('viewAbstractModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+function closeViewModalOutside(event) {
+    const modal = document.getElementById('viewAbstractModal');
+    if (event.target === modal) {
+        closeViewModal();
     }
 }
