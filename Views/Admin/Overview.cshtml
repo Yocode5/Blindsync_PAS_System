@@ -62,7 +62,7 @@
                                     <i class="fas fa-times" style="color: #ef4444; font-size: 1.2rem; margin-right: 10px;"></i>
                                 </span>
                                 
-                                <span title="Reassign Supervisor" onclick="openReassignModal('@project.StudentName', '@project.ProjectTitle', '@project.SupervisorName')" style="cursor: pointer;">
+                                <span title="Reassign Supervisor" onclick="openReassignModal(@project.ProjectId, '@project.StudentName', '@project.ProjectTitle', '@project.SupervisorName')" style="cursor: pointer;">
                                     <i class="fas fa-sync-alt" style="color: #10b981; font-size: 1.2rem;"></i>
                                 </span>
                             </div>
@@ -84,16 +84,22 @@
             <p><strong>Student Name:</strong> <span id="modalStudentName"></span></p>
             <p><strong>Project Name:</strong> <span id="modalProjectName"></span></p>
             <p><strong>Current Supervisor:</strong> <span id="modalCurrentSupervisor"></span></p>
+            
             <div style="margin-top: 1.5rem;">
                 <label style="font-weight: bold; font-size: 1.1rem;">Select Supervisor:</label>
                 <select class="custom-select" id="newSupervisorSelect">
                     <option value="">[Select New Supervisor]</option>
-                    <option value="Dr. Smith">Dr. Smith</option>
-                    <option value="Dr. Silva">Dr. Silva</option>
-                    <option value="Prof. Perera">Prof. Perera</option>
+                    
+                    @if (ViewBag.Supervisors != null)
+                    {
+                        foreach (var supervisor in ViewBag.Supervisors)
+                        {
+                            <option value="@supervisor.Id">@supervisor.FullName</option>
+                        }
+                    }
                 </select>
             </div>
-        </div>
+            </div>
         <div class="modal-footer">
             <button class="btn-reassign" onclick="submitReassign()">Reassign</button>
             <button class="btn-cancel" onclick="closeReassignModal()">Cancel</button>
