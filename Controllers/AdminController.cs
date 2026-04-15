@@ -23,7 +23,7 @@ namespace Blindsync_PAS_System.Controllers
 
        public async Task<IActionResult> Overview()
         {
-            //  username from the email to display 
+            //username from the email to display 
             ViewBag.UserName = User.Identity?.Name?.Split('@')[0] ?? "Guest";
 
             var overviewData = new AdminOverviewVM
@@ -34,7 +34,7 @@ namespace Blindsync_PAS_System.Controllers
                 TotalMatched = await _context.Projects.CountAsync(p => p.Status == ProjectStatus.Matched),
                 TotalPending = await _context.Projects.CountAsync(p => p.Status == ProjectStatus.Pending),
 
-                // Retrieve a list of recent projects to display in the overview data table
+                //Retrieve a list of recent projects to display in the overview data table
                 Projects = await _context.Projects
                     .Include(p => p.Creator) // Join the Student (Creator) table
                         .ThenInclude(s => s.UserAccount) 
@@ -52,10 +52,11 @@ namespace Blindsync_PAS_System.Controllers
                     .OrderByDescending(p => p.ProjectId) 
                     .Take(10) // Limit the table to 10 rows
                     .ToListAsync()
-            };
+            };           
 
             return View(overviewData);
         }
+        
 
         public async Task<IActionResult> Users()
         {
@@ -219,6 +220,30 @@ namespace Blindsync_PAS_System.Controllers
             return Json(new { success = true, message = $"User Had been {newStatusText}" });
 
         }
+        [HttpPost]
+        public async Task<IActionResult> ReassignSupervisor([FromBody] ReassignSupervisorDto model)
+        {
+            if (model == null || model.ProjectId == 0 || model.SupervisorId == 0)
+            {
+                return Json(new { success = false, message = "Invalid data received." });
+            }            
+            //Find the project by its ID
+            var project = await _context.Projects.FindAsync(model.ProjectId);
+            
+            if (project == null)
+            {
+                return Json(new { success = false, message = "Project not found in the database." });
+            }
+            //Update the supervisor
+            project.SupervisorId = model.SupervisorId;
+            // If the project was "Pending", update it to "Matched" since a supervisor is now assigned
+            if (project.Status == ProjectStatus.Pending)
+             {
+                 project.Status = ProjectStatus.Matched;
+            }           
+            await _context.SaveChangesAsync();
+            return Json(new { success = true, message = "Supervisor reassigned successfully!" });
+            }  
         
         
     }
