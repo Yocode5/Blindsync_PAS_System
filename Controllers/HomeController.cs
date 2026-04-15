@@ -80,14 +80,12 @@ namespace Blindsync_PAS_System.Controllers
 
         [Authorize]
         [HttpGet]
-        public IActionResult Profile(string returnUrl = null)
+        public IActionResult LoadProfileModal()
         {
-            ViewData["ReturnUrl"] = returnUrl;
-
             var userEmail = User.Identity.Name;
             var user = _context.Users.FirstOrDefault(u => u.Email == userEmail);
 
-            if (user == null) return RedirectToAction("Login", "Home");
+            if (user == null) return Unauthorized();
 
             var viewModel = new UserProfileVM
             {
@@ -96,23 +94,24 @@ namespace Blindsync_PAS_System.Controllers
                 Email = user.Email
             };
 
-            return View(viewModel);
+            return PartialView("_ProfileModal", viewModel);
         }
 
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Profile(UserProfileVM model, string returnUrl = null)
+        public async Task<IActionResult> UpdateProfile(UserProfileVM model)
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                return Json(new { success = false, message = string.Join("\n", errors) });
             }
 
             var userEmail = User.Identity.Name;
             var user = _context.Users.FirstOrDefault(u => u.Email == userEmail);
 
-            if (user == null) return RedirectToAction("Login", "Home");
+            if (user == null) return Json(new { success = false, message = "User not found." });
 
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
@@ -120,6 +119,11 @@ namespace Blindsync_PAS_System.Controllers
 
             if (!string.IsNullOrEmpty(model.NewPassword))
             {
+                if (string.IsNullOrEmpty(model.CurrentPassword))
+                {
+                    return Json(new { success = false, message = "Current password is required to set a new password." });
+                }
+
                 var hasher = new Microsoft.AspNetCore.Identity.PasswordHasher<User>();
                 var result = hasher.VerifyHashedPassword(user, user.PasswordHash, model.CurrentPassword);
 
@@ -130,21 +134,19 @@ namespace Blindsync_PAS_System.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("CurrentPassword", "The current password you entered is incorrect.");
-                    return View(model);
+                    return Json(new { success = false, message = "The current password you entered is incorrect." });
                 }
             }
 
             _context.SaveChanges();
 
-            var oldEmail = User.Identity.Name;
-            if (oldEmail != model.Email)
+            if (userEmail != model.Email)
             {
                 var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, model.Email),
-                    new Claim(ClaimTypes.Role, user.Role)
-                };
+        {
+            new Claim(ClaimTypes.Name, model.Email),
+            new Claim(ClaimTypes.Role, user.Role)
+        };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -153,18 +155,7 @@ namespace Blindsync_PAS_System.Controllers
                     new ClaimsPrincipal(claimsIdentity));
             }
 
-            TempData["SuccessMessage"] = "Profile updated successfully!";
-
-            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-
-            if (user.Role == "Admin") return RedirectToAction("Overview", "Admin");
-            if (user.Role == "Student") return RedirectToAction("Dashboard", "Students");
-            if (user.Role == "Supervisor") return RedirectToAction("ReviewBoard", "Supervisors");
-
-            return RedirectToAction("Index", "Home");
+            return Json(new { success = true, message = "Profile updated successfully!" });
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
