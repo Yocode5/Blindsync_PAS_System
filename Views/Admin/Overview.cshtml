@@ -2,34 +2,21 @@
 
 @{
     ViewData["Title"] = "Admin Dashboard";
-    Layout = null; 
+   
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/Admin/OverviewStyle.css" />
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - BlindSync</title>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-    
-    <link rel="stylesheet" href="~/css/Navbar.css" />
-    
-    <link rel="stylesheet" href="~/css/Admin/OverviewStyle.css" />
-    
-</head>
-<body>    
-    <partial name="_AdminNavbar" />
     <div class="admin-container">        
         <h1 class="welcome-text">Welcome, Admin!</h1>
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-title">👥 Students</div>
+                <div class="stat-title"> Students</div>
                 <div class="stat-value">@Model.TotalStudents</div>
             </div>
             <div class="stat-card">
-                <div class="stat-title">🔄 Total Matched</div>
+                <div class="stat-title"> Total Matched</div>
                 <div class="stat-value">@Model.TotalMatched</div>
             </div>
             <div class="stat-card">
@@ -114,5 +101,3 @@
     </div>
 </div>
 <script src="~/js/Admin/Overview.js" asp-append-version="true"></script>
-</body>
-</html>
