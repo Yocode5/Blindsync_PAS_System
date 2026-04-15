@@ -26,6 +26,14 @@ namespace Blindsync_PAS_System.Controllers
             //username from the email to display 
             ViewBag.UserName = User.Identity?.Name?.Split('@')[0] ?? "Guest";
 
+            ViewBag.Supervisors = await _context.Supervisors
+                .Include(s => s.UserAccount)
+                .Select(s => new {
+                    Id = s.Id, // Check if your primary key is 'Id' or 'SupervisorId'
+                    FullName = s.UserAccount.FirstName + " " + s.UserAccount.LastName
+                })
+                .ToListAsync();
+
             var overviewData = new AdminOverviewVM
             {
                 // Retrieve total counts for the top statistical cards
@@ -52,6 +60,7 @@ namespace Blindsync_PAS_System.Controllers
                     .OrderByDescending(p => p.ProjectId) 
                     .Take(10) // Limit the table to 10 rows
                     .ToListAsync()
+                    
             };           
 
             return View(overviewData);
