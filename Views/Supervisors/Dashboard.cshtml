@@ -1,0 +1,77 @@
+@{
+    ViewData["Title"] = "Supervisor Dashboard - BlindSync";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlindSync - Supervisor Dashboard</title>
+    <link rel="stylesheet" href="~/css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="custom-navbar">
+        <div class="nav-brand">BlindSync</div>
+        <div class="nav-links">
+            <a href="#">📋 Review Board</a>
+            <a href="#">🤝 My Matches</a>
+        </div>
+        <div class="nav-actions">
+            <button class="btn-profile" onclick="showToast('Profile page coming soon')">👤 Profile</button>
+            <button class="btn-logout" onclick="showToast('Logged out', false)">🚪 Logout</button>
+        </div>
+    </nav>
+
+    <!-- Welcome Message -->
+    <div class="welcome-container">
+        <div class="welcome">Welcome, @ViewBag.SupervisorName</div>
+    </div>
+
+    <!-- Main Content Box -->
+    <div class="content-box">
+        <div class="filter-title">Filter My Expertise</div>
+        
+        <!-- Search Bar -->
+        <div class="filter-search-bar">
+            <input type="text" id="searchInput" placeholder="🔍 Search projects...">
+        </div>
+        
+        <!-- Filter Buttons -->
+        <div class="filter-buttons" id="filterButtonsContainer">
+            <button class="filter-btn" data-expertise="AI">Artificial Intelligence<span class="close-x" onclick="event.stopPropagation(); removeFilter(this)">✕</span></button>
+            <button class="filter-btn" data-expertise="Web">Web Development<span class="close-x" onclick="event.stopPropagation(); removeFilter(this)">✕</span></button>
+            <button class="filter-btn" data-expertise="Cyber">Cybersecurity<span class="close-x" onclick="event.stopPropagation(); removeFilter(this)">✕</span></button>
+            <button class="filter-btn active" data-expertise="all">All<span class="close-x" onclick="event.stopPropagation(); removeFilter(this)">✕</span></button>
+        </div>
+        
+        <!-- Projects Section -->
+        <div class="projects-title" id="projectsTitle">Aligned Projects</div>
+        
+        <div class="projects-grid" id="projectsGrid">
+            <!-- Project cards will be populated dynamically -->
+        </div>
+    </div>
+
+    <!-- Modal for View More Details -->
+    <div id="detailsModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-button-group" id="modalButtonGroup"></div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="~/js/dashboard.js"></script>
+    <script>
+        // Pass server-side data to JavaScript
+        const projectsFromServer = @Html.Raw(Json.Serialize(Model));
+    </script>
+</body>
+</html>
