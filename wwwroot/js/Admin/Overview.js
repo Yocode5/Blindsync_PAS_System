@@ -1,7 +1,7 @@
 ﻿let currentProjectId = null;
 
 function openReassignModal(projectId, studentName, projectName, currentSupervisor) {
-    currentProjectId = projectId; // ආපු ID එක save කරගන්නවා
+    currentProjectId = projectId;
     document.getElementById('modalStudentName').innerText = studentName;
     document.getElementById('modalProjectName').innerText = projectName;
     document.getElementById('modalCurrentSupervisor').innerText = currentSupervisor;
