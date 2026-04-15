@@ -112,5 +112,32 @@ namespace Blindsync_PAS_System.Controllers
             
             return View(myProposals);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> EditProposal(int id, string title, int researchAreaId, string techStack, string abstractText)
+        {
+            var project = await _context.Projects.FindAsync(id);
+
+            if (project == null)
+            {
+                return Json(new { success = false, message = "Project not found." });
+            }
+
+            project.Title = title ?? "";
+            project.ResearchAreaId = researchAreaId;
+            project.TechStack = techStack ?? "";
+            project.Abstract = abstractText ?? "";
+
+            try
+            {
+                _context.Update(project);
+                await _context.SaveChangesAsync();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
     }
 }

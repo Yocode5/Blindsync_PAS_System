@@ -67,7 +67,15 @@
                         <a href="#" class="view-details-link">View More Details</a>
 
                         <div class="proposal-actions">
-                            <button class="btn-action edit" onclick="openEditModal('@project.Title', '@project.ResearchAreaId', '@project.TechStack', '@project.Abstract')">Edit Submission</button>
+                            <button class="btn-action edit" onclick="openEditModal(
+                                             '@project.Id', 
+                                             '@Html.Raw(System.Web.HttpUtility.JavaScriptStringEncode(project.Title))', 
+                                             '@project.ResearchAreaId', 
+                                             '@project.TechStack', 
+                                             '@Html.Raw(System.Web.HttpUtility.JavaScriptStringEncode(project.Abstract))'
+                                              )">
+                                        Edit Submission </button>
+
 
                             <form id="withdrawForm" asp-action="WithdrawProposal" method="post" style="flex: 1; display: flex;">
                                 <input type="hidden" name="projectId" value="@project.Id" />
@@ -196,10 +204,12 @@
         </div>
 
         <div class="modal-body">
+            <input type="hidden" id="editFieldProjectId">
+
             <div class="form-row"> 
                 <div class="form-group">
                     <label>Project Title</label>
-                    <input type="text" id="editFieldProjectTitle" class="soft-input" placeholder="[Pre Filled]">
+                    <input type="text" id="editFieldProjectTitle" class="soft-input" placeholder="Enter title...">
                 </div>
                 
                 <div class="form-group">
@@ -213,10 +223,13 @@
                         <input type="hidden" name="ResearchAreaId" id="hiddenEditResearchAreaId">
 
                         <ul class="custom-dropdown-options" id="editDropdownOptions">
-                            <li onclick="selectEditResearchArea('1', 'Artificial Intelligence')">Artificial Intelligence</li>
-                            <li onclick="selectEditResearchArea('2', 'Software Engineering')">Software Engineering</li>
-                            <li onclick="selectEditResearchArea('3', 'Data Science')">Data Science</li>
-                            <li onclick="selectEditResearchArea('4', 'Cyber Security')">Cyber Security</li>
+                            @if (ViewBag.ResearchAreas != null)
+                            {
+                                foreach (var area in ViewBag.ResearchAreas)
+                                {
+                                    <li onclick="selectEditResearchArea('@area.Id', '@area.Name')">@area.Name</li>
+                                }
+                            }
                         </ul>
                     </div>
                 </div>
@@ -224,15 +237,13 @@
 
             <div class="form-group">
                 <label>Tech Stack</label>
-                <input type="text" id="editFieldTechStack" class="soft-input" placeholder="Tech Stack">
-                <div class="tag-container" id="editTagContainerElement">
-                     <span class="tech-tag">React <i onclick="this.parentElement.remove()">&times;</i></span>
-                </div>
+                <input type="text" id="editFieldTechStack" class="soft-input" placeholder="e.g. React, Node.js (Press Enter)">
+                <div class="tag-container" id="editTagContainerElement"></div>
             </div>
 
             <div class="form-group">
                 <label>Abstract</label>
-                <textarea id="editFieldAbstract" class="soft-input" rows="5" placeholder="[Pre Filled]"></textarea>
+                <textarea id="editFieldAbstract" class="soft-input" rows="5" placeholder="Enter abstract..."></textarea>
             </div>
         </div>
 
