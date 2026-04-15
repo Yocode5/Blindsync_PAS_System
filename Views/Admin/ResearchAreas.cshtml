@@ -2,20 +2,12 @@
 
 @{
     ViewData["Title"] = "Research Areas";
-    Layout = null;
+   
 }
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <title>@ViewData["Title"] - BlindSync</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-    
-    <link rel="stylesheet" href="~/css/Navbar.css" />
+@section Styles {
     <link rel="stylesheet" href="~/css/Admin/ResearchAreaStyle.css" asp-append-version="true" />
-</head>
-<body>    
-    <partial name="_AdminNavbar" />
+}  
+   
     <div class="admin-container">        
         <h1 class="welcome-text">Welcome, Admin!</h1>
         <div class="input-group-container">
@@ -39,5 +31,4 @@
         </div>
     </div>
     <script src="~/js/Admin/ResearchArea.js" asp-append-version="true"></script>
-</body>
-</html>
+<
