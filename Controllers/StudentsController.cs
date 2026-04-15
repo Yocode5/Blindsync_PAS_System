@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Blindsync_PAS_System.Data;
 using Blindsync_PAS_System.Models;
+using Blindsync_PAS_System.ViewModels; 
 
 namespace Blindsync_PAS_System.Controllers
 {
@@ -18,7 +19,7 @@ namespace Blindsync_PAS_System.Controllers
             var userEmail = User.Identity?.Name;
 
             var student = _context.Students
-                .Include(s => s.UserAccount) 
+                .Include(s => s.UserAccount)
                 .Include(s => s.Projects)
                     .ThenInclude(p => p.Area)
                 .Include(s => s.Projects)
@@ -41,7 +42,7 @@ namespace Blindsync_PAS_System.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProposal(string Title, int ResearchAreaId, string TechStack, string Abstract)
+        public async Task<IActionResult> CreateProposal(ProposalVM model) 
         {
             var userEmail = User.Identity?.Name;
 
@@ -56,11 +57,11 @@ namespace Blindsync_PAS_System.Controllers
             {
                 var newProject = new Project
                 {
-                    Title = Title,
-                    ResearchAreaId = ResearchAreaId,
-                    Abstract = Abstract,
+                    Title = model.Title,
+                    ResearchAreaId = model.ResearchAreaId.Value, 
+                    Abstract = model.Abstract,
                     StudentId = student.Id,
-                    TechStack = TechStack ?? "",
+                    TechStack = model.TechStack ?? "",
                     CreatedAt = DateTime.Now,
                     Status = ProjectStatus.Pending
                 };
@@ -99,44 +100,55 @@ namespace Blindsync_PAS_System.Controllers
 
         public IActionResult Proposals()
         {
-            
             var userEmail = User.Identity?.Name;
 
-            
             var myProposals = _context.Projects
                 .Include(p => p.Area)
                 .Where(p => p.Creator.UserAccount.Email == userEmail)
                 .OrderByDescending(p => p.CreatedAt)
                 .ToList();
 
-            
             return View(myProposals);
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditProposal(int id, string title, int researchAreaId, string techStack, string abstractText)
+        public async Task<IActionResult> EditProposal(ProposalVM model) 
         {
-            var project = await _context.Projects.FindAsync(id);
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                return Json(new { success = false, message = string.Join(" ", errors) });
+            }
+
+            if (!int.TryParse(model.Id, out int projectId))
+            {
+                return Json(new { success = false, message = "Invalid project ID." });
+            }
+
+            var project = await _context.Projects.FindAsync(projectId);
 
             if (project == null)
             {
                 return Json(new { success = false, message = "Project not found." });
             }
 
-            project.Title = title ?? "";
-            project.ResearchAreaId = researchAreaId;
-            project.TechStack = techStack ?? "";
-            project.Abstract = abstractText ?? "";
+            project.Title = model.Title ?? "";
+            project.ResearchAreaId = model.ResearchAreaId.Value;
+            project.TechStack = model.TechStack ?? "";
+            project.Abstract = model.Abstract ?? "";
 
             try
             {
                 _context.Update(project);
                 await _context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = "Proposal updated successfully!";
+
                 return Json(new { success = true });
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "An error occurred while saving to the database." });
             }
         }
     }

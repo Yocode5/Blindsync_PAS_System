@@ -6,20 +6,31 @@
     {
         @foreach (var project in Model)
         {
-            <div class="proposal-row">
-                <div class="proposal-details">
-                    <h3>@project.Title</h3>
-                    <p>Research Area: <span class="sub-text">@(project.Area?.Name ?? "General")</span></p>
-                    <p>Date of Submission: <span class="sub-text">@project.CreatedAt.ToString("dd MMM yyyy")</span></p>
+            <div class="proposal-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+
+                <div class="proposal-left-group" style="display: flex; align-items: center; gap: 20px;">
+
+                    <div class="proposal-icon-wrapper">
+                        <i class="fas fa-clipboard-list" style="font-size: 3.5rem; color: #17cfc3;"></i>
+                    </div>
+
+                    <div class="proposal-details">
+                        <h3 style="margin: 0 0 8px 0;">@project.Title</h3>
+                        <p style="margin: 0 0 4px 0;">
+                            Research Area: <span class="sub-text">@(project.Area?.Name ?? "General")</span>
+                        </p>
+                        <p style="margin: 0;">
+                            Date of Submission: <span class="sub-text">@project.CreatedAt.ToString("dd MMM yyyy")</span>
+                        </p>
+                    </div>
                 </div>
 
-                <div class="proposal-status-section">                  
-                   <span class="status-badge @project.Status.ToString().ToLower()">
+                <div class="proposal-status-section" style="display: flex; flex-direction: column; align-items: flex-end; gap: 12px; min-width: 150px;">
+                    <span class="status-badge @project.Status.ToString().ToLower()">
                         @project.Status.ToString()
                     </span>
 
-                   
-                    <a href="javascript:void(0)" class="view-abstract"
+                    <a href="javascript:void(0)" class="view-abstract" style="text-decoration: underline; font-size: 0.9rem;"
                        onclick="openViewModal(
                                    '@Html.Raw(JavaScriptEncoder.Default.Encode(project.Title))',
                                    '@(project.Area?.Name ?? "N/A")',
@@ -38,6 +49,7 @@
         </div>
     }
 </div>
+
 <div id="viewAbstractModal" class="modal-overlay" onclick="closeViewModalOutside(event)">
     <div class="modal-container">
         <div class="modal-header">
@@ -61,10 +73,6 @@
                 <label>Abstract</label>
                 <div id="modalAbstractText" class="soft-input" style="min-height: 160px; background: #E0E0E0; overflow-y: auto;"></div>
             </div>
-        </div>
-
-        <div class="modal-actions">
-            <button class="btn-cancel" onclick="closeViewModal()" style="width: 100%;">Close</button>
         </div>
     </div>
 </div>
