@@ -105,34 +105,37 @@ function confirmWithdrawal() {
     });
 }
 
-function openEditModal(title, areaId, techStack, abstract) {
+function openEditModal(id, title, areaId, techStack, abstract) {
+    document.getElementById('editFieldProjectId').value = id;
     document.getElementById('editFieldProjectTitle').value = title;
     document.getElementById('editFieldAbstract').value = abstract;
 
     const hiddenInput = document.getElementById('hiddenEditResearchAreaId');
     hiddenInput.value = areaId;
 
-    const areaNameMap = {
-        "1": "Artificial Intelligence",
-        "2": "Software Engineering",
-        "3": "Data Science",
-        "4": "Cyber Security"
-    };
+    let areaName = "Select Research Area";
+    const dropdownOptions = document.querySelectorAll('#editDropdownOptions li');
 
-    const selectedText = areaNameMap[areaId] || "Select Research Area";
-    document.getElementById('editSelectedResearchText').innerText = selectedText;
+    dropdownOptions.forEach(option => {
+        const onclickAttr = option.getAttribute('onclick');
+        if (onclickAttr && onclickAttr.includes(`'${areaId}'`)) {
+            areaName = option.innerText;
+        }
+    });
+
+    document.getElementById('editSelectedResearchText').innerText = areaName;
 
     const tagContainer = document.getElementById('editTagContainerElement');
     tagContainer.innerHTML = '';
 
-    if (techStack && techStack.trim() !== "") {
+    if (techStack && techStack !== "undefined" && techStack.trim() !== "") {
         const techs = techStack.split(',');
         techs.forEach(tech => {
-            const trimmedTech = tech.trim();
-            if (trimmedTech) {
+            const trimmed = tech.trim();
+            if (trimmed) {
                 const span = document.createElement('span');
                 span.className = 'tech-tag';
-                span.innerHTML = `${trimmedTech} <i onclick="this.parentElement.remove()">&times;</i>`;
+                span.innerHTML = `${trimmed} <i onclick="this.parentElement.remove()">&times;</i>`;
                 tagContainer.appendChild(span);
             }
         });
@@ -146,33 +149,37 @@ function closeEditModal() {
 }
 
 function submitEdit() {
-    const updatedTitle = document.getElementById('editFieldProjectTitle').value;
-    const updatedArea = document.getElementById('editSelectedResearchText').innerText;
+    const projectId = document.getElementById('editFieldProjectId').value;
+    const title = document.getElementById('editFieldProjectTitle').value;
+    const abstract = document.getElementById('editFieldAbstract').value;
+    const areaId = document.getElementById('hiddenEditResearchAreaId').value;
 
- 
-    const dashboardTitle = document.querySelector('.proposal-title-row h4');
-    if (dashboardTitle) {
-        dashboardTitle.innerText = updatedTitle;
-    }
-  
-    const detailRows = document.querySelectorAll('.detail-row');
-    detailRows.forEach(row => {
-        if (row.innerText.includes("Research Area:")) {
-            row.innerHTML = `<strong>Research Area:</strong> ${updatedArea}`;
+    const tagElements = document.querySelectorAll('#editTagContainerElement .tech-tag');
+    const techStack = Array.from(tagElements)
+        .map(tag => tag.innerText.replace('×', '').trim())
+        .join(',');
+
+    $.ajax({
+        url: '/Students/EditProposal',
+        type: 'POST',
+        data: {
+            id: parseInt(projectId),
+            title: title,
+            researchAreaId: parseInt(areaId),
+            techStack: techStack,
+            abstractText: abstract
+        },
+        success: function (response) {
+            if (response.success) {
+                location.reload();
+            } else {
+                alert("Update failed: " + response.message);
+            }
+        },
+        error: function () {
+            alert("Error connecting to server.");
         }
     });
-   
-    const tagElements = document.querySelectorAll('#editTagContainerElement .tech-tag');
-    const techArray = Array.from(tagElements).map(tag => tag.innerText.replace('×', '').trim());
-
-    const dashboardTagContainer = document.querySelector('.readonly-tags');
-    if (dashboardTagContainer) {
-        dashboardTagContainer.innerHTML = techArray.map(t =>
-            `<span class="tech-tag readonly">${t}</span>`
-        ).join('');
-    }
-
-    closeEditModal();
 }
 function toggleEditDropdown(event) {
     event.stopPropagation();
