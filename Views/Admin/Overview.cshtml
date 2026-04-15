@@ -5,29 +5,40 @@
    
 }
 @section Styles {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="~/css/Admin/OverviewStyle.css" />
 }
 
     <div class="admin-container">        
-        <h1 class="welcome-text">Welcome, Admin!</h1>
+        <h1 class="welcome-text">Welcome, @(ViewBag.UserName ?? "Admin")!</h1>
+
         <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-title"> Students</div>
-                <div class="stat-value">@Model.TotalStudents</div>
+        <div class="stat-card">
+            <div class="stat-title">
+                <i class="fa-solid fa-user-group" style="margin-right: 8px;"></i> Students
             </div>
-            <div class="stat-card">
-                <div class="stat-title"> Total Matched</div>
-                <div class="stat-value">@Model.TotalMatched</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-title">👨‍🏫 Supervisors</div>
-                <div class="stat-value">@Model.TotalSupervisors</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-title">⏳ Pending</div>
-                <div class="stat-value">@Model.TotalPending</div>
-            </div>
+            <div class="stat-value">@Model.TotalStudents</div>
         </div>
+        <div class="stat-card">
+            <div class="stat-title">
+                <i class="fa-solid fa-right-left" style="margin-right: 8px;"></i> Total Matched
+            </div>
+            <div class="stat-value">@Model.TotalMatched</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-title">
+                <i class="fa-solid fa-user-check" style="margin-right: 8px;"></i> Supervisors
+            </div>
+            <div class="stat-value">@Model.TotalSupervisors</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-title">
+                <i class="fa-solid fa-clipboard-list" style="margin-right: 8px;"></i> Pending
+            </div>
+            <div class="stat-value">@Model.TotalPending</div>
+        </div>
+    </div>
+        
         <div class="table-container">
             <h2>System Overview</h2>
             <table class="data-table">
@@ -57,16 +68,14 @@
                                     </span>
                                 </td>
                                 <td>
-                            <div class="action-icons">
-                                <span title="Delete" style="cursor: pointer;">
-                                    <i class="fas fa-times" style="color: #ef4444; font-size: 1.2rem; margin-right: 10px;"></i>
+                                <span title="Delete" style="cursor: pointer; margin-right: 15px;">
+                                    <i class="fa-solid fa-xmark" style="color: #f87171; font-size: 1.2rem;"></i>
                                 </span>
                                 
                                 <span title="Reassign Supervisor" onclick="openReassignModal(@project.ProjectId, '@project.StudentName', '@project.ProjectTitle', '@project.SupervisorName')" style="cursor: pointer;">
-                                    <i class="fas fa-sync-alt" style="color: #10b981; font-size: 1.2rem;"></i>
+                                    <i class="fa-solid fa-rotate" style="background-color: rgba(16, 185, 129, 0.15); color: #10b981; border-radius: 50%; padding: 6px; font-size: 0.85rem;"></i>
                                 </span>
-                            </div>
-                        </td>
+                            </td>
                             </tr>
                         }
                     }
