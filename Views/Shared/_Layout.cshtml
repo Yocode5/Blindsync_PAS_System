@@ -18,13 +18,15 @@
     <link rel="stylesheet" href="~/css/Student/MyProposalStyle.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/Student/Modals.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/Navbar.css" asp-append-version="true" />
-    <link rel="icon" type="image/x-icon" href="~/favicon2.png"/>
+
+    <link rel="stylesheet" href="~/css/Home/ProfileStyle.css" asp-append-version="true" />
+
+    <link rel="icon" type="image/x-icon" href="~/favicon2.png" />
 
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
     <header>
-        
         @if (User.IsInRole("Admin"))
         {
             @await Html.PartialAsync("_AdminNavbar")
@@ -45,20 +47,82 @@
         </main>
     </div>
 
+    <div id="globalProfileContainer"></div>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/Student/Dashboard.js" asp-append-version="true"></script>
     <script src="~/js/Student/MyProposals.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
-
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        function openProfileModal() {
+            $.get('@Url.Action("LoadProfileModal", "Home")', function (data) {
+                $('#globalProfileContainer').html(data);
+            });
+        }
+
+        function closeProfileModal() {
+            $('#globalProfileContainer').empty();
+        }
+
+        function submitProfileForm(event) {
+            event.preventDefault();
+            const form = $('#profileAjaxForm');
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("UpdateProfile", "Home")',
+                data: form.serialize(),
+                success: function (res) {
+                    if (res.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: res.message,
+                            timer: 2000,
+                            showConfirmButton: false
+                        }).then(() => {
+                            location.reload(); 
+                        });
+                    } else {
+                        Swal.fire({ icon: 'error', title: 'Error', text: res.message });
+                    }
+                },
+                error: function () {
+                    Swal.fire('Error', 'Failed to communicate with the server.', 'error');
+                }
+            });
+        }
+
+        function switchTab(tabId, element) {
+            $('.tab-content').removeClass('active');
+            $('.tab-btn').removeClass('active');
+            $('#tab-' + tabId).addClass('active');
+            $(element).addClass('active');
+        }
+
+        function toggleVisibility(inputId, icon) {
+            var input = document.getElementById(inputId);
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+            } else {
+                input.type = "password";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            }
+        }
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
 
     @if (TempData["LoginSuccess"] != null)
     {
         <script>
             document.addEventListener("DOMContentLoaded", function() {
-                 
                  const Toast = Swal.mixin({
                      toast: true,
                      position: 'top-end',
@@ -73,6 +137,6 @@
                  });
              });
         </script>
-	}
+    }
 </body>
 </html>

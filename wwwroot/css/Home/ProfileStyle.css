@@ -14,9 +14,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(15, 23, 42, 0.8);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
     z-index: 9999;
 }
 
@@ -28,6 +28,7 @@
     padding: 25px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
     position: relative;
+    animation: profileSlideIn 0.3s ease-out forwards;
 }
 
 .profile-header {
@@ -150,7 +151,7 @@
         background-color: #093f6e;
     }
 
-.btn-cancel {
+.profile-modal-container .btn-cancel {
     flex: 1;
     background-color: #f1f5f9;
     color: #475569;
@@ -162,7 +163,7 @@
     transition: background-color 0.2s;
 }
 
-    .btn-cancel:hover {
+    .profile-modal-container .btn-cancel:hover {
         background-color: #e2e8f0;
     }
 
@@ -189,3 +190,15 @@
     .toggle-password:hover {
         color: #0b508a;
     }
+
+@keyframes profileSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
