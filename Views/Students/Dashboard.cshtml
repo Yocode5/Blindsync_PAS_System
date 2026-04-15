@@ -67,7 +67,7 @@
                         <a href="#" class="view-details-link">View More Details</a>
 
                         <div class="proposal-actions">
-                            <button class="btn-action edit">Edit Submission</button>
+                            <button class="btn-action edit" onclick="openEditModal('@project.Title', '@project.ResearchAreaId', '@project.TechStack', '@project.Abstract')">Edit Submission</button>
 
                             <form id="withdrawForm" asp-action="WithdrawProposal" method="post" style="flex: 1; display: flex;">
                                 <input type="hidden" name="projectId" value="@project.Id" />
@@ -185,5 +185,60 @@
                 <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
             </div>
         </form>
+    </div>
+</div>
+
+<div id="editProposalModal" class="modal-overlay" onclick="closeEditModalOutside(event)" style="display: none;">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h2>Edit Proposal</h2>
+            <span class="close-btn" onclick="closeEditModal()">&times;</span>
+        </div>
+
+        <div class="modal-body">
+            <div class="form-row"> 
+                <div class="form-group">
+                    <label>Project Title</label>
+                    <input type="text" id="editFieldProjectTitle" class="soft-input" placeholder="[Pre Filled]">
+                </div>
+                
+                <div class="form-group">
+                    <label>Research Area</label>
+                    <div class="custom-dropdown-container" id="editResearchDropdown">
+                        <div class="custom-dropdown-trigger" onclick="toggleEditDropdown(event)">
+                            <span id="editSelectedResearchText">Select Research Area</span>
+                            <i class="fas fa-chevron-down dropdown-icon" id="editDropdownIcon"></i>
+                        </div>
+
+                        <input type="hidden" name="ResearchAreaId" id="hiddenEditResearchAreaId">
+
+                        <ul class="custom-dropdown-options" id="editDropdownOptions">
+                            <li onclick="selectEditResearchArea('1', 'Artificial Intelligence')">Artificial Intelligence</li>
+                            <li onclick="selectEditResearchArea('2', 'Software Engineering')">Software Engineering</li>
+                            <li onclick="selectEditResearchArea('3', 'Data Science')">Data Science</li>
+                            <li onclick="selectEditResearchArea('4', 'Cyber Security')">Cyber Security</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Tech Stack</label>
+                <input type="text" id="editFieldTechStack" class="soft-input" placeholder="Tech Stack">
+                <div class="tag-container" id="editTagContainerElement">
+                     <span class="tech-tag">React <i onclick="this.parentElement.remove()">&times;</i></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Abstract</label>
+                <textarea id="editFieldAbstract" class="soft-input" rows="5" placeholder="[Pre Filled]"></textarea>
+            </div>
+        </div>
+
+        <div class="modal-actions">
+            <button type="button" class="btn-add" onclick="submitEdit()">Edit</button>
+            <button type="button" class="btn-cancel" onclick="closeEditModal()">Cancel</button>
+        </div>
     </div>
 </div>

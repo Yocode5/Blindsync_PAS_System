@@ -310,3 +310,57 @@ main, .container {
     .btn-collaborate:hover {
         opacity: 0.8;
     }
+
+
+#editProposalModal .custom-dropdown-trigger {
+    background-color: var(--accent-teal) !important;
+    color: white !important;
+    border-radius: 12px !important;
+    height: 48px !important;
+    padding: 0 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    cursor: pointer !important;
+}
+
+
+#editProposalModal .dropdown-icon {
+    transition: transform 0.3s ease !important;
+}
+
+#editProposalModal .custom-dropdown-container.open .dropdown-icon {
+    transform: rotate(180deg) !important; 
+}
+
+
+#editProposalModal .custom-dropdown-options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    margin-top: 8px;
+    padding: 8px 0;
+    list-style: none;
+    max-height: 180px; 
+    overflow-y: auto; 
+    z-index: 2500;
+    display: none; 
+}
+
+    #editProposalModal .custom-dropdown-options.show {
+        display: block !important;
+    }
+
+ 
+    #editProposalModal .custom-dropdown-options::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    #editProposalModal .custom-dropdown-options::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 10px;
+    }
