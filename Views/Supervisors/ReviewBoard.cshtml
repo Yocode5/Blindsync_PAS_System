@@ -1,44 +1,189 @@
-﻿@{
+﻿@model Blindsync_PAS_System.ViewModels.SupervisorDashboardViewModel 
+@using System.Text.Encodings.Web
+
+@{
     ViewData["Title"] = "Review Board";
 }
 
-@*Temporary UI fix*@
-<h1>Review Board</h1>
+<link rel="stylesheet" href="~/css/Supervisor/ReviewBoardStyle.css" asp-append-version="true" />
 
-<p>
-    <a href="#">Create New</a>
-</p>
+<div class="container mt-4 dashboard-wrapper">
+    <h3>Welcome, @Model.FirstName</h3>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Supervisor ID</th>
-            <th>Project Quota</th>
-            <th>User Account</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>SUP-001</td>
-            <td>5</td>
-            <td>prof.smith@uni.ac.lk</td>
-            <td>
-                <a href="#">Edit</a> |
-                <a href="#">Details</a> |
-                <a href="#">Delete</a>
-            </td>
-        </tr>
+    <div class="main-content-box">
+        <div class="filter-section">
+            <h4>Filter My Expertise</h4>
+            <input type="text" id="projectSearch" class="search-input" placeholder="Search projects by name or research area...">
+            
+            <div id="selectedTags" class="selected-tags-container">
+                @foreach(var area in Model.ExpertiseAreas)
+                {
+                    <span class="expertise-tag" data-name="@area">
+                        @area <span class="remove-tag">&times;</span>
+                    </span>
+                }
+            </div>
 
-        <tr>
-            <td>SUP-002</td>
-            <td>3</td>
-            <td>dr.jones@uni.ac.lk</td>
-            <td>
-                <a href="#">Edit</a> |
-                <a href="#">Details</a> |
-                <a href="#">Delete</a>
-            </td>
-        </tr>
-    </tbody>
-</table>
+            <h5 class="available-categories-title">Available categories to select:</h5>
+            <div id="availableTags" class="available-categories-container">
+                @foreach(var area in Model.AvailableResearchAreas)
+                {
+                    <span class="available-tag" data-name="@area">@area</span>
+                }
+            </div>
+        </div>
+
+        <hr style="border-color: rgba(255,255,255,0.1); margin: 25px 0;">
+
+        <h4 class="aligned-projects-header">Aligned Projects</h4>
+        <p id="emptyMessage" style="display:none;">Select at least one expertise category to view aligned projects.</p>
+        
+        <div id="projectsList" class="projects-container">
+            @foreach(var project in Model.AlignedProjects)
+            {
+                <div class="project-card" data-title="@project.Title.ToLower()" data-area="@project.ResearchArea">
+                    <span class="card-header-icon">&#128196;</span>
+                    <h5>@project.Title</h5>
+                    <p class="mb-1"><b>Research Area:</b> @project.ResearchArea</p>
+                    <p class="mb-1"><b>Tech Stack:</b></p>
+                    <div class="mb-2">
+                        @foreach(var tech in project.TechStack)
+                        {
+                            <span class="tech-tag">@tech</span>
+                        }
+                    </div>
+                    <a class="view-more" onclick="openModal('@project.ProjectId', '@JavaScriptEncoder.Default.Encode(project.Title)', '@project.ResearchArea', '@string.Join(", ", project.TechStack)', '@JavaScriptEncoder.Default.Encode(project.AbstractText)')">
+                       View More Details
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="projectModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content custom-modal-content">
+            <input type="hidden" id="selectedProjectId" />
+
+            <div class="modal-header border-0 pb-0">
+                <h4 class="modal-title fw-bold" id="modalTitle">Project Title</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><b>Research Area:</b> <span id="modalArea"></span></p>
+                <p><b>Tech Stack:</b></p>
+                <div id="modalTechStack" class="mb-3"></div>
+                <p><b>Abstract:</b></p>
+                <div class="modal-abstract">
+                    <span id="modalAbstract"></span>
+                </div>
+            </div>
+            <div class="modal-footer border-0 d-flex justify-content-between">
+                <button type="button" class="btn btn-accept" onclick="acceptProject()">Accept Project</button>
+                <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/Supervisor/ReviewBoard.js" asp-append-version="true"></script>
+@section Scripts {
+    <script>
+        // Global function to open the modal
+        function openModal(id, title, area, techStackStr, abstractText) {
+            console.log("Modal trigger for ID:", id);            
+            let doc = new DOMParser().parseFromString(title, "text/html");
+            let decodedTitle = doc.documentElement.textContent;
+            
+            let docAbs = new DOMParser().parseFromString(abstractText, "text/html");
+            let decodedAbstract = docAbs.documentElement.textContent;            
+            const modalTitle = document.getElementById('modalTitle');
+            const modalArea = document.getElementById('modalArea');
+            const modalAbstract = document.getElementById('modalAbstract');
+            const selectedIdInput = document.getElementById('selectedProjectId');
+
+            if (modalTitle && modalArea && modalAbstract) {
+                selectedIdInput.value = id;
+                modalTitle.innerText = decodedTitle;
+                modalArea.innerText = area;
+                modalAbstract.innerText = decodedAbstract;
+
+                let techContainer = document.getElementById('modalTechStack');
+                techContainer.innerHTML = '';
+                techStackStr.split(',').forEach(tech => {
+                    if(tech.trim() !== "") {
+                        let span = document.createElement('span');
+                        span.className = 'tech-tag d-inline-block mb-1';
+                        span.innerText = tech.trim();
+                        span.style.backgroundColor = '#20B2AA'; 
+                        span.style.color = 'black';
+                        techContainer.appendChild(span);
+                    }
+                });               
+                var myModal = new bootstrap.Modal(document.getElementById('projectModal'));
+                myModal.show();
+            } else {
+                console.error("One or more Modal elements not found!");
+            }
+        }        
+        function acceptProject() {
+            const projectId = document.getElementById('selectedProjectId').value;
+            fetch(`/Supervisors/AcceptProject?id=${projectId}`, { method: 'POST' })
+            .then(response => {
+                if (response.ok) {
+                    alert("Project accepted successfully!");
+                    location.reload();
+                }
+            });
+        }        
+        document.addEventListener("DOMContentLoaded", function() {
+            const selectedTagsContainer = document.getElementById('selectedTags');
+            const projectsList = document.getElementById('projectsList');
+            const emptyMessage = document.getElementById('emptyMessage');
+            const searchInput = document.getElementById('projectSearch');
+            let selectedCategories = [];            
+            if (!selectedTagsContainer || !projectsList) return;
+
+            function updateUI() {
+                const cards = projectsList.querySelectorAll('.project-card');
+                let visibleCount = 0;
+
+                cards.forEach(card => {
+                    const area = card.getAttribute('data-area');
+                    if (selectedCategories.includes(area)) {
+                        card.style.display = 'flex';
+                        visibleCount++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                projectsList.style.display = visibleCount > 0 ? 'flex' : 'none';
+                emptyMessage.style.display = visibleCount > 0 ? 'none' : 'block';
+            }           
+            document.querySelectorAll('.available-tag').forEach(tag => {
+                tag.addEventListener('click', function() {
+                    const name = this.getAttribute('data-name');
+                    if (!selectedCategories.includes(name)) {
+                        selectedCategories.push(name);
+                        this.style.display = 'none';                       
+                        
+                        const span = document.createElement('span');
+                        span.className = 'expertise-tag';
+                        span.innerHTML = `${name} <span class="remove-tag" style="cursor:pointer; margin-left:8px;">&times;</span>`;
+                        selectedTagsContainer.appendChild(span);
+
+                        span.querySelector('.remove-tag').addEventListener('click', () => {
+                            selectedCategories = selectedCategories.filter(c => c !== name);
+                            span.remove();
+                            this.style.display = 'block';
+                            updateUI();
+                        });
+                        updateUI();
+                    }
+                });
+            });
+        });
+    </script>
+}
