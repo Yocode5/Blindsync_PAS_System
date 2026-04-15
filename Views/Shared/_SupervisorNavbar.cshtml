@@ -1,5 +1,33 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
 }
+
+<nav class="custom-navbar">
+    <div class="nav-brand">
+        <strong>BlindSync</strong>
+    </div>
+
+    <div class="nav-links">
+        <a asp-controller="Supervisors" asp-action="ReviewBoard"
+           class="nav-item @(currentAction == "ReviewBoard" ? "active" : "")">
+            <i class="fas fa-th-large"></i> Review Board
+        </a>
+
+        <a asp-controller="Supervisors" asp-action="MyMatches"
+           class="nav-item @(currentAction == "MyMatches" ? "active" : "")">
+            <i class="fas fa-book"></i> My Matches
+        </a>
+    </div>
+
+    <div class="nav-actions">
+        <a asp-controller="Home" asp-action="Profile" class="btn btn-profile" style="text-decoration: none;">
+            <i class="fas fa-user-circle"></i> Profile
+        </a>
+
+        <form asp-controller="Home" asp-action="Logout" method="post" style="margin: 0;">
+            <button type="submit" class="btn btn-logout">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </form>
+    </div>
+</nav>

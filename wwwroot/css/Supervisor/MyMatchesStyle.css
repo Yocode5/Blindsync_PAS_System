@@ -1,2 +1,179 @@
-﻿body {
+﻿.supervisor-dashboard-wrapper {
+    padding: 30px 40px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #ffffff;
+}
+
+.welcome-header {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 25px;
+    letter-spacing: 0.5px;
+    color: #ffffff;
+}
+
+.matches-main-container {
+    background-color: #1a2b3c;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    height: 75vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 25px;
+    color: #ffffff;
+}
+
+.matches-scroll-area {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding-right: 15px;
+}
+
+    .matches-scroll-area::-webkit-scrollbar {
+        width: 12px;
+    }
+
+    .matches-scroll-area::-webkit-scrollbar-track {
+        background: #111d28;
+        border-radius: 10px;
+    }
+
+    .matches-scroll-area::-webkit-scrollbar-thumb {
+        background: #a0aec0;
+        border-radius: 10px;
+        border: 3px solid #111d28;
+    }
+
+.match-card {
+    background-color: #0f3d4c;
+    border-radius: 16px;
+    padding: 25px 30px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: stretch;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.match-col-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: 30px;
+}
+
+    .match-col-icon i {
+        font-size: 5rem;
+        color: #22d3ee;
+    }
+
+.match-col-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.project-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    color: #ffffff;
+}
+
+.research-area {
+    margin: 0 0 15px 0;
+    font-size: 1rem;
+    color: #cbd5e1;
+}
+
+.tech-stack-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.95rem;
+}
+
+.tech-pill {
+    background-color: #112f3c;
+    color: #e2e8f0;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+}
+
+.match-divider {
+    width: 2px;
+    background-color: #22d3ee;
+    opacity: 0.5;
+    margin: 0 40px;
+}
+
+.match-col-student {
+    flex: 1.2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+}
+
+.student-info {
+    margin: 0 0 8px 0;
+    font-size: 1rem;
+    color: #e2e8f0;
+}
+
+    .student-info strong {
+        color: #ffffff;
+    }
+
+.btn-chat {
+    position: absolute;
+    top: -5px;
+    right: 0;
+    background-color: #082f49;
+    color: #22d3ee;
+    border: none;
+    border-radius: 8px;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+    .btn-chat:hover {
+        background-color: #0f172a;
+    }
+
+.match-bottom-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 15px;
+}
+
+.link-read-proposal {
+    color: #22d3ee;
+    text-decoration: underline;
+    font-size: 0.95rem;
+    transition: color 0.2s;
+}
+
+    .link-read-proposal:hover {
+        color: #67e8f9;
+    }
+
+.date-accepted {
+    font-size: 0.9rem;
+    color: #cbd5e1;
 }

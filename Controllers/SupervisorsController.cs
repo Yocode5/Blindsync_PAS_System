@@ -6,7 +6,12 @@ namespace Blindsync_PAS_System.Controllers
     {
         public IActionResult ReviewBoard()
         {
-            return View(); // Looks for Views/Supervisors/ReviewBoard.cshtml
+            return View();
+        }
+
+        public IActionResult MyMatches()
+        {
+            return View();
         }
     }
 }

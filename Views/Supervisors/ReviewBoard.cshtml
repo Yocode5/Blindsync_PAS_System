@@ -1,47 +1,44 @@
-﻿@model IEnumerable<Blindsync_PAS_System.Models.Supervisor>
-
-@{
-    ViewData["Title"] = "Index";
+﻿@{
+    ViewData["Title"] = "Review Board";
 }
 
-<h1>Index</h1>
+@*Temporary UI fix*@
+<h1>Review Board</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a href="#">Create New</a>
 </p>
+
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.SupervisorId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProjectQuota)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserAccount)
-            </th>
-            <th></th>
+            <th>Supervisor ID</th>
+            <th>Project Quota</th>
+            <th>User Account</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
         <tr>
+            <td>SUP-001</td>
+            <td>5</td>
+            <td>prof.smith@uni.ac.lk</td>
             <td>
-                @Html.DisplayFor(modelItem => item.SupervisorId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProjectQuota)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserAccount.Email)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a href="#">Edit</a> |
+                <a href="#">Details</a> |
+                <a href="#">Delete</a>
             </td>
         </tr>
-}
+
+        <tr>
+            <td>SUP-002</td>
+            <td>3</td>
+            <td>dr.jones@uni.ac.lk</td>
+            <td>
+                <a href="#">Edit</a> |
+                <a href="#">Details</a> |
+                <a href="#">Delete</a>
+            </td>
+        </tr>
     </tbody>
 </table>
