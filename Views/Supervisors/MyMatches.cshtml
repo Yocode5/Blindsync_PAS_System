@@ -44,7 +44,7 @@
                     <p class="student-info"><strong>Student Email:</strong> [Student Email]</p>
 
                     <div class="match-bottom-actions">
-                        <a href="#" class="link-read-proposal">Read Full Proposal</a>
+                        <a href="javascript:void(0);" class="link-read-proposal" onclick="openProposalModal()">Read Full Proposal</a>
                         <span class="date-accepted"><strong>Accepted on:</strong> [dd/mm/yyyy]</span>
                     </div>
                 </div>
@@ -72,7 +72,7 @@
                     <p class="student-info"><strong>Student Name:</strong> [Student Name]</p>
                     <p class="student-info"><strong>Student Email:</strong> [Student Email]</p>
                     <div class="match-bottom-actions">
-                        <a href="#" class="link-read-proposal">Read Full Proposal</a>
+                        <a href="javascript:void(0);" class="link-read-proposal" onclick="openProposalModal()">Read Full Proposal</a>
                         <span class="date-accepted"><strong>Accepted on:</strong> [dd/mm/yyyy]</span>
                     </div>
                 </div>
@@ -81,3 +81,40 @@
         </div>
     </div>
 </div>
+
+<div id="proposalModalOverlay" class="modal-overlay">
+    <div class="proposal-modal">
+        <div class="modal-header">
+            <h2 class="modal-title">[Project Title]</h2>
+            <button class="btn-close" onclick="closeProposalModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            <div class="modal-info-row">
+                <strong>Research Area:</strong> <span>[Research Area]</span>
+            </div>
+
+            <div class="modal-info-row">
+                <strong>Tech Stack:</strong>
+                <div class="modal-tech-stack">
+                    <span class="modal-tech-pill">[Tech]</span>
+                    <span class="modal-tech-pill">[Tech]</span>
+                    <span class="modal-tech-pill">[Tech]</span>
+                </div>
+            </div>
+
+            <div class="modal-info-row">
+                <strong>Abstract:</strong>
+                <div class="modal-abstract-box">
+                    [Abstract Text]
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/Supervisor/MyMatches.js"></script>
+}
