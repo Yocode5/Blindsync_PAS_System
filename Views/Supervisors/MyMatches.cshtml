@@ -1,0 +1,83 @@
+﻿@{
+    ViewData["Title"] = "My Matches";
+    Layout = "_Layout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Supervisor/MyMatchesStyle.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+}
+
+<div class="supervisor-dashboard-wrapper">
+    <h2 class="welcome-header">Welcome, [FirstName]</h2>
+
+    <div class="matches-main-container">
+        <h3 class="section-title">Active Matches</h3>
+
+        <div class="matches-scroll-area">
+            <div class="match-card">
+
+                <div class="match-col-icon">
+                    <i class="fas fa-book"></i>
+                </div>
+
+                <div class="match-col-details">
+                    <h4 class="project-title">[Project Proposal Name]</h4>
+                    <p class="research-area"><strong>Research Area:</strong> [Research Area]</p>
+                    <div class="tech-stack-container">
+                        <strong>Tech Stack:</strong>
+                        <span class="tech-pill">[Tech]</span>
+                        <span class="tech-pill">[Tech]</span>
+                        <span class="tech-pill">[Tech]</span>
+                    </div>
+                </div>
+
+                <div class="match-divider"></div>
+
+                <div class="match-col-student">
+                    <button class="btn-chat" title="Message Student">
+                        <i class="fas fa-comment-alt"></i>
+                    </button>
+
+                    <p class="student-info"><strong>Student ID:</strong> [Student ID]</p>
+                    <p class="student-info"><strong>Student Name:</strong> [Student Name]</p>
+                    <p class="student-info"><strong>Student Email:</strong> [Student Email]</p>
+
+                    <div class="match-bottom-actions">
+                        <a href="#" class="link-read-proposal">Read Full Proposal</a>
+                        <span class="date-accepted"><strong>Accepted on:</strong> [dd/mm/yyyy]</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="match-card">
+                <div class="match-col-icon">
+                    <i class="fas fa-book"></i>
+                </div>
+                <div class="match-col-details">
+                    <h4 class="project-title">[Project Proposal Name]</h4>
+                    <p class="research-area"><strong>Research Area:</strong> [Research Area]</p>
+                    <div class="tech-stack-container">
+                        <strong>Tech Stack:</strong>
+                        <span class="tech-pill">[Tech]</span>
+                        <span class="tech-pill">[Tech]</span>
+                        <span class="tech-pill">[Tech]</span>
+                    </div>
+                </div>
+                <div class="match-divider"></div>
+                <div class="match-col-student">
+                    <button class="btn-chat"><i class="fas fa-comment-alt"></i></button>
+                    <p class="student-info"><strong>Student ID:</strong> [Student ID]</p>
+                    <p class="student-info"><strong>Student Name:</strong> [Student Name]</p>
+                    <p class="student-info"><strong>Student Email:</strong> [Student Email]</p>
+                    <div class="match-bottom-actions">
+                        <a href="#" class="link-read-proposal">Read Full Proposal</a>
+                        <span class="date-accepted"><strong>Accepted on:</strong> [dd/mm/yyyy]</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
