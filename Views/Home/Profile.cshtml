@@ -27,7 +27,7 @@
             <button type="button" class="tab-btn @(hasSecurityError ? "active" : "")" onclick="switchTab('security', this)">Security</button>
         </div>
 
-        <form asp-controller="Home" asp-action="Profile" method="post" class="profile-form">
+        <form asp-controller="Home" asp-action="Profile" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post" class="profile-form">
 
             <div id="tab-basic" class="tab-content @(hasSecurityError ? "" : "active")">
                 <div class="form-group">
@@ -78,7 +78,7 @@
 
             <div class="profile-actions">
                 <button type="submit" class="btn-save">Save Changes</button>
-                <button type="button" class="btn-cancel" onclick="location.href='@Url.Action("Dashboard", "Students")'">Cancel</button>
+                <button type="button" class="btn-cancel" onclick="location.href='@(ViewData["ReturnUrl"] ?? "/")'">Cancel</button>
             </div>
         </form>
     </div>
