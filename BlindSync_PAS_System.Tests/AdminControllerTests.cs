@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 using System.Text.Json;
 using Blindsync_PAS_System.Controllers;
 using Blindsync_PAS_System.Data;
@@ -137,6 +139,98 @@ namespace BlindSync_PAS_System.Tests
             Assert.NotNull(savedSupervisor);
             Assert.Equal("SUP007", savedSupervisor.SupervisorId);
             Assert.Equal(5, savedSupervisor.ProjectQuota);
+        }
+
+        [Fact]
+        public async Task Overview_ReturnsCorrectViewModel_WithAggregatedData()
+        {
+            var context = GetInMemoryDbContext();
+            var controller = new AdminController(context);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "bossadmin@uni.ac.lk"),
+                    new Claim(ClaimTypes.Role, "Admin")
+                }, "mock")
+            );
+
+            controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext { User = user }
+            };
+
+            // Seeding process
+            var studentUser = new User { Email = "s1@uni.ac.lk", FirstName = "Sam", LastName = "Smith", Role = "Student", PasswordHash = "x", IsActive = true };
+            var supUser = new User { Email = "sup1@uni.ac.lk", FirstName = "Dr. Bob", LastName = "Jones", Role = "Supervisor", PasswordHash = "x", IsActive = true };
+            context.Users.AddRange(studentUser, supUser);
+            await context.SaveChangesAsync();
+
+            var student = new Student { StudentId = "STU001", UserId = studentUser.Id };
+            var supervisor = new Supervisor { SupervisorId = "SUP001", UserId = supUser.Id, ProjectQuota = 5 };
+            context.Students.Add(student);
+            context.Supervisors.Add(supervisor);
+            await context.SaveChangesAsync();
+
+            // Adding one pending and one matched project 
+            context.Projects.Add(new Project { Title = "Pending App", StudentId = student.Id, Status = ProjectStatus.Pending, Abstract = "Fake abstract data" });
+            context.Projects.Add(new Project { Title = "Matched AI", StudentId = student.Id, SupervisorId = supervisor.Id, Status = ProjectStatus.Matched, Abstract = "Fake abstract data" });
+            await context.SaveChangesAsync();
+
+            var result = await controller.Overview() as ViewResult;
+
+            Assert.NotNull(result);
+
+            var model = Assert.IsType<AdminOverviewVM>(result.Model);
+
+            Assert.Equal(1, model.TotalStudents);
+            Assert.Equal(1, model.TotalSupervisors);
+            Assert.Equal(1, model.TotalPending);
+            Assert.Equal(1, model.TotalMatched);
+
+            Assert.Equal(2, model.Projects.Count);
+
+            Assert.Equal("bossadmin", controller.ViewBag.Username);
+        }
+
+        [Fact]
+        public async Task ReassignSupervisor_UpdatesProject_AndChangesStatusToMatched()
+        {
+            var context = GetInMemoryDbContext();
+            var controller = new AdminController(context);
+
+            // Seeding a supervisor
+            var supUser = new User { Email = "newsup@uni.ac.lk", FirstName = "Doc", LastName = "Brown", Role = "Supervisor", IsActive = true, PasswordHash = "x" };
+            context.Users.Add(supUser);
+            await context.SaveChangesAsync();
+
+            var supervisor = new Supervisor { SupervisorId = "SUP999", UserId = supUser.Id, ProjectQuota = 5 };
+            context.Supervisors.Add(supervisor);
+
+            //Seeding a project that's Pending
+            var project = new Project { Title = "Time Machine UI", Status = ProjectStatus.Pending, Abstract = "1.21 Gigawatts of pure science." };
+            context.Projects.Add(project);
+            await context.SaveChangesAsync();
+
+            var payload = new ReassignSupervisorDto
+            {
+                ProjectId = project.Id,
+                SupervisorId = supervisor.Id,
+            };
+
+            var result = await controller.ReassignSupervisor(payload) as JsonResult;
+
+            Assert.NotNull(result);
+
+            var jsonString = System.Text.Json.JsonSerializer.Serialize(result.Value);
+            var data = System.Text.Json.JsonDocument.Parse(jsonString).RootElement;
+
+            Assert.True(data.GetProperty("success").GetBoolean());
+
+            var updatedProject = await context.Projects.FindAsync(project.Id);
+
+            Assert.Equal(supervisor.Id, updatedProject.SupervisorId);
+
+            Assert.Equal(ProjectStatus.Matched, updatedProject.Status);
         }
     }
 }
