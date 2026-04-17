@@ -133,13 +133,14 @@ document.getElementById("createAbstract").addEventListener("input", function () 
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-    let toast = document.getElementById("toastNotification");
-    if (toast) {
+    let toasts = document.querySelectorAll(".custom-toast");
+
+    toasts.forEach(toast => {
         setTimeout(function () {
             toast.style.animation = "slideOutRight 0.4s ease-in forwards";
             setTimeout(() => toast.remove(), 400);
         }, 3500);
-    }
+    });
 });
 
 function confirmWithdrawal() {
@@ -285,11 +286,13 @@ function submitEdit() {
             if (response.success) {
                 location.reload();
             } else {
-                alert("Update failed: " + response.message);
+                closeEditModal();
+                showCustomErrorToast(response.message);
             }
         },
         error: function () {
-            alert("Error connecting to server.");
+            closeEditModal();
+            showCustomErrorToast("A network error occurred. Please try again.");
         }
     });
 }
@@ -382,4 +385,27 @@ function closeViewModalOutside(event) {
     if (event.target === modal) {
         closeViewModal();
     }
+}
+
+function showCustomErrorToast(message) {
+    const existingToast = document.getElementById('toastNotificationError');
+    if (existingToast) {
+        existingToast.remove();
+    }
+
+    const toast = document.createElement('div');
+    toast.id = 'toastNotificationError';
+    toast.className = 'custom-toast error-toast';
+
+    toast.innerHTML = `
+        <i class="fas fa-exclamation-circle"></i>
+        <span>${message}</span>
+    `;
+
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.animation = 'slideOutRight 0.4s ease-out forwards';
+        setTimeout(() => toast.remove(), 400);
+    }, 4000);
 }

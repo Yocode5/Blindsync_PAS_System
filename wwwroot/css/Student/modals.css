@@ -325,3 +325,13 @@ textarea.soft-input {
     }
 }
 
+.custom-toast.error-toast {
+    background-color: #ffffff;
+    color: #e74c3c;
+    border-left: 6px solid #e74c3c; 
+}
+
+    .custom-toast.error-toast i {
+        color: #e74c3c; 
+    }
+
