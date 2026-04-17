@@ -35,31 +35,31 @@
     transition: all 0.2s ease;
 }
 
-.nav-item:hover {
-    color: var(--navbar-hover);
-    background-color: #f0f0f0;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-}
+    .nav-item:hover {
+        color: var(--navbar-hover);
+        background-color: #f0f0f0;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    }
 
-.nav-item.active {
-    color: var(--navbar-hover) !important;
-    font-weight: 700;
-    background-color: rgba(0, 0, 0, 0.05);
-    position: relative; 
-}
+    .nav-item.active {
+        color: var(--navbar-hover) !important;
+        font-weight: 700;
+        background-color: rgba(0, 0, 0, 0.05);
+        position: relative;
+    }
 
-.nav-item.active::after {
-    content: "";
-    position: absolute;
-    bottom: 4px; 
-    left: 50%;
-    transform: translateX(-50%);
-    width: 70px; 
-    height: 2px;
-    background-color: var(--navbar-hover);
-    border-radius: 2px;
-}
+        .nav-item.active::after {
+            content: "";
+            position: absolute;
+            bottom: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 2px;
+            background-color: var(--navbar-hover);
+            border-radius: 2px;
+        }
 
 .nav-actions {
     display: flex;
@@ -68,35 +68,110 @@
 
 .btn {
     border: none;
-    padding: 8px 20px; 
+    padding: 8px 20px;
     border-radius: 10px;
     color: var(--text-light);
-    font-weight: 600; 
+    font-weight: 600;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 8px;
-    transition: all 0.2s ease; 
+    transition: all 0.2s ease;
 }
 
-.btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-    color: var(--text-light) !important;
-}
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        color: var(--text-light) !important;
+    }
 
 .btn-profile {
     background-color: var(--btn-profile);
 }
 
-.btn-profile:hover {
-    background-color: var(--btn-profile-hover);
-}
+    .btn-profile:hover {
+        background-color: var(--btn-profile-hover);
+    }
 
 .btn-logout {
     background-color: var(--btn-logout);
+    outline: none !important; 
 }
 
-.btn-logout:hover {
-    background-color: var(--btn-logout-hover);
+    .btn-logout:hover {
+        background-color: var(--btn-logout-hover);
+        border-color: transparent !important;
+    }
+
+    .btn-logout:focus,
+    .btn-logout:active {
+        outline: none !important;
+        box-shadow: none !important;
+        border-color: transparent !important;
+    }
+
+.modern-popup {
+    border-radius: 20px !important;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2) !important;
+    width: 380px !important;
+    height: 300px !important;
+    padding: 1.5em !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
 }
+
+    .modern-popup .swal2-icon {
+        margin-top: 0 !important;
+        margin-bottom: 0.5em !important;
+        transform: scale(0.85); 
+    }
+
+    .modern-popup .swal2-title {
+        font-size: 1.4rem !important;
+        margin-bottom: 0.2em !important;
+        padding-top: 0 !important;
+    }
+
+    .modern-popup .swal2-html-container {
+        font-size: 0.95rem !important;
+        margin-top: 0 !important;
+        margin-bottom: 1.2em !important;
+    }
+
+    .modern-popup .swal2-actions {
+        margin-top: 0 !important;
+    }
+
+.modern-confirm-btn, .modern-cancel-btn {
+    border-radius: 10px !important;
+    padding: 10px 24px !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease !important;
+    margin: 0 8px !important;
+    border: none !important;
+    cursor: pointer;
+}
+
+.modern-confirm-btn {
+    background-color: #c94c4c !important;
+    color: white !important;
+}
+
+    .modern-confirm-btn:hover {
+        background-color: #a83c3c !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(201, 76, 76, 0.3) !important;
+    }
+
+.modern-cancel-btn {
+    background-color: #f0f4f8 !important;
+    color: #244A75 !important;
+}
+
+    .modern-cancel-btn:hover {
+        background-color: #e2e8f0 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(36, 74, 117, 0.15) !important;
+    }
