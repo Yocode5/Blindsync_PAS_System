@@ -38,6 +38,11 @@ namespace BlindSync_PAS_System.Tests
             {
                 HttpContext = new DefaultHttpContext { User = user }
             };
+
+            
+            controller.TempData = new Microsoft.AspNetCore.Mvc.ViewFeatures.TempDataDictionary(
+                controller.HttpContext,
+                Moq.Mock.Of<Microsoft.AspNetCore.Mvc.ViewFeatures.ITempDataProvider>());
         }
 
         [Fact]

@@ -31,3 +31,7 @@ jobs:
         # Build the project and catch any build errors
         - name: Build Project
           run: dotnet build --no-restore --configuration Release 
+
+        # Execute the tests
+        - name: Run Tests
+          run: dotnet test --no-build --configuration Release --verbosity normal
