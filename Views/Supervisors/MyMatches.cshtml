@@ -1,27 +1,23 @@
 ﻿@using System.Text.Encodings.Web
 @model IEnumerable<Blindsync_PAS_System.Models.Project>
 
-    @{
+@{
     ViewData["Title"] = "My Matches";
     Layout = "_Layout";
-    }
+}
 
-    @section Styles {
-        <link rel="stylesheet" href="~/css/Supervisor/MyMatchesStyle.css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-    }
+@section Styles {
+    <link rel="stylesheet" href="~/css/Supervisor/MyMatchesStyle.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+}
 
-    <div class="supervisor-dashboard-wrapper">
-        <h2 class="welcome-header">Welcome, @ViewBag.FirstName</h2>
+<div class="supervisor-dashboard-wrapper">
 
-        <div class="matches-main-container">
-            <h3 class="section-title">Active Matches</h3>
-
-            <div class="matches-scroll-area">
-                @if (Model != null && Model.Any())
+    <div class="matches-list-container">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var project in Model)
             {
-                foreach (var project in Model)
-                {
                 <div class="match-card">
                     <div class="match-col-icon">
                         <i class="fas fa-book"></i>
@@ -34,16 +30,16 @@
                         <div class="tech-stack-container">
                             <strong>Tech Stack:</strong>
                             @if (!string.IsNullOrEmpty(project.TechStack))
+                            {
+                                foreach (var tech in project.TechStack.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                                 {
-                            foreach (var tech in project.TechStack.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-                                    {
-                            <span class="tech-pill">@tech.Trim()</span>
-                                    }
+                                    <span class="tech-pill">@tech.Trim()</span>
                                 }
-                                else
-                                {
-                            <span class="tech-pill" style="background-color: transparent; border: 1px solid #4a5568;">None specified</span>
-                                }
+                            }
+                            else
+                            {
+                                <span class="tech-pill" style="background-color: transparent; border: 1px solid #4a5568;">None specified</span>
+                            }
                         </div>
                     </div>
 
@@ -51,8 +47,7 @@
 
                     <div class="match-col-student">
                         <a href="mailto:@project.Creator.UserAccount.Email?subject=Regarding Project Proposal: @project.Title"
-                           class="btn-chat" title="Email Student"
-                           style="display: inline-flex; align-items: center; justify-content: center; text-decoration: none;">
+                           class="btn-chat" title="Email Student">
                             <i class="fas fa-comment-alt"></i>
                         </a>
 
@@ -73,48 +68,47 @@
                         </div>
                     </div>
                 </div>
-                }
             }
-            else
-            {
-                <div class="no-data" style="padding: 20px; color: #a0aec0;">
-                    <p>You do not have any active matches yet.</p>
+        }
+        else
+        {
+            <div class="no-data">
+                <p>You do not have any active matches yet.</p>
+            </div>
+        }
+    </div>
+</div>
+
+<div id="proposalModalOverlay" class="modal-overlay" style="display: none;" onclick="closeProposalModalOutside(event)">
+    <div class="proposal-modal">
+        <div class="modal-header">
+            <h2 class="modal-title" id="modalTitle">[Project Title]</h2>
+            <button class="btn-close" onclick="closeProposalModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            <div class="modal-info-row">
+                <strong>Research Area:</strong> <span id="modalArea">[Research Area]</span>
+            </div>
+
+            <div class="modal-info-row">
+                <strong>Tech Stack:</strong>
+                <div class="modal-tech-stack" id="modalTechStack">
                 </div>
-            }
+            </div>
+
+            <div class="modal-info-row">
+                <strong>Abstract:</strong>
+                <div class="modal-abstract-box" id="modalAbstractText">
+                    [Abstract Text]
+                </div>
             </div>
         </div>
     </div>
+</div>
 
-    <div id="proposalModalOverlay" class="modal-overlay" style="display: none;" onclick="closeProposalModalOutside(event)">
-        <div class="proposal-modal">
-            <div class="modal-header">
-                <h2 class="modal-title" id="modalTitle">[Project Title]</h2>
-                <button class="btn-close" onclick="closeProposalModal()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-
-            <div class="modal-body">
-                <div class="modal-info-row">
-                    <strong>Research Area:</strong> <span id="modalArea">[Research Area]</span>
-                </div>
-
-                <div class="modal-info-row">
-                    <strong>Tech Stack:</strong>
-                    <div class="modal-tech-stack" id="modalTechStack">
-                    </div>
-                </div>
-
-                <div class="modal-info-row">
-                    <strong>Abstract:</strong>
-                    <div class="modal-abstract-box" id="modalAbstractText">
-                        [Abstract Text]
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    @section Scripts {
-        <script src="~/js/Supervisor/MyMatches.js" asp-append-version="true"></script>
-    }
+@section Scripts {
+    <script src="~/js/Supervisor/MyMatches.js" asp-append-version="true"></script>
+}

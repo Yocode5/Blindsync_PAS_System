@@ -85,6 +85,9 @@ namespace Blindsync_PAS_System.Controllers
             {
                 _context.Update(project);
                 await _context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = "Project accepted successfully!";
+
                 return Ok(new { message = "Project accepted successfully!" });
             }
             catch

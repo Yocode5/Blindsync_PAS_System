@@ -10,7 +10,7 @@
     let suggestionBank = [];
     document.querySelectorAll('.available-tag').forEach(tag => suggestionBank.push(tag.getAttribute('data-name')));
     document.querySelectorAll('.project-card').forEach(card => suggestionBank.push(card.getAttribute('data-title')));
-    suggestionBank = [...new Set(suggestionBank)]; 
+    suggestionBank = [...new Set(suggestionBank)];
 
     searchInput.addEventListener('input', function () {
         const val = this.value;
@@ -57,7 +57,7 @@
             const tagSpan = document.createElement('span');
             tagSpan.className = 'expertise-tag';
             tagSpan.setAttribute('data-name', name);
-            tagSpan.innerHTML = `${name} <span class="remove-tag" style="cursor:pointer; margin-left:8px;">&times;</span>`;
+            tagSpan.innerHTML = `${name} <span class="remove-tag" style="cursor:pointer; margin-left:8px; color: #000000; font-weight: bold;">&times;</span>`;
             selectedTagsContainer.appendChild(tagSpan);
 
             tagSpan.querySelector('.remove-tag').addEventListener('click', () => removeCategory(name));
@@ -116,8 +116,16 @@ function openCustomModal(id, titleEncoded, areaEncoded, techEncoded, abstractEnc
                 let span = document.createElement('span');
                 span.className = 'tech-tag d-inline-block mb-1';
                 span.innerText = tech.trim();
-                span.style.backgroundColor = '#20B2AA';
-                span.style.color = 'black';
+
+                span.style.backgroundColor = '#2c4a73';
+                span.style.color = '#ffffff';
+                span.style.padding = '6px 12px';
+                span.style.borderRadius = '8px';
+                span.style.fontSize = '0.85rem';
+                span.style.marginRight = '6px';
+                span.style.fontWeight = '500';
+                span.style.border = '1px solid rgba(255, 255, 255, 0.1)';
+
                 techContainer.appendChild(span);
             }
         });
@@ -149,20 +157,7 @@ function acceptProject() {
             if (response.ok) {
                 closeCustomModal();
 
-                if (typeof Swal !== 'undefined') {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Accepted!',
-                        text: 'Project accepted successfully.',
-                        timer: 2000,
-                        showConfirmButton: false
-                    }).then(() => {
-                        location.reload();
-                    });
-                } else {
-                    alert("Project accepted successfully!");
-                    location.reload();
-                }
+                window.location.href = window.location.pathname;
             } else {
                 alert("Failed to accept project. Please try again.");
                 acceptBtn.disabled = false;
@@ -176,3 +171,17 @@ function acceptProject() {
             acceptBtn.innerText = "Accept Project";
         });
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    const toasts = document.querySelectorAll('.custom-toast');
+
+    toasts.forEach(toast => {
+        setTimeout(() => {
+            toast.classList.add('slide-out');
+            setTimeout(() => {
+                toast.remove();
+            }, 400);
+
+        }, 3000);
+    });
+});
