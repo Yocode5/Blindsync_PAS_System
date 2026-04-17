@@ -30,24 +30,21 @@ namespace Blindsync_PAS_System.Controllers
 
             if (supervisor == null) return RedirectToAction("Login", "Home");
 
-            var expertise = new List<string> { "Machine Learning", "Cloud Computing", "IoT" };
-
             var pendingProjects = await _context.Projects
                 .Include(p => p.Area)
                 .Where(p => p.Status == ProjectStatus.Pending)
                 .ToListAsync();
 
-            var allResearchAreas = pendingProjects
-                .Where(p => p.Area != null)
-                .Select(p => p.Area.Name)
-                .Distinct()
-                .ToList();
+            var allResearchAreas = await _context.ResearchAreas
+                .Where(ra => ra.IsActive)
+                .Select(ra => ra.Name)
+                .ToListAsync();
 
             var model = new SupervisorDashboardViewModel
             {
                 FirstName = supervisor.UserAccount?.FirstName ?? "Supervisor",
-                ExpertiseAreas = expertise,
-                AvailableResearchAreas = allResearchAreas,
+                ExpertiseAreas = new List<string>(), 
+                AvailableResearchAreas = allResearchAreas, 
                 AlignedProjects = pendingProjects.Select(p => new ProjectProposalViewModel
                 {
                     ProjectId = p.Id,
@@ -61,28 +58,6 @@ namespace Blindsync_PAS_System.Controllers
             };
 
             return View(model);
-        }
-
-        public IActionResult MyMatches()
-        {
-            var userEmail = User.Identity?.Name;
-            var supervisor = _context.Supervisors
-                .Include(s => s.UserAccount)
-                .FirstOrDefault(s => s.UserAccount.Email == userEmail);
-
-            if (supervisor == null) return RedirectToAction("Login", "Home");
-
-            var matchedProjects = _context.Projects
-                .Include(p => p.Area)
-                .Include(p => p.Creator)
-                    .ThenInclude(c => c.UserAccount)
-                .Where(p => p.SupervisorId == supervisor.Id && p.Status == ProjectStatus.Matched)
-                .OrderByDescending(p => p.AssignedAt)
-                .ToList();
-
-            ViewBag.FirstName = supervisor.UserAccount.FirstName;
-
-            return View(matchedProjects);
         }
 
         [HttpPost]
@@ -116,6 +91,28 @@ namespace Blindsync_PAS_System.Controllers
             {
                 return StatusCode(500, new { message = "Error updating database" });
             }
+        }
+
+        public IActionResult MyMatches()
+        {
+            var userEmail = User.Identity?.Name;
+            var supervisor = _context.Supervisors
+                .Include(s => s.UserAccount)
+                .FirstOrDefault(s => s.UserAccount.Email == userEmail);
+
+            if (supervisor == null) return RedirectToAction("Login", "Home");
+
+            var matchedProjects = _context.Projects
+                .Include(p => p.Area)
+                .Include(p => p.Creator)
+                    .ThenInclude(c => c.UserAccount)
+                .Where(p => p.SupervisorId == supervisor.Id && p.Status == ProjectStatus.Matched)
+                .OrderByDescending(p => p.AssignedAt)
+                .ToList();
+
+            ViewBag.FirstName = supervisor.UserAccount.FirstName;
+
+            return View(matchedProjects);
         }
     }
 }
