@@ -1,55 +1,66 @@
-﻿async function addNewArea() {
-    //Reference the input field and get its trimmed value
-    const input = document.getElementById('newAreaInput');
-    const areaName = input.value.trim();
-    //Client-side validation to prevent empty submissions
-    if (areaName === "") {
-        alert("Please enter a research area name!");
-        return;
+﻿document.addEventListener('DOMContentLoaded', function () {
+    const successToast = document.getElementById('toastNotification');
+    const errorToast = document.getElementById('toastNotificationError');
+
+    if (successToast) {
+        setTimeout(() => {
+            successToast.classList.add('slide-out');
+            setTimeout(() => successToast.remove(), 400);
+        }, 3000);
     }
 
-    try {       
+    if (errorToast) {
+        setTimeout(() => {
+            errorToast.classList.add('slide-out');
+            setTimeout(() => errorToast.remove(), 400);
+        }, 3000);
+    }
+});
+
+async function addNewArea() {
+    const input = document.getElementById('newAreaInput');
+    const areaName = input.value.trim();
+
+    try {
         const response = await fetch('/Admin/AddResearchArea', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ Name: areaName })
         });
-        const result = await response.json();
-        if (result.success) {            
-            input.value = "";            
-            location.reload(); 
-        } else {           
-            alert(result.message);
-        }
+
+        location.reload();
     } catch (error) {
         console.error("Error adding research area:", error);
-        alert("Something went wrong. Please check your connection.");
     }
 }
 
-/**
-
- * @param {number} id - The unique Database ID of the Research Area.
- */
-async function deleteArea(id) {    
-    if (!confirm("Are you sure you want to delete this research area?")) return;
-    try {       
-        const response = await fetch(`/Admin/DeleteResearchArea?id=${id}`, {
-            method: 'POST'
-        });
-        const result = await response.json();        
-        if (result.success) {           
-            const tag = document.getElementById(`area-${id}`);            
-            if (tag) {                
-                tag.style.transition = 'opacity 0.3s ease';
-                tag.style.opacity = '0';                                
-                setTimeout(() => tag.remove(), 300);
-            }
-        } else {            
-            alert(result.message);
+async function deleteArea(id) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Remove this research area permanently?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it',
+        cancelButtonText: 'Cancel',
+        buttonsStyling: false,
+        background: '#ffffff',
+        color: '#1a365d',
+        backdrop: `rgba(10, 25, 47, 0.8)`,
+        customClass: {
+            popup: 'modern-popup',
+            confirmButton: 'modern-confirm-btn',
+            cancelButton: 'modern-cancel-btn'
         }
-    } catch (error) {
-        console.error("Error deleting research area:", error);
-        alert("An error occurred while deleting. Please try again.");
-    }
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            try {
+                await fetch(`/Admin/DeleteResearchArea?id=${id}`, {
+                    method: 'POST'
+                });
+                location.reload();
+            } catch (error) {
+                console.error("Error deleting research area:", error);
+            }
+        }
+    });
 }

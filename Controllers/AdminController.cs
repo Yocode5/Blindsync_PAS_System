@@ -122,35 +122,56 @@ namespace Blindsync_PAS_System.Controllers
             var areas = await _context.ResearchAreas.OrderByDescending(a => a.Id).ToListAsync();
             return View(areas);
         }
-        //Add a new Research Area
+
+        // Add a new Research Area
         [HttpPost]
         public async Task<IActionResult> AddResearchArea([FromBody] ResearchArea model)
         {
-        if (string.IsNullOrWhiteSpace(model.Name))
-        {
-            return Json(new { success = false, message = "Research Area name cannot be empty." });
+            if (string.IsNullOrWhiteSpace(model.Name))
+            {
+                TempData["ErrorMessage"] = "Research Area name cannot be empty.";
+                return Json(new { success = false });
+            }
+
+            var exists = await _context.ResearchAreas
+                .AnyAsync(a => a.Name.ToLower() == model.Name.ToLower());
+
+            if (exists)
+            {
+                TempData["ErrorMessage"] = "This Research Area already exists.";
+                return Json(new { success = false });
+            }
+
+            try
+            {
+                _context.ResearchAreas.Add(new ResearchArea
+                {
+                    Name = model.Name,
+                    IsActive = true
+                });
+
+                await _context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = "Research Area added successfully!";
+                return Json(new { success = true });
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "An error occurred while saving to the database.";
+                return Json(new { success = false });
+            }
         }
-        // Check if the name already exists
-        var exists = await _context.ResearchAreas.AnyAsync(a => a.Name.ToLower() == model.Name.ToLower());
-        if (exists)
-        {
-        return Json(new { success = false, message = "This Research Area already exists." });
-        }
-        _context.ResearchAreas.Add(new ResearchArea { Name = model.Name, IsActive = true });
-        await _context.SaveChangesAsync();
-        return Json(new { success = true, message = "Research Area added successfully!" });
-        }        
         [HttpPost]
         public async Task<IActionResult> DeleteResearchArea(int id)
         {
-        var area = await _context.ResearchAreas.FindAsync(id);
-        if (area == null)
-        {
-        return Json(new { success = false, message = "Research Area not found." });
-        }
-        _context.ResearchAreas.Remove(area);
-        await _context.SaveChangesAsync();
-        return Json(new { success = true, message = "Research Area deleted successfully!" });
+            var area = await _context.ResearchAreas.FindAsync(id);
+            if (area == null)
+            {
+            return Json(new { success = false, message = "Research Area not found." });
+            }
+            _context.ResearchAreas.Remove(area);
+            await _context.SaveChangesAsync();
+            return Json(new { success = true, message = "Research Area deleted successfully!" });
         }
 
         [HttpPost]
