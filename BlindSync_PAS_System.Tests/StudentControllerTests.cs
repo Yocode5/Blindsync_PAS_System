@@ -155,19 +155,25 @@ namespace BlindSync_PAS_System.Tests
             // ARRANGE
             var context = GetInMemoryDbContext();
 
+            // Seed a user and student so the controller can verify ownership
+            var fakeUser = new User { Id = 5, Email = "editor@uni.ac.lk", Role = "Student", PasswordHash = "x", FirstName = "Ed", LastName = "Guy" };
+            var fakeStudent = new Student { Id = 5, UserId = 5, StudentId = "STU005" };
+            context.Users.Add(fakeUser);
+            context.Students.Add(fakeStudent);
+
             var project = new Project
             {
                 Id = 50,
                 Title = "Old Title",
                 Abstract = "Old Abstract",
                 ResearchAreaId = 1,
-                TechStack = "Old Tech"
+                TechStack = "Old Tech",
+                StudentId = 5 // Assign it to our fake student
             };
             context.Projects.Add(project);
             await context.SaveChangesAsync();
 
-            var controller = new StudentsController(context); 
-            controller.TempData = new TempDataDictionary(new DefaultHttpContext(), Moq.Mock.Of<ITempDataProvider>());
+            var controller = GetControllerWithLoggedInUser(context, "editor@uni.ac.lk");
 
             var payload = new ProposalVM
             {
