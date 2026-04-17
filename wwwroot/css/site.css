@@ -56,3 +56,16 @@ h1, h2, h3, h4, h5, h6 {
     top: 120px !important; 
     right: -12px !important;
 }
+
+.swal2-icon.swal2-success {
+    border-color: #244a75 !important;
+    color: #244a75 !important;
+}
+
+    .swal2-icon.swal2-success [class^=swal2-success-line] {
+        background-color: #244a75 !important;
+    }
+
+    .swal2-icon.swal2-success .swal2-success-ring {
+        border-color: rgba(36, 74, 117, 0.3) !important;
+    }
