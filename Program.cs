@@ -51,13 +51,17 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var context = services.GetRequiredService<AppDbContext>();
-        context.Database.Migrate();
-        Console.WriteLine("Database migration completed successfully.");
+
+        if (context.Database.IsRelational())
+        {
+            context.Database.Migrate();
+            Console.WriteLine("Database migration completed successfully.");
+        }
     }
     catch (Exception ex)
     {
         Console.WriteLine($"An error occurred during migration: {ex.Message}");
-        throw;
+        throw; 
     }
 }
 
