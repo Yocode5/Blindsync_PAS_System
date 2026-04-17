@@ -146,13 +146,21 @@ document.addEventListener("DOMContentLoaded", function () {
 function confirmWithdrawal() {
     Swal.fire({
         title: 'Withdraw Proposal?',
-        text: "Are you sure you want to withdraw this proposal? You will have to submit a new one.",
+        text: "You will have to submit a new one.",
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#b03d3d',
-        cancelButtonColor: '#2b4f6b',
-        confirmButtonText: 'Yes, withdraw it!',
-        cancelButtonText: 'Cancel'
+        confirmButtonText: '<i class="fas fa-trash-alt"></i> Yes, withdraw it',
+        cancelButtonText: 'Cancel',
+        buttonsStyling: false,
+        background: '#ffffff',
+        color: '#1a365d',
+        backdrop: `rgba(10, 25, 47, 0.8)`,
+
+        customClass: {
+            popup: 'modern-popup',
+            confirmButton: 'modern-confirm-btn',
+            cancelButton: 'modern-cancel-btn'
+        }
     }).then((result) => {
         if (result.isConfirmed) {
             document.getElementById('withdrawForm').submit();

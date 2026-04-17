@@ -1,6 +1,10 @@
 ﻿@using System.Text.Encodings.Web
 @model IEnumerable<Blindsync_PAS_System.Models.Project>
 
+@{
+    ViewData["Title"] = "Student Proposals";
+}
+
 <div class="proposals-list">
     @if (Model != null && Model.Any())
     {
@@ -45,6 +49,7 @@
     else
     {
         <div class="no-data">
+            <i class="fas fa-folder-open empty-icon"></i>
             <p>You haven't submitted any proposals yet.</p>
         </div>
     }
