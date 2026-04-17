@@ -5,7 +5,24 @@
 }
 
 @section Styles {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <link rel="stylesheet" href="~/css/Supervisor/ReviewBoardStyle.css" asp-append-version="true" />
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="toastNotification" class="custom-toast">
+        <i class="fas fa-check-circle"></i>
+        <span>@TempData["SuccessMessage"]</span>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div id="toastNotificationError" class="custom-toast error-toast">
+        <i class="fas fa-exclamation-circle"></i>
+        <span>@TempData["ErrorMessage"]</span>
+    </div>
 }
 
 <div class="container mt-4 dashboard-wrapper">
@@ -41,7 +58,9 @@
             @foreach (var project in Model.AlignedProjects)
             {
                 <div class="project-card" data-title="@project.Title" data-area="@project.ResearchArea">
-                    <span class="card-header-icon">&#128196;</span>
+                    <div class="card-header-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
                     <h5>@project.Title</h5>
                     <p class="mb-1"><b>Research Area:</b> @project.ResearchArea</p>
                     <p class="mb-1"><b>Tech Stack:</b></p>
