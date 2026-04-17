@@ -8,40 +8,57 @@
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-    const errorDiv = document.getElementById('server-errors');
-    if (errorDiv && errorDiv.innerText.trim() !== '') {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Invalid email or password!',
-            confirmButtonColor: '#244A75'
-        });
+    const errorTrigger = document.getElementById('loginErrorTrigger');
+
+    if (errorTrigger) {
+        const message = errorTrigger.getAttribute('data-error');
+        showCustomErrorToast(message);
     }
 });
 
 document.querySelector('form').addEventListener('submit', function (e) {
-    const email = document.getElementById('Email').value.trim();
-    const password = document.getElementById('passwordInput').value.trim();
-
-    // Check if the fields are empty
-    if (!email || !password) {
-        e.preventDefault(); // Stops the form from submitting
-        Swal.fire({
-            icon: 'warning',
-            title: 'Hold up!',
-            text: 'Please enter both your email and password.',
-            confirmButtonColor: '#244A75'
-        });
+    if (!$(this).valid()) {
         return;
     }
 
     Swal.fire({
-        title: 'Authenticating...',
-        text: 'Checking your credentials',
+        title: 'Authenticating',
+        html: '<span style="color: #64748b; font-size: 0.95rem;">Checking your credentials securely...</span>',
         allowOutsideClick: false,
         showConfirmButton: false,
+        width: '380px',
+        padding: '2.5em',
+        background: '#ffffff',
+        color: '#1a365d',
+        backdrop: `rgba(10, 25, 47, 0.8)`,
         didOpen: () => {
             Swal.showLoading();
+            const loader = Swal.getPopup().querySelector('.swal2-loader');
+            if (loader) {
+                loader.style.borderColor = '#244A75 transparent';
+                loader.style.borderWidth = '4px';
+            }
         }
     });
-})
+});
+
+function showCustomErrorToast(message) {
+    const existingToast = document.getElementById('toastNotificationError');
+    if (existingToast) existingToast.remove();
+
+    const toast = document.createElement('div');
+    toast.id = 'toastNotificationError';
+    toast.className = 'custom-toast error-toast';
+
+    toast.innerHTML = `
+        <i class="fas fa-exclamation-circle"></i>
+        <span>${message}</span>
+    `;
+
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.animation = 'slideOutRight 0.4s ease-out forwards';
+        setTimeout(() => toast.remove(), 400);
+    }, 4000);
+}

@@ -6,7 +6,7 @@ namespace Blindsync_PAS_System.ViewModels
     {
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Invalid email format")]
-        [RegularExpression(@"^[a-zA-Z0-9._%+-]+@uni\.ac\.lk$", ErrorMessage = "Only @nsbm.ac.lk emails are allowed")]
+        [RegularExpression(@"^[a-zA-Z0-9._%+-]+@uni\.ac\.lk$", ErrorMessage = "Only @uni.ac.lk emails are allowed")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Password is required")]
