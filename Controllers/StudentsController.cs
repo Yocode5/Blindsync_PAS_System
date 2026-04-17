@@ -42,7 +42,7 @@ namespace Blindsync_PAS_System.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProposal(ProposalVM model) 
+        public async Task<IActionResult> CreateProposal(ProposalVM model)
         {
             var userEmail = User.Identity?.Name;
 
@@ -55,10 +55,19 @@ namespace Blindsync_PAS_System.Controllers
 
             if (student != null)
             {
+                bool hasActiveProposal = await _context.Projects
+                    .AnyAsync(p => p.StudentId == student.Id && p.Status != ProjectStatus.Withdrawn);
+
+                if (hasActiveProposal)
+                {
+                    TempData["ErrorMessage"] = "Action Denied: You already have an active proposal. You must withdraw it before creating a new one.";
+                    return RedirectToAction("Dashboard");
+                }
+
                 var newProject = new Project
                 {
                     Title = model.Title,
-                    ResearchAreaId = model.ResearchAreaId.Value, 
+                    ResearchAreaId = model.ResearchAreaId.Value,
                     Abstract = model.Abstract,
                     StudentId = student.Id,
                     TechStack = model.TechStack ?? "",
@@ -87,6 +96,12 @@ namespace Blindsync_PAS_System.Controllers
 
             if (project != null)
             {
+                if (project.Status != ProjectStatus.Pending)
+                {
+                    TempData["ErrorMessage"] = $"Action Denied: You cannot withdraw a proposal that is currently {project.Status}.";
+                    return RedirectToAction("Dashboard");
+                }
+
                 project.Status = ProjectStatus.Withdrawn;
 
                 _context.Projects.Update(project);
@@ -112,7 +127,7 @@ namespace Blindsync_PAS_System.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditProposal(ProposalVM model) 
+        public async Task<IActionResult> EditProposal(ProposalVM model)
         {
             if (!ModelState.IsValid)
             {
@@ -125,11 +140,26 @@ namespace Blindsync_PAS_System.Controllers
                 return Json(new { success = false, message = "Invalid project ID." });
             }
 
-            var project = await _context.Projects.FindAsync(projectId);
+            var userEmail = User.Identity?.Name;
+
+            var project = await _context.Projects
+                .Include(p => p.Creator)
+                    .ThenInclude(c => c.UserAccount)
+                .FirstOrDefaultAsync(p => p.Id == projectId);
 
             if (project == null)
             {
                 return Json(new { success = false, message = "Project not found." });
+            }
+
+            if (project.Creator.UserAccount.Email != userEmail)
+            {
+                return Json(new { success = false, message = "Action Denied: You do not have permission to edit this proposal." });
+            }
+
+            if (project.Status != ProjectStatus.Pending)
+            {
+                return Json(new { success = false, message = $"Action Denied: This proposal cannot be edited because its status is currently {project.Status}." });
             }
 
             project.Title = model.Title ?? "";
@@ -146,10 +176,10 @@ namespace Blindsync_PAS_System.Controllers
 
                 return Json(new { success = true });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return Json(new { success = false, message = "An error occurred while saving to the database." });
             }
-        }
+        }   
     }
 }

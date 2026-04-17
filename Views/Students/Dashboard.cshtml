@@ -1,5 +1,6 @@
 ﻿@model Blindsync_PAS_System.Models.Student
-@using System.Text.Encodings.Web @{
+@using System.Text.Encodings.Web
+@{
     ViewData["Title"] = "Student Dashboard";
 }
 
@@ -8,6 +9,14 @@
     <div id="toastNotification" class="custom-toast">
         <i class="fas fa-check-circle"></i>
         <span>@TempData["SuccessMessage"]</span>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div id="toastNotificationError" class="custom-toast error-toast">
+        <i class="fas fa-exclamation-circle"></i>
+        <span>@TempData["ErrorMessage"]</span>
     </div>
 }
 
@@ -77,25 +86,27 @@
                                 View More Details
                             </a>
 
-                            <div class="proposal-actions" style="margin-top: 20px;">
-                                <button class="btn-action edit" onclick="openEditModal(
-                                                 '@project.Id',
-                                                 '@Html.Raw(System.Web.HttpUtility.JavaScriptStringEncode(project.Title))',
-                                                 '@project.ResearchAreaId',
-                                                 '@project.TechStack',
-                                                 '@Html.Raw(System.Web.HttpUtility.JavaScriptStringEncode(project.Abstract))'
-                                                  )">
-                                    Edit Submission
-                                </button>
-
-
-                                <form id="withdrawForm" asp-action="WithdrawProposal" method="post" style="flex: 1; display: flex;">
-                                    <input type="hidden" name="projectId" value="@project.Id" />
-                                    <button type="button" class="btn-action withdraw" onclick="confirmWithdrawal()">
-                                        Withdraw
+                            @if (project.Status == Blindsync_PAS_System.Models.ProjectStatus.Pending)
+                            {
+                                <div class="proposal-actions" style="margin-top: 20px;">
+                                    <button class="btn-action edit" onclick="openEditModal(
+                                                     '@project.Id',
+                                                     '@Html.Raw(System.Web.HttpUtility.JavaScriptStringEncode(project.Title))',
+                                                     '@project.ResearchAreaId',
+                                                     '@project.TechStack',
+                                                     '@Html.Raw(System.Web.HttpUtility.JavaScriptStringEncode(project.Abstract))'
+                                                      )">
+                                        Edit Submission
                                     </button>
-                                </form>
-                            </div>
+
+                                    <form id="withdrawForm" asp-action="WithdrawProposal" method="post" style="flex: 1; display: flex;">
+                                        <input type="hidden" name="projectId" value="@project.Id" />
+                                        <button type="button" class="btn-action withdraw" onclick="confirmWithdrawal()">
+                                            Withdraw
+                                        </button>
+                                    </form>
+                                </div>
+                            }
                         </div>
                     </div>
 
