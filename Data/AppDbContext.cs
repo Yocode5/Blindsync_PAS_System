@@ -10,7 +10,7 @@ namespace Blindsync_PAS_System.Data
         {
         }
 
-        public DbSet<User> Users { get; set; }
+        public virtual DbSet<User> Users { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Supervisor> Supervisors { get; set; }
         public DbSet<ResearchArea> ResearchAreas { get; set; }
