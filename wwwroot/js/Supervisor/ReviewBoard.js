@@ -156,7 +156,6 @@ function acceptProject() {
         .then(response => {
             if (response.ok) {
                 closeCustomModal();
-
                 window.location.href = window.location.pathname;
             } else {
                 alert("Failed to accept project. Please try again.");
@@ -169,6 +168,32 @@ function acceptProject() {
             alert("A network error occurred.");
             acceptBtn.disabled = false;
             acceptBtn.innerText = "Accept Project";
+        });
+}
+
+function markForReview() {
+    const projectId = document.getElementById('selectedProjectId').value;
+    const reviewBtn = document.querySelector('.btn-review');
+
+    reviewBtn.disabled = true;
+    reviewBtn.innerText = "Marking...";
+
+    fetch(`/Supervisors/MarkForReview?id=${projectId}`, { method: 'POST' })
+        .then(response => {
+            if (response.ok) {
+                closeCustomModal();
+                window.location.href = window.location.pathname;
+            } else {
+                alert("Failed to mark project for review. Please try again.");
+                reviewBtn.disabled = false;
+                reviewBtn.innerText = "Mark for Review";
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("A network error occurred.");
+            reviewBtn.disabled = false;
+            reviewBtn.innerText = "Mark for Review";
         });
 }
 

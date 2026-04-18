@@ -32,7 +32,7 @@ namespace Blindsync_PAS_System.Controllers
 
             var pendingProjects = await _context.Projects
                 .Include(p => p.Area)
-                .Where(p => p.Status == ProjectStatus.Pending)
+                .Where(p => p.Status == ProjectStatus.Pending || (p.Status == ProjectStatus.UnderReview && p.SupervisorId == supervisor.Id))
                 .ToListAsync();
 
             var allResearchAreas = await _context.ResearchAreas
@@ -43,8 +43,8 @@ namespace Blindsync_PAS_System.Controllers
             var model = new SupervisorDashboardViewModel
             {
                 FirstName = supervisor.UserAccount?.FirstName ?? "Supervisor",
-                ExpertiseAreas = new List<string>(), 
-                AvailableResearchAreas = allResearchAreas, 
+                ExpertiseAreas = new List<string>(),
+                AvailableResearchAreas = allResearchAreas,
                 AlignedProjects = pendingProjects.Select(p => new ProjectProposalViewModel
                 {
                     ProjectId = p.Id,
@@ -64,11 +64,7 @@ namespace Blindsync_PAS_System.Controllers
         public async Task<IActionResult> AcceptProject(int id)
         {
             var project = await _context.Projects.FindAsync(id);
-
-            if (project == null)
-            {
-                return NotFound(new { message = "Project not found" });
-            }
+            if (project == null) return NotFound(new { message = "Project not found" });
 
             var userEmail = User.Identity?.Name;
             var supervisor = await _context.Supervisors
@@ -85,9 +81,7 @@ namespace Blindsync_PAS_System.Controllers
             {
                 _context.Update(project);
                 await _context.SaveChangesAsync();
-
                 TempData["SuccessMessage"] = "Project accepted successfully!";
-
                 return Ok(new { message = "Project accepted successfully!" });
             }
             catch
@@ -96,7 +90,68 @@ namespace Blindsync_PAS_System.Controllers
             }
         }
 
-        public IActionResult MyMatches()
+        [HttpPost]
+        public async Task<IActionResult> MarkForReview(int id)
+        {
+            var project = await _context.Projects.FindAsync(id);
+            if (project == null) return NotFound(new { message = "Project not found" });
+
+            var userEmail = User.Identity?.Name;
+            var supervisor = await _context.Supervisors
+                .Include(s => s.UserAccount)
+                .FirstOrDefaultAsync(s => s.UserAccount.Email == userEmail);
+
+            if (supervisor == null) return Unauthorized(new { message = "Unauthorized access" });
+
+            project.Status = ProjectStatus.UnderReview;
+            project.SupervisorId = supervisor.Id;
+
+            try
+            {
+                _context.Update(project);
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Project marked for review!";
+                return Ok(new { message = "Project marked for review!" });
+            }
+            catch
+            {
+                return StatusCode(500, new { message = "Error updating database" });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ReleaseProject(int id)
+        {
+            var project = await _context.Projects.FindAsync(id);
+            if (project == null) return NotFound(new { message = "Project not found" });
+
+            var userEmail = User.Identity?.Name;
+            var supervisor = await _context.Supervisors
+                .Include(s => s.UserAccount)
+                .FirstOrDefaultAsync(s => s.UserAccount.Email == userEmail);
+
+            if (supervisor == null || project.SupervisorId != supervisor.Id)
+            {
+                return Unauthorized(new { message = "Unauthorized access" });
+            }
+
+            project.Status = ProjectStatus.Pending;
+            project.SupervisorId = null;
+
+            try
+            {
+                _context.Update(project);
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Project released back to the review board.";
+                return Ok(new { message = "Project released successfully!" });
+            }
+            catch
+            {
+                return StatusCode(500, new { message = "Error updating database" });
+            }
+        }
+
+        public IActionResult MySelections()
         {
             var userEmail = User.Identity?.Name;
             var supervisor = _context.Supervisors
@@ -109,8 +164,9 @@ namespace Blindsync_PAS_System.Controllers
                 .Include(p => p.Area)
                 .Include(p => p.Creator)
                     .ThenInclude(c => c.UserAccount)
-                .Where(p => p.SupervisorId == supervisor.Id && p.Status == ProjectStatus.Matched)
-                .OrderByDescending(p => p.AssignedAt)
+                .Where(p => p.SupervisorId == supervisor.Id && (p.Status == ProjectStatus.Matched || p.Status == ProjectStatus.UnderReview))
+                .OrderBy(p => p.Status == ProjectStatus.Matched ? 1 : 0)
+                .ThenByDescending(p => p.AssignedAt)
                 .ToList();
 
             ViewBag.FirstName = supervisor.UserAccount.FirstName;

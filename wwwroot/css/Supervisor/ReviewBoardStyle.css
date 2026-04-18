@@ -324,7 +324,7 @@
 }
 
 .custom-modal-content .btn-accept,
-.custom-modal-content .btn-cancel {
+.custom-modal-content .btn-review {
     flex: 1;
     padding: 12px;
     border: none;
@@ -346,15 +346,15 @@
         box-shadow: 0 4px 12px rgba(11, 80, 138, 0.3);
     }
 
-.custom-modal-content .btn-cancel {
-    background-color: #f1f5f9;
-    color: #475569 !important;
+.custom-modal-content .btn-review {
+    background-color: #f59e0b;
+    color: white !important;
 }
 
-    .custom-modal-content .btn-cancel:hover {
-        background-color: #e2e8f0;
-        color: #1a252f !important;
+    .custom-modal-content .btn-review:hover {
+        background-color: #d97706;
         transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
     }
 
 .custom-toast {

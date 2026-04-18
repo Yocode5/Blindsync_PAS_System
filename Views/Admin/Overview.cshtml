@@ -30,27 +30,19 @@
 
     <div class="stats-grid">
         <div class="stat-card">
-            <div class="stat-title">
-                <i class="fa-solid fa-user-group" style="margin-right: 8px;"></i> Students
-            </div>
+            <div class="stat-title"><i class="fa-solid fa-user-group"></i> Students</div>
             <div class="stat-value">@Model.TotalStudents</div>
         </div>
         <div class="stat-card">
-            <div class="stat-title">
-                <i class="fa-solid fa-user-check" style="margin-right: 8px;"></i> Supervisors
-            </div>
+            <div class="stat-title"><i class="fa-solid fa-user-check"></i> Supervisors</div>
             <div class="stat-value">@Model.TotalSupervisors</div>
         </div>
         <div class="stat-card">
-            <div class="stat-title">
-                <i class="fa-solid fa-right-left" style="margin-right: 8px;"></i> Total Matched Proposals
-            </div>
+            <div class="stat-title"><i class="fa-solid fa-right-left"></i> Total Matched</div>
             <div class="stat-value">@Model.TotalMatched</div>
         </div>
         <div class="stat-card">
-            <div class="stat-title">
-                <i class="fa-solid fa-clipboard-list" style="margin-right: 8px;"></i> Pending Proposals
-            </div>
+            <div class="stat-title"><i class="fa-solid fa-clipboard-list"></i> Pending</div>
             <div class="stat-value">@Model.TotalPending</div>
         </div>
     </div>
@@ -69,27 +61,24 @@
                 </tr>
             </thead>
             <tbody>
-                @if (Model.Projects != null && Model.Projects.Any())
+                @foreach (var project in Model.Projects)
                 {
-                    foreach (var project in Model.Projects)
-                    {
-                        <tr>
-                            <td>@project.ProjectTitle</td>
-                            <td>@project.StudentId</td>
-                            <td>@project.StudentName</td>
-                            <td>@project.SupervisorName</td>
-                            <td>
-                                <span class="status-badge status-@project.Status.Replace(" ", "-")">
-                                    @project.Status
-                                </span>
-                            </td>
-                            <td>
-                                <span title="Reassign Supervisor" onclick="openReassignModal(@project.ProjectId, '@project.StudentName', '@project.ProjectTitle', '@project.SupervisorName')" style="cursor: pointer;">
-                                    <i class="fa-solid fa-rotate" style="background-color: rgba(16, 185, 129, 0.15); color: #10b981; border-radius: 50%; padding: 6px; font-size: 0.85rem;"></i>
-                                </span>
-                            </td>
-                        </tr>
-                    }
+                    <tr>
+                        <td>@project.ProjectTitle</td>
+                        <td>@project.StudentId</td>
+                        <td>@project.StudentName</td>
+                        <td>@project.SupervisorName</td>
+                        <td>
+                            <span class="status-badge status-@project.Status">
+                                @project.Status
+                            </span>
+                        </td>
+                        <td>
+                            <span title="Reassign Supervisor" onclick="openReassignModal(@project.ProjectId, '@project.StudentName', '@project.ProjectTitle', '@project.SupervisorName')" style="cursor: pointer;">
+                                <i class="fa-solid fa-rotate" style="background-color: rgba(16, 185, 129, 0.15); color: #10b981; border-radius: 50%; padding: 6px; font-size: 0.85rem;"></i>
+                            </span>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>
@@ -111,7 +100,6 @@
                 <label style="font-weight: bold; font-size: 1.1rem;">Select Supervisor:</label>
                 <select class="custom-select" id="newSupervisorSelect">
                     <option value="">[Select New Supervisor]</option>
-
                     @if (ViewBag.Supervisors != null)
                     {
                         foreach (var supervisor in ViewBag.Supervisors)

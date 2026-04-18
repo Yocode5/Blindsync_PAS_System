@@ -4,8 +4,8 @@
     --table-header-bg: #2b4b6f;
     --table-row-bg: #1d344f;
     --status-matched: #238A63;
-    --status-pending: #F6AD55;
-    --status-review: #E27272;
+    --status-pending: #4A89DC;
+    --status-review: #f59e0b;
     --btn-blue: #4A89DC;
     --btn-red: #E67474;
 }
@@ -22,7 +22,6 @@
     font-size: 1.6rem;
     margin-bottom: 1.5rem;
     font-weight: bold;
-    padding-left: 5px;
     color: white;
 }
 
@@ -132,10 +131,12 @@
         }
 
 .status-badge {
-    padding: 6px 25px;
+    padding: 6px 20px;
     border-radius: 12px;
     font-weight: 600;
     font-size: 0.85rem;
+    display: inline-block;
+    min-width: 100px;
 }
 
 .status-Matched {
@@ -148,33 +149,10 @@
     color: white;
 }
 
-.status-Under-Review {
+.status-UnderReview {
     background: var(--status-review);
     color: white;
 }
-
-.action-icons {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-}
-
-    .action-icons span i {
-        transition: transform 0.2s;
-        font-size: 1.1rem;
-    }
-
-    .action-icons span:hover i {
-        transform: scale(1.2);
-    }
-
-    .action-icons .fa-times {
-        color: var(--status-review) !important;
-    }
-
-    .action-icons .fa-sync-alt {
-        color: #1DC3C6 !important;
-    }
 
 .modal-overlay {
     position: fixed;
@@ -204,20 +182,12 @@
     align-items: center;
     border-bottom: 2px solid #E2E8F0;
     padding: 25px 30px 15px 30px;
-    margin: 0 10px;
 }
-
-    .modal-header h2 {
-        margin: 0;
-        font-size: 1.5rem;
-        font-weight: bold;
-    }
 
 .close-modal {
     font-size: 1.5rem;
     color: #6c757d;
     cursor: pointer;
-    transition: 0.2s;
 }
 
     .close-modal:hover {
@@ -228,11 +198,6 @@
     padding: 20px 30px 35px 30px;
 }
 
-    .modal-body p {
-        margin: 10px 0;
-        font-size: 0.95rem;
-    }
-
 .custom-select {
     width: 100%;
     padding: 12px 20px;
@@ -241,22 +206,14 @@
     color: white;
     border: none;
     border-radius: 20px;
-    font-size: 1rem;
     font-weight: bold;
     cursor: pointer;
-    outline: none;
 }
-
-    .custom-select option {
-        background: white;
-        color: #333;
-    }
 
 .modal-footer {
     display: flex;
     gap: 15px;
     padding: 0 30px 30px 30px;
-    margin-top: 0;
 }
 
 .btn-reassign {
@@ -268,7 +225,6 @@
     border-radius: 20px;
     font-weight: bold;
     cursor: pointer;
-    font-size: 1rem;
     transition: 0.2s;
 }
 
@@ -286,7 +242,6 @@
     border-radius: 20px;
     font-weight: bold;
     cursor: pointer;
-    font-size: 1rem;
     transition: 0.2s;
 }
 
@@ -310,20 +265,11 @@
     align-items: center;
     gap: 12px;
     font-weight: 600;
-    font-size: 1.05rem;
     animation: slideInRight 0.4s ease-out forwards;
 }
 
     .custom-toast.error-toast {
         border-left: 6px solid #ef4444;
-    }
-
-    .custom-toast i {
-        font-size: 1.25rem;
-    }
-
-    .custom-toast.slide-out {
-        animation: slideOutRight 0.4s ease-in forwards !important;
     }
 
 @keyframes slideInRight {
@@ -351,22 +297,20 @@
 }
 
 .modern-popup {
-    border-radius: 20px !important;
-    padding: 2rem 2rem 2.5rem 2rem !important;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
-    width: 480px !important;
-    max-width: 90vw !important;
+    border-radius: 24px !important;
+    padding: 2rem !important;
+    width: 450px !important;
+    height: auto !important;
+    overflow: visible !important;
 }
 
 .modern-btn-common {
-    border-radius: 10px !important;
-    padding: 10px 22px !important;
+    border-radius: 12px !important;
+    padding: 12px 28px !important;
     font-weight: 700 !important;
-    margin: 8px !important;
+    margin: 0 8px !important;
     border: none !important;
-    cursor: pointer !important;
-    font-size: 0.95rem;
-    transition: all 0.2s ease !important;
+    cursor: pointer;
 }
 
 .modern-confirm-btn-danger {
@@ -374,27 +318,7 @@
     color: white !important;
 }
 
-    .modern-confirm-btn-danger:hover {
-        background-color: #dc2626 !important;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3) !important;
-    }
-
 .modern-cancel-btn {
     background-color: #f1f5f9 !important;
     color: #1a365d !important;
-}
-
-    .modern-cancel-btn:hover {
-        background-color: #e2e8f0 !important;
-        transform: translateY(-2px);
-    }
-
-.modern-html-container {
-    overflow: visible !important;
-    margin-top: 20px !important;
-    margin-bottom: 20px !important;
-    font-size: 1.05rem !important;
-    line-height: 1.8 !important;
-    min-height: 50px !important;
 }
