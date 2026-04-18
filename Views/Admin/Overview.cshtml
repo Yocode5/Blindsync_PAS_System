@@ -65,12 +65,12 @@
                                 <td>
                                     <span class="status-badge status-@project.Status.Replace(" ", "-")">
                                         @project.Status
-                                    </span>
+                                   </span>
                                 </td>
-                                <td>
+                                <td>@*
                                 <span title="Delete" style="cursor: pointer; margin-right: 15px;">
                                     <i class="fa-solid fa-xmark" style="color: #f87171; font-size: 1.2rem;"></i>
-                                </span>
+                                </span>*@
                                 
                                 <span title="Reassign Supervisor" onclick="openReassignModal(@project.ProjectId, '@project.StudentName', '@project.ProjectTitle', '@project.SupervisorName')" style="cursor: pointer;">
                                     <i class="fa-solid fa-rotate" style="background-color: rgba(16, 185, 129, 0.15); color: #10b981; border-radius: 50%; padding: 6px; font-size: 0.85rem;"></i>
