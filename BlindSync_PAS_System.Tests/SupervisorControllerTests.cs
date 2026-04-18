@@ -168,7 +168,7 @@ namespace BlindSync_PAS_System.Tests
             context.Projects.Add(new Project { Title = "Another Student's Project", Status = ProjectStatus.Matched, SupervisorId = otherSupervisor.Id, Abstract = "Abstract", ResearchAreaId = testArea.Id, StudentId = student.Id });
             await context.SaveChangesAsync();
 
-            var result = controller.MyMatches() as ViewResult;
+            var result = controller.MySelections() as ViewResult;
 
             Assert.NotNull(result);
             var model = Assert.IsAssignableFrom<IEnumerable<Project>>(result.Model);
