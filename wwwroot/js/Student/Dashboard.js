@@ -1,9 +1,25 @@
 ﻿function openModal() {
     document.getElementById('proposalModal').style.display = 'flex';
+    document.getElementById('titleError').style.display = 'none';
+    document.getElementById('researchAreaError').style.display = 'none';
+    const techStackError = document.getElementById('techStackError');
+    if (techStackError) techStackError.style.display = 'none';
+    document.getElementById('abstractError').style.display = 'none';
 }
 
 function closeModal() {
     document.getElementById('proposalModal').style.display = 'none';
+    document.getElementById('createProposalForm').reset();
+    document.getElementById('selectedResearchText').innerText = "Select Research Area";
+    document.getElementById('hiddenResearchAreaId').value = "";
+    document.getElementById('techTagContainer').innerHTML = "";
+    document.getElementById('hiddenTechStack').value = "";
+    techTags = [];
+    document.getElementById('titleError').style.display = 'none';
+    document.getElementById('researchAreaError').style.display = 'none';
+    const techStackError = document.getElementById('techStackError');
+    if (techStackError) techStackError.style.display = 'none';
+    document.getElementById('abstractError').style.display = 'none';
 }
 
 function closeCreateModalOutside(event) {
@@ -35,7 +51,8 @@ techInput.addEventListener('keydown', function (e) {
         if (tagText !== '' && !techTags.includes(tagText)) {
             techTags.push(tagText);
             renderTags();
-            document.getElementById("techStackError").style.display = "none";
+            const techStackError = document.getElementById("techStackError");
+            if (techStackError) techStackError.style.display = "none";
         }
         techInput.value = '';
     }
@@ -76,6 +93,16 @@ function selectResearchArea(id, name) {
 function validateCreateForm() {
     let isValid = true;
 
+    const titleError = document.getElementById('titleError');
+    const researchError = document.getElementById('researchAreaError');
+    const abstractError = document.getElementById('abstractError');
+    const techStackError = document.getElementById('techStackError');
+
+    titleError.style.display = 'none';
+    researchError.style.display = 'none';
+    abstractError.style.display = 'none';
+    if (techStackError) techStackError.style.display = 'none';
+
     const techInputBox = document.getElementById("techInput");
     if (techInputBox && techInputBox.value.trim() !== '') {
         let tagText = techInputBox.value.trim().replace(',', '');
@@ -87,39 +114,27 @@ function validateCreateForm() {
     }
 
     const titleValue = document.getElementById("createTitle").value.trim();
-    const titleError = document.getElementById("titleError");
     if (titleValue === "") {
         titleError.style.display = "block";
         isValid = false;
-    } else {
-        titleError.style.display = "none";
     }
 
     const researchAreaValue = document.getElementById("hiddenResearchAreaId").value;
-    const researchAreaError = document.getElementById("researchAreaError");
     if (researchAreaValue === "") {
-        researchAreaError.style.display = "block";
+        researchError.style.display = "block";
         isValid = false;
-    } else {
-        researchAreaError.style.display = "none";
     }
 
     const techStackValue = document.getElementById("hiddenTechStack").value;
-    const techStackError = document.getElementById("techStackError");
-    if (techStackValue === "") {
+    if (techStackValue === "" && techStackError) {
         techStackError.style.display = "block";
         isValid = false;
-    } else {
-        techStackError.style.display = "none";
     }
 
     const abstractValue = document.getElementById("createAbstract").value.trim();
-    const abstractError = document.getElementById("abstractError");
     if (abstractValue === "") {
         abstractError.style.display = "block";
         isValid = false;
-    } else {
-        abstractError.style.display = "none";
     }
 
     return isValid;
@@ -246,34 +261,34 @@ function submitEdit() {
 
     const titleError = document.getElementById("editTitleError");
     if (title === "") {
-        titleError.style.display = "block";
+        if (titleError) titleError.style.display = "block";
         isValid = false;
     } else {
-        titleError.style.display = "none";
+        if (titleError) titleError.style.display = "none";
     }
 
     const areaError = document.getElementById("editResearchAreaError");
     if (areaId === "") {
-        areaError.style.display = "block";
+        if (areaError) areaError.style.display = "block";
         isValid = false;
     } else {
-        areaError.style.display = "none";
+        if (areaError) areaError.style.display = "none";
     }
 
     const techError = document.getElementById("editTechStackError");
     if (techStack === "") {
-        techError.style.display = "block";
+        if (techError) techError.style.display = "block";
         isValid = false;
     } else {
-        techError.style.display = "none";
+        if (techError) techError.style.display = "none";
     }
 
     const abstractError = document.getElementById("editAbstractError");
     if (abstract === "") {
-        abstractError.style.display = "block";
+        if (abstractError) abstractError.style.display = "block";
         isValid = false;
     } else {
-        abstractError.style.display = "none";
+        if (abstractError) abstractError.style.display = "none";
     }
 
     if (!isValid) {
@@ -306,10 +321,16 @@ function submitEdit() {
 }
 
 document.getElementById("editFieldProjectTitle").addEventListener("input", function () {
-    if (this.value.trim() !== "") document.getElementById("editTitleError").style.display = "none";
+    if (this.value.trim() !== "") {
+        const error = document.getElementById("editTitleError");
+        if (error) error.style.display = "none";
+    }
 });
 document.getElementById("editFieldAbstract").addEventListener("input", function () {
-    if (this.value.trim() !== "") document.getElementById("editAbstractError").style.display = "none";
+    if (this.value.trim() !== "") {
+        const error = document.getElementById("editAbstractError");
+        if (error) error.style.display = "none";
+    }
 });
 
 function toggleEditDropdown(event) {
@@ -317,7 +338,7 @@ function toggleEditDropdown(event) {
     const container = document.getElementById('editResearchDropdown');
     const options = document.getElementById('editDropdownOptions');
     container.classList.toggle('open');
-    options.classList.toggle('show');
+    if (options) options.classList.toggle('show');
 }
 
 function selectEditResearchArea(id, name) {
@@ -327,9 +348,10 @@ function selectEditResearchArea(id, name) {
     const container = document.getElementById('editResearchDropdown');
     const options = document.getElementById('editDropdownOptions');
     container.classList.remove('open');
-    options.classList.remove('show');
+    if (options) options.classList.remove('show');
 
-    document.getElementById("editResearchAreaError").style.display = "none";
+    const error = document.getElementById("editResearchAreaError");
+    if (error) error.style.display = "none";
 }
 
 document.getElementById('editFieldTechStack').addEventListener('keyup', function (e) {
@@ -341,7 +363,8 @@ document.getElementById('editFieldTechStack').addEventListener('keyup', function
         if (val.length > 0) {
             addTechTag(val);
             this.value = '';
-            document.getElementById("editTechStackError").style.display = "none";
+            const error = document.getElementById("editTechStackError");
+            if (error) error.style.display = "none";
         }
     }
 });

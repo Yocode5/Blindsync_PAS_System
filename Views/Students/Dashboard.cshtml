@@ -167,7 +167,7 @@
     </div>
 </div>
 
-<div id="proposalModal" class="modal-overlay" onclick="closeCreateModalOutside(event)">
+<div id="proposalModal" class="modal-overlay" onclick="closeCreateModalOutside(event)" style="display: none;">
     <div class="modal-container">
         <div class="modal-header">
             <h2>Create Proposal</h2>
@@ -178,7 +178,7 @@
                 <div class="form-group">
                     <label>Project Title</label>
                     <input type="text" name="Title" id="createTitle" placeholder="Enter title..." class="soft-input">
-                    <span id="titleError" class="error-msg">Project Title is required.</span>
+                    <span id="titleError" class="error-msg" style="display: none;">Project Title is required.</span>
                 </div>
                 <div class="form-group">
                     <label>Research Area</label>
@@ -198,7 +198,7 @@
                             }
                         </ul>
                     </div>
-                    <span id="researchAreaError" class="error-msg">Please select a Research Area.</span>
+                    <span id="researchAreaError" class="error-msg" style="display: none;">Please select a Research Area.</span>
                 </div>
             </div>
             <div class="form-group">
@@ -206,11 +206,12 @@
                 <input type="text" id="techInput" placeholder="e.g. React, Node.js (Press Enter)" class="soft-input">
                 <input type="hidden" name="TechStack" id="hiddenTechStack">
                 <div class="tag-container" id="techTagContainer"></div>
+                <span id="techStackError" class="error-msg" style="display: none;">Tech Stack is required.</span>
             </div>
             <div class="form-group">
                 <label>Abstract</label>
                 <textarea name="Abstract" id="createAbstract" rows="5" class="soft-input" placeholder="Enter abstract..."></textarea>
-                <span id="abstractError" class="error-msg">Abstract is required.</span>
+                <span id="abstractError" class="error-msg" style="display: none;">Abstract is required.</span>
             </div>
             <div class="modal-actions">
                 <button type="submit" class="btn-add">Add</button>
@@ -232,6 +233,7 @@
                 <div class="form-group">
                     <label>Project Title</label>
                     <input type="text" id="editFieldProjectTitle" class="soft-input">
+                    <span id="editTitleError" class="error-msg" style="display: none;">Project Title is required.</span>
                 </div>
                 <div class="form-group">
                     <label>Research Area</label>
@@ -241,7 +243,7 @@
                             <i class="fas fa-chevron-down dropdown-icon"></i>
                         </div>
                         <input type="hidden" id="hiddenEditResearchAreaId">
-                        <ul class="custom-dropdown-options">
+                        <ul class="custom-dropdown-options" id="editDropdownOptions">
                             @if (ViewBag.ResearchAreas != null)
                             {
                                 foreach (var area in ViewBag.ResearchAreas)
@@ -251,6 +253,7 @@
                             }
                         </ul>
                     </div>
+                    <span id="editResearchAreaError" class="error-msg" style="display: none;">Please select a Research Area.</span>
                 </div>
             </div>
             <div class="form-group">
@@ -258,10 +261,12 @@
                 <input type="text" id="editFieldTechStack" class="soft-input">
                 <input type="hidden" id="hiddenEditTechStack">
                 <div class="tag-container" id="editTagContainerElement"></div>
+                <span id="editTechStackError" class="error-msg" style="display: none;">Tech Stack is required.</span>
             </div>
             <div class="form-group">
                 <label>Abstract</label>
                 <textarea id="editFieldAbstract" class="soft-input" rows="5"></textarea>
+                <span id="editAbstractError" class="error-msg" style="display: none;">Abstract is required.</span>
             </div>
         </div>
         <div class="modal-actions">
