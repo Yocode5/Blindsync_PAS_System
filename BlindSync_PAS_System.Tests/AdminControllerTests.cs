@@ -1,17 +1,17 @@
 using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
+using System.Text.Json;
+using Blindsync_PAS_System.Controllers;
+using Blindsync_PAS_System.Data;
+using Blindsync_PAS_System.Models;
+using Blindsync_PAS_System.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using System;
-using System.Security.Claims;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Xunit;
-using Blindsync_PAS_System.Controllers;
-using Blindsync_PAS_System.Data;
-using Blindsync_PAS_System.Models;
-using Blindsync_PAS_System.ViewModels;
 
 namespace BlindSync_PAS_System.Tests
 {
@@ -27,13 +27,18 @@ namespace BlindSync_PAS_System.Tests
             return new AppDbContext(option);
         }
 
+        private ITempDataDictionary GetRealTempData()
+        {
+            return new TempDataDictionary(new DefaultHttpContext(), Mock.Of<ITempDataProvider>());
+        }
+
         [Fact]
         public async Task AddNewUser_ReturnsError_WhenEmailAlreadyExists()
         {
             var context = GetInMemoryDbContext();
             var controller = new AdminController(context)
             {
-                TempData = new Mock<ITempDataDictionary>().Object
+                TempData = GetRealTempData()
             };
 
             // Seed the DB with a user 
@@ -68,7 +73,7 @@ namespace BlindSync_PAS_System.Tests
             var data = JsonDocument.Parse(jsonString).RootElement;
 
             Assert.False(data.GetProperty("success").GetBoolean());
-            Assert.Equal("A user with this email already exists.", data.GetProperty("message").GetString());
+            Assert.Equal("A user with this email already exists.", controller.TempData["ErrorMessage"]);
         }
 
         [Fact]
@@ -77,7 +82,7 @@ namespace BlindSync_PAS_System.Tests
             var context = GetInMemoryDbContext();
             var controller = new AdminController(context)
             {
-                TempData = new Mock<ITempDataDictionary>().Object
+                TempData = GetRealTempData()
             };
 
             // Create a user who's status is currently active
@@ -104,7 +109,7 @@ namespace BlindSync_PAS_System.Tests
             var data = JsonDocument.Parse(jsonString).RootElement;
 
             Assert.True(data.GetProperty("success").GetBoolean());
-            Assert.Equal("User has been Deactivated", data.GetProperty("message").GetString());
+            Assert.Equal("User has been Deactivated!", controller.TempData["SuccessMessage"]);
 
             var userInDb = await context.Users.FindAsync(testUser.Id);
             Assert.False(userInDb.IsActive);
@@ -116,7 +121,7 @@ namespace BlindSync_PAS_System.Tests
             var context = GetInMemoryDbContext();
             var controller = new AdminController(context)
             {
-                TempData = new Mock<ITempDataDictionary>().Object
+                TempData = GetRealTempData()
             };
 
             // Create a payload specifically for a new supervisor
@@ -158,7 +163,7 @@ namespace BlindSync_PAS_System.Tests
             var context = GetInMemoryDbContext();
             var controller = new AdminController(context)
             {
-                TempData = new Mock<ITempDataDictionary>().Object
+                TempData = GetRealTempData()
             };
 
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -212,7 +217,7 @@ namespace BlindSync_PAS_System.Tests
             var context = GetInMemoryDbContext();
             var controller = new AdminController(context)
             {
-                TempData = new Mock<ITempDataDictionary>().Object
+                TempData = GetRealTempData()
             };
 
             // Seeding a supervisor
