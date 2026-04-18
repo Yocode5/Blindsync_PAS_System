@@ -4,7 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Blindsync_PAS_System.Data;
 using Blindsync_PAS_System.Models;
 using Blindsync_PAS_System.ViewModels;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 
@@ -23,7 +25,7 @@ namespace Blindsync_PAS_System.Controllers
 
         public async Task<IActionResult> Overview()
         {
-            ViewBag.UserName = User.Identity?.Name?.Split('@')[0] ?? "Guest";
+            ViewBag.UserName = User.Identity?.Name?.Split('@')[0] ?? "Admin";
 
             ViewBag.Supervisors = await _context.Supervisors
                 .Include(s => s.UserAccount)
@@ -41,10 +43,9 @@ namespace Blindsync_PAS_System.Controllers
                 TotalPending = await _context.Projects.CountAsync(p => p.Status == ProjectStatus.Pending),
 
                 Projects = await _context.Projects
-                    .Include(p => p.Creator)
-                        .ThenInclude(s => s.UserAccount)
-                    .Include(p => p.AssignedSupervisor)
-                        .ThenInclude(s => s.UserAccount)
+                    .Include(p => p.Creator).ThenInclude(s => s.UserAccount)
+                    .Include(p => p.AssignedSupervisor).ThenInclude(s => s.UserAccount)
+                    .Where(p => p.Status != ProjectStatus.Withdrawn)
                     .Select(p => new ProjectOverviewDto
                     {
                         ProjectId = p.Id,
@@ -56,19 +57,46 @@ namespace Blindsync_PAS_System.Controllers
                     })
                     .OrderByDescending(p => p.ProjectId)
                     .ToListAsync()
-
             };
 
             return View(overviewData);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> ReassignSupervisor([FromBody] ReassignSupervisorDto model)
+        {
+            if (model == null || model.ProjectId == 0 || model.SupervisorId == 0)
+            {
+                TempData["ErrorMessage"] = "Invalid data received.";
+                return Json(new { success = false });
+            }
+
+            var project = await _context.Projects.FindAsync(model.ProjectId);
+
+            if (project == null)
+            {
+                TempData["ErrorMessage"] = "Project not found.";
+                return Json(new { success = false });
+            }
+
+            project.SupervisorId = model.SupervisorId;
+            project.AssignedAt = DateTime.UtcNow;
+
+            if (project.Status == ProjectStatus.Pending || project.Status == ProjectStatus.UnderReview)
+            {
+                project.Status = ProjectStatus.Matched;
+            }
+
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "Supervisor reassigned successfully!";
+            return Json(new { success = true });
+        }
 
         public async Task<IActionResult> Users()
         {
             var loggedInEmail = User.Identity?.Name;
-
             var currentUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == loggedInEmail);
-
             ViewBag.FirstName = currentUser?.FirstName ?? "Admin";
 
             var vm = new ManageUsersVM();
@@ -110,7 +138,6 @@ namespace Blindsync_PAS_System.Controllers
                 IsActive = a.IsActive
             }).ToList();
 
-
             return View(vm);
         }
 
@@ -129,33 +156,18 @@ namespace Blindsync_PAS_System.Controllers
                 return Json(new { success = false });
             }
 
-            var exists = await _context.ResearchAreas
-                .AnyAsync(a => a.Name.ToLower() == model.Name.ToLower());
-
+            var exists = await _context.ResearchAreas.AnyAsync(a => a.Name.ToLower() == model.Name.ToLower());
             if (exists)
             {
                 TempData["ErrorMessage"] = "This Research Area already exists.";
                 return Json(new { success = false });
             }
 
-            try
-            {
-                _context.ResearchAreas.Add(new ResearchArea
-                {
-                    Name = model.Name,
-                    IsActive = true
-                });
+            _context.ResearchAreas.Add(new ResearchArea { Name = model.Name, IsActive = true });
+            await _context.SaveChangesAsync();
 
-                await _context.SaveChangesAsync();
-
-                TempData["SuccessMessage"] = "Research Area added successfully!";
-                return Json(new { success = true });
-            }
-            catch (Exception)
-            {
-                TempData["ErrorMessage"] = "An error occurred while saving to the database.";
-                return Json(new { success = false });
-            }
+            TempData["SuccessMessage"] = "Research Area added successfully!";
+            return Json(new { success = true });
         }
 
         [HttpPost]
@@ -167,10 +179,8 @@ namespace Blindsync_PAS_System.Controllers
                 TempData["ErrorMessage"] = "Research Area not found.";
                 return Json(new { success = false });
             }
-
             _context.ResearchAreas.Remove(area);
             await _context.SaveChangesAsync();
-
             TempData["SuccessMessage"] = "Research Area deleted successfully!";
             return Json(new { success = true });
         }
@@ -197,7 +207,6 @@ namespace Blindsync_PAS_System.Controllers
                     TempData["ErrorMessage"] = "Student ID is required.";
                     return Json(new { success = false });
                 }
-
                 if (await _context.Students.AnyAsync(s => s.StudentId == model.StudentId))
                 {
                     TempData["ErrorMessage"] = "This Student ID is already registered.";
@@ -211,13 +220,11 @@ namespace Blindsync_PAS_System.Controllers
                     TempData["ErrorMessage"] = "Supervisor ID is required.";
                     return Json(new { success = false });
                 }
-
                 if (await _context.Supervisors.AnyAsync(s => s.SupervisorId == model.SupervisorId))
                 {
                     TempData["ErrorMessage"] = "This Supervisor ID is already registered.";
                     return Json(new { success = false });
                 }
-
                 if ((model.ProjectQuota ?? 0) <= 0)
                 {
                     TempData["ErrorMessage"] = "Project Quota must be greater than zero.";
@@ -226,7 +233,6 @@ namespace Blindsync_PAS_System.Controllers
             }
 
             var hasher = new PasswordHasher<User>();
-
             var newUser = new User
             {
                 FirstName = model.FirstName,
@@ -241,22 +247,10 @@ namespace Blindsync_PAS_System.Controllers
             _context.Users.Add(newUser);
             await _context.SaveChangesAsync();
 
-            if (model.Role == "Student")
-            {
-                _context.Students.Add(new Student { StudentId = model.StudentId, UserId = newUser.Id });
-            }
-            else if (model.Role == "Supervisor")
-            {
-                _context.Supervisors.Add(new Supervisor
-                {
-                    SupervisorId = model.SupervisorId,
-                    ProjectQuota = model.ProjectQuota.Value,
-                    UserId = newUser.Id
-                });
-            }
+            if (model.Role == "Student") { _context.Students.Add(new Student { StudentId = model.StudentId, UserId = newUser.Id }); }
+            else if (model.Role == "Supervisor") { _context.Supervisors.Add(new Supervisor { SupervisorId = model.SupervisorId, ProjectQuota = model.ProjectQuota.Value, UserId = newUser.Id }); }
 
             await _context.SaveChangesAsync();
-
             TempData["SuccessMessage"] = $"{model.Role} added successfully!";
             return Json(new { success = true });
         }
@@ -265,12 +259,7 @@ namespace Blindsync_PAS_System.Controllers
         public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDTO model)
         {
             var user = await _context.Users.FindAsync(model.UserId);
-
-            if (user == null)
-            {
-                TempData["ErrorMessage"] = "User not found.";
-                return Json(new { success = false });
-            }
+            if (user == null) { TempData["ErrorMessage"] = "User not found."; return Json(new { success = false }); }
 
             if (await _context.Users.AnyAsync(u => u.Email == model.Email && u.Id != model.UserId))
             {
@@ -289,7 +278,6 @@ namespace Blindsync_PAS_System.Controllers
             }
 
             await _context.SaveChangesAsync();
-
             TempData["SuccessMessage"] = "User Updated Successfully";
             return Json(new { success = true });
         }
@@ -298,49 +286,12 @@ namespace Blindsync_PAS_System.Controllers
         public async Task<IActionResult> ToggleUserStatus([FromBody] UserIdDTO model)
         {
             var user = await _context.Users.FindAsync(model.UserId);
-            if (user == null)
-            {
-                TempData["ErrorMessage"] = "User not Found.";
-                return Json(new { success = false });
-            }
+            if (user == null) { TempData["ErrorMessage"] = "User not Found."; return Json(new { success = false }); }
 
             user.IsActive = !user.IsActive;
-
             await _context.SaveChangesAsync();
 
-            string newStatusText = user.IsActive ? "Reactivated" : "Deactivated";
-
-            TempData["SuccessMessage"] = $"User has been {newStatusText}!";
-            return Json(new { success = true });
-
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> ReassignSupervisor([FromBody] ReassignSupervisorDto model)
-        {
-            if (model == null || model.ProjectId == 0 || model.SupervisorId == 0)
-            {
-                TempData["ErrorMessage"] = "Invalid data received.";
-                return Json(new { success = false });
-            }
-
-            var project = await _context.Projects.FindAsync(model.ProjectId);
-
-            if (project == null)
-            {
-                TempData["ErrorMessage"] = "Project not found in the database.";
-                return Json(new { success = false });
-            }
-
-            project.SupervisorId = model.SupervisorId;
-
-            if (project.Status == ProjectStatus.Pending)
-            {
-                project.Status = ProjectStatus.Matched;
-            }
-            await _context.SaveChangesAsync();
-
-            TempData["SuccessMessage"] = "Supervisor reassigned successfully!";
+            TempData["SuccessMessage"] = $"User has been {(user.IsActive ? "Reactivated" : "Deactivated")}!";
             return Json(new { success = true });
         }
     }

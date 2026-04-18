@@ -2,29 +2,54 @@
 @model IEnumerable<Blindsync_PAS_System.Models.Project>
 
 @{
-    ViewData["Title"] = "My Matches";
+    ViewData["Title"] = "My Selections";
     Layout = "_Layout";
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/Supervisor/MyMatchesStyle.css" />
+    <link rel="stylesheet" href="~/css/Supervisor/MySelectionsStyle.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 }
 
-<div class="supervisor-dashboard-wrapper">
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="toastNotification" class="custom-toast">
+        <i class="fas fa-check-circle"></i>
+        <span>@TempData["SuccessMessage"]</span>
+    </div>
+}
 
+<div class="supervisor-dashboard-wrapper">
     <div class="matches-list-container">
         @if (Model != null && Model.Any())
         {
             foreach (var project in Model)
             {
-                <div class="match-card">
+                <div class="match-card @(project.Status == Blindsync_PAS_System.Models.ProjectStatus.UnderReview ? "under-review-card" : "matched-card")">
                     <div class="match-col-icon">
-                        <i class="fas fa-book"></i>
+                        @if (project.Status == Blindsync_PAS_System.Models.ProjectStatus.UnderReview)
+                        {
+                            <i class="fas fa-search-plus"></i>
+                        }
+                        else
+                        {
+                            <i class="fas fa-book"></i>
+                        }
                     </div>
 
                     <div class="match-col-details">
-                        <h4 class="project-title">@project.Title</h4>
+                        <div class="d-flex align-items-center mb-2" style="gap: 12px;">
+                            <h4 class="project-title m-0">@project.Title</h4>
+                            @if (project.Status == Blindsync_PAS_System.Models.ProjectStatus.UnderReview)
+                            {
+                                <span class="badge status-badge-review">UNDER REVIEW</span>
+                            }
+                            else
+                            {
+                                <span class="badge status-badge-matched">MATCHED</span>
+                            }
+                        </div>
+
                         <p class="research-area"><strong>Research Area:</strong> @(project.Area?.Name ?? "General")</p>
 
                         <div class="tech-stack-container">
@@ -38,7 +63,7 @@
                             }
                             else
                             {
-                                <span class="tech-pill" style="background-color: transparent; border: 1px solid #4a5568;">None specified</span>
+                                <span class="tech-pill no-tech">None specified</span>
                             }
                         </div>
                     </div>
@@ -64,7 +89,18 @@
                                        '@Html.Raw(JavaScriptEncoder.Default.Encode(project.Abstract ?? ""))')">
                                 Read Full Proposal
                             </a>
-                            <span class="date-accepted"><strong>Accepted on:</strong> @(project.AssignedAt?.ToString("dd/MM/yyyy") ?? "N/A")</span>
+
+                            @if (project.Status == Blindsync_PAS_System.Models.ProjectStatus.UnderReview)
+                            {
+                                <div class="action-btn-group">
+                                    <button class="btn-accept-match" onclick="acceptProjectFromMyProjects(@project.Id)">Accept</button>
+                                    <button class="btn-release-match" onclick="releaseProject(@project.Id)">Release</button>
+                                </div>
+                            }
+                            else
+                            {
+                                <span class="date-accepted"><strong>Accepted on:</strong> @(project.AssignedAt?.ToString("dd/MM/yyyy") ?? "N/A")</span>
+                            }
                         </div>
                     </div>
                 </div>
@@ -73,7 +109,7 @@
         else
         {
             <div class="no-data">
-                <p>You do not have any active matches yet.</p>
+                <p>You do not have any active selections yet.</p>
             </div>
         }
     </div>
@@ -110,5 +146,6 @@
 </div>
 
 @section Scripts {
-    <script src="~/js/Supervisor/MyMatches.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/js/Supervisor/MySelections.js" asp-append-version="true"></script>
 }
