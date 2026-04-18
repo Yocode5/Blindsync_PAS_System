@@ -333,3 +333,10 @@ textarea.soft-input {
 .custom-toast.error-toast i {
     color: #e74c3c;
 }
+
+.error-msg {
+    color: #e74c3c !important; 
+    font-size: 0.85rem;
+    margin-top: 5px;
+    display: block; 
+}
