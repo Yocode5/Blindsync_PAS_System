@@ -74,22 +74,10 @@
                 url: '@Url.Action("UpdateProfile", "Home")',
                 data: form.serialize(),
                 success: function (res) {
-                    if (res.success) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success!',
-                            text: res.message,
-                            timer: 2000,
-                            showConfirmButton: false
-                        }).then(() => {
-                            location.reload(); 
-                        });
-                    } else {
-                        Swal.fire({ icon: 'error', title: 'Error', text: res.message });
-                    }
+                    window.location.reload();
                 },
                 error: function () {
-                    Swal.fire('Error', 'Failed to communicate with the server.', 'error');
+                    window.location.reload();
                 }
             });
         }

@@ -105,13 +105,18 @@ namespace Blindsync_PAS_System.Controllers
             if (!ModelState.IsValid)
             {
                 var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
-                return Json(new { success = false, message = string.Join("\n", errors) });
+                TempData["ErrorMessage"] = string.Join(" ", errors);
+                return Json(new { success = false });
             }
 
             var userEmail = User.Identity.Name;
             var user = _context.Users.FirstOrDefault(u => u.Email == userEmail);
 
-            if (user == null) return Json(new { success = false, message = "User not found." });
+            if (user == null)
+            {
+                TempData["ErrorMessage"] = "User not found.";
+                return Json(new { success = false });
+            }
 
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
@@ -121,7 +126,8 @@ namespace Blindsync_PAS_System.Controllers
             {
                 if (string.IsNullOrEmpty(model.CurrentPassword))
                 {
-                    return Json(new { success = false, message = "Current password is required to set a new password." });
+                    TempData["ErrorMessage"] = "Current password is required to set a new password.";
+                    return Json(new { success = false });
                 }
 
                 var hasher = new Microsoft.AspNetCore.Identity.PasswordHasher<User>();
@@ -134,7 +140,8 @@ namespace Blindsync_PAS_System.Controllers
                 }
                 else
                 {
-                    return Json(new { success = false, message = "The current password you entered is incorrect." });
+                    TempData["ErrorMessage"] = "The current password you entered is incorrect.";
+                    return Json(new { success = false });
                 }
             }
 
@@ -155,7 +162,8 @@ namespace Blindsync_PAS_System.Controllers
                     new ClaimsPrincipal(claimsIdentity));
             }
 
-            return Json(new { success = true, message = "Profile updated successfully!" });
+            TempData["SuccessMessage"] = "Profile updated successfully!";
+            return Json(new { success = true });
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
