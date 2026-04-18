@@ -1,6 +1,50 @@
 ﻿document.addEventListener('DOMContentLoaded', function () {
 
-    const roleFilter = document.getElementById('userRoleFilter');
+    const logoutForms = document.querySelectorAll('form[action*="Logout"]');
+    logoutForms.forEach(form => {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Leaving so soon?',
+                text: "You will need to log in again to access the portal.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: '<i class="fas fa-sign-out-alt"></i> Yes, log me out',
+                cancelButtonText: 'Cancel',
+                buttonsStyling: false,
+                background: '#ffffff',
+                color: '#1a365d',
+                backdrop: `rgba(10, 25, 47, 0.8)`,
+                customClass: {
+                    popup: 'modern-popup',
+                    htmlContainer: 'modern-html-container', 
+                    confirmButton: 'modern-btn-common modern-confirm-btn-danger',
+                    cancelButton: 'modern-btn-common modern-cancel-btn'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
+
+    const successToast = document.getElementById('toastNotification');
+    const errorToast = document.getElementById('toastNotificationError');
+
+    if (successToast) {
+        setTimeout(() => {
+            successToast.classList.add('slide-out');
+            setTimeout(() => successToast.remove(), 400);
+        }, 3000);
+    }
+
+    if (errorToast) {
+        setTimeout(() => {
+            errorToast.classList.add('slide-out');
+            setTimeout(() => errorToast.remove(), 400);
+        }, 3000);
+    }
 
     const tables = {
         'students': document.getElementById('table-students'),
@@ -8,19 +52,30 @@
         'admins': document.getElementById('table-admins')
     };
 
-    roleFilter.addEventListener('change', function () {
-        const selectedRole = this.value;
+    const dropdownItems = document.querySelectorAll('.custom-rounded-menu .dropdown-item');
+    const dropdownBtn = document.getElementById('userRoleDropdown');
 
-        Object.values(tables).forEach(t => {
-            if (t) t.classList.add('d-none');
+    dropdownItems.forEach(item => {
+        item.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            dropdownBtn.innerText = this.innerText;
+
+            dropdownItems.forEach(i => i.classList.remove('active'));
+            this.classList.add('active');
+
+            const selectedRole = this.dataset.value;
+
+            Object.values(tables).forEach(t => {
+                if (t) t.classList.add('d-none');
+            });
+
+            if (tables[selectedRole]) {
+                tables[selectedRole].classList.remove('d-none');
+            }
         });
-
-        if (tables[selectedRole]) {
-            tables[selectedRole].classList.remove('d-none');
-        }
     });
 
-    
     const modalRoleSelect = document.getElementById('modalRoleSelect');
     const fieldStudent = document.getElementById('field-student');
     const fieldSupervisorId = document.getElementById('field-supervisor-id');
@@ -28,12 +83,11 @@
 
     if (modalRoleSelect) {
         modalRoleSelect.addEventListener('change', function () {
-            
+
             fieldStudent.classList.add('d-none');
             fieldSupervisorId.classList.add('d-none');
             fieldSupervisorQuota.classList.add('d-none');
 
-            
             if (this.value === 'Student') {
                 fieldStudent.classList.remove('d-none');
             } else if (this.value === 'Supervisor') {
@@ -48,11 +102,8 @@
 
     if (togglePasswordIcon && modalPasswordInput) {
         togglePasswordIcon.addEventListener('click', function () {
-            
             const isPassword = modalPasswordInput.getAttribute('type') === 'password';
             modalPasswordInput.setAttribute('type', isPassword ? 'text' : 'password');
-
-            
             this.classList.toggle('fa-eye');
             this.classList.toggle('fa-eye-slash');
         });
@@ -105,7 +156,6 @@
 
             document.getElementById('modalPasswordInput').required = false;
             document.getElementById('modalPasswordInput').placeholder = '(Leave blank to keep current)';
-
             document.getElementById('modalPasswordInput').value = '';
 
             document.querySelector('.custom-modal-header h2').innerText = 'Edit User';
@@ -117,11 +167,10 @@
 
     if (addUserForm) {
         addUserForm.addEventListener('submit', async function (e) {
-            e.preventDefault(); // Stops Standard form Submission
+            e.preventDefault();
 
             const editUserId = document.getElementById('editUserId').value;
             const isEditMode = editUserId !== '';
-
             const role = document.getElementById('modalRoleSelect').value;
 
             if (!addUserForm.checkValidity()) {
@@ -132,7 +181,20 @@
             if (role == 'Student') {
                 const studentId = document.getElementById('addStudentId').value.trim();
                 if (!studentId) {
-                    Swal.fire({ icon: 'warning', title: 'Missing Info', text: 'Please enter a Student ID.', confirmButtonColor: '#F6AD55' });
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Missing Info',
+                        text: 'Please enter a Student ID.',
+                        buttonsStyling: false,
+                        background: '#ffffff',
+                        color: '#1a365d',
+                        backdrop: `rgba(10, 25, 47, 0.8)`,
+                        customClass: {
+                            popup: 'modern-popup',
+                            htmlContainer: 'modern-html-container', 
+                            confirmButton: 'modern-btn-common modern-cancel-btn'
+                        }
+                    });
                     return;
                 }
             } else if (role === 'Supervisor') {
@@ -140,11 +202,37 @@
                 const quota = document.getElementById('addQuota').value;
 
                 if (!supId) {
-                    Swal.fire({ icon: 'warning', title: 'Missing Info', text: 'Please enter a Supervisor ID.', confirmButtonColor: '#F6AD55' });
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Missing Info',
+                        text: 'Please enter a Supervisor ID.',
+                        buttonsStyling: false,
+                        background: '#ffffff',
+                        color: '#1a365d',
+                        backdrop: `rgba(10, 25, 47, 0.8)`,
+                        customClass: {
+                            popup: 'modern-popup',
+                            htmlContainer: 'modern-html-container', 
+                            confirmButton: 'modern-btn-common modern-cancel-btn'
+                        }
+                    });
                     return;
                 }
                 if (!quota || parseInt(quota) <= 0) {
-                    Swal.fire({ icon: 'warning', title: 'Invalid Quota', text: 'Project Quota must be greater than zero.', confirmButtonColor: '#F6AD55' });
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Invalid Quota',
+                        text: 'Project Quota must be greater than zero.',
+                        buttonsStyling: false,
+                        background: '#ffffff',
+                        color: '#1a365d',
+                        backdrop: `rgba(10, 25, 47, 0.8)`,
+                        customClass: {
+                            popup: 'modern-popup',
+                            htmlContainer: 'modern-html-container', 
+                            confirmButton: 'modern-btn-common modern-cancel-btn'
+                        }
+                    });
                     return;
                 }
             }
@@ -168,34 +256,13 @@
             }
 
             try {
-                const response = await fetch(targetUrl, {
+                await fetch(targetUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
 
-                const result = await response.json();
-
-                if (result.success) {
-                    modalInstance.hide();
-
-                    Swal.fire({
-                        icon: 'success',
-                        title: isEditMode ? 'Updated!' : 'Created!',
-                        text: result.message,
-                        confirmButtonColor: '#38B2AC',
-                        timer: 2000
-                    }).then(() => {
-                        window.location.reload();
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: result.message,
-                        confirmButtonColor: '#E67474'
-                    });
-                }
+                window.location.reload();
             }
             catch (error) {
                 console.error('Error:', error);
@@ -203,7 +270,15 @@
                     icon: 'error',
                     title: 'System Error',
                     text: 'An error occurred while communicating with the server.',
-                    confirmButtonColor: '#E67474'
+                    buttonsStyling: false,
+                    background: '#ffffff',
+                    color: '#1a365d',
+                    backdrop: `rgba(10, 25, 47, 0.8)`,
+                    customClass: {
+                        popup: 'modern-popup',
+                        htmlContainer: 'modern-html-container', 
+                        confirmButton: 'modern-btn-common modern-cancel-btn'
+                    }
                 });
             }
         })
@@ -217,53 +292,53 @@ document.querySelectorAll('.icon-toggle').forEach(btn => {
         const isActive = this.dataset.isactive === 'true';
 
         const actionText = isActive ? 'Deactivate' : 'Reactivate';
-        const confirmColor = isActive ? '#E67474' : '#38B2AC';
         const iconType = isActive ? 'warning' : 'info';
+
+        const confirmBtnClass = isActive ? 'modern-confirm-btn-danger' : 'modern-confirm-btn';
 
         Swal.fire({
             title: `${actionText} User?`,
             text: `Are you sure you want to ${actionText.toLowerCase()} ${userName}?`,
             icon: iconType,
             showCancelButton: true,
-            confirmButtonColor: confirmColor,
-            cancelButtonColor: '#6c757d',
-            confirmButtonText: `Yes, ${actionText}!`
+            confirmButtonText: `Yes, ${actionText}!`,
+            cancelButtonText: 'Cancel',
+            buttonsStyling: false,
+            background: '#ffffff',
+            color: '#1a365d',
+            backdrop: `rgba(10, 25, 47, 0.8)`,
+            customClass: {
+                popup: 'modern-popup',
+                htmlContainer: 'modern-html-container', 
+                confirmButton: `modern-btn-common ${confirmBtnClass}`,
+                cancelButton: 'modern-btn-common modern-cancel-btn'
+            }
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch('/Admin/ToggleUserStatus', {
+                    await fetch('/Admin/ToggleUserStatus', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ UserId: parseInt(userId) })
                     });
 
-                    const data = await response.json();
+                    window.location.reload();
 
-                    if (data.success) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success!',
-                            text: data.message,
-                            confirmButtonColor: '#38B2AC',
-                            timer: 2000
-                        }).then(() => {
-                            window.location.reload();
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: data.message,
-                            confirmButtonColor: '#E67474'
-                        });
-                    }
                 } catch (error) {
                     console.error('Error', error);
                     Swal.fire({
                         icon: 'error',
                         title: 'Server Error',
                         text: 'Could not connect to the server.',
-                        confirmButtonColor: '#E67474'
+                        buttonsStyling: false,
+                        background: '#ffffff',
+                        color: '#1a365d',
+                        backdrop: `rgba(10, 25, 47, 0.8)`,
+                        customClass: {
+                            popup: 'modern-popup',
+                            htmlContainer: 'modern-html-container', 
+                            confirmButton: 'modern-btn-common modern-cancel-btn'
+                        }
                     });
                 }
             }
