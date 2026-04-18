@@ -8,11 +8,11 @@
     transition: all 0.2s ease;
 }
 
-.btn-add-user:hover {
-    background-color: #12243d;
-    color: white;
-    transform: translateY(-2px);
-}
+    .btn-add-user:hover {
+        background-color: #12243d;
+        color: white;
+        transform: translateY(-2px);
+    }
 
 .directory-card {
     background-color: rgba(8, 28, 51, 0.66);
@@ -20,21 +20,40 @@
     padding: 30px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
+
 .directory-filter {
-    background-color: #1DC3C6;
-    color: #031425;
-    border: none;
-    border-radius: 15px;
+    background-color: #1e293b;
+    color: #ffffff;
+    border: 1px solid rgba(56, 163, 165, 0.4);
+    box-shadow: 0 4px 15px rgba(56, 163, 165, 0.1);
+    border-radius: 12px;
     width: 250px;
-    font-weight: bold;
+    font-weight: 600;
     cursor: pointer;
-    box-shadow: none;
-    transition: background-color 0.2s ease;
+    transition: all 0.3s ease;
+    padding-right: 40px;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 16px 12px;
 }
 
-.directory-filter:hover {
-    background-color: #2c8c87;
-}
+    .directory-filter.dropdown-toggle::after {
+        display: none;
+    }
+
+    .directory-filter:hover {
+        background-color: #2a3b52;
+        border-color: rgba(56, 163, 165, 0.8);
+        box-shadow: 0 4px 15px rgba(56, 163, 165, 0.3);
+    }
+
+    .directory-filter:focus {
+        background-color: #1e293b;
+        color: #ffffff;
+        border-color: #38a3a5;
+        box-shadow: 0 0 0 3px rgba(56, 163, 165, 0.25);
+    }
 
 .directory-table {
     border-collapse: separate;
@@ -45,56 +64,55 @@
     vertical-align: middle;
 }
 
-.directory-table thead tr {
-    background-color: rgba(255, 255, 255, 0.08); 
-}
+    .directory-table thead tr {
+        background-color: rgba(255, 255, 255, 0.08);
+    }
 
-.directory-table thead th {
-    border-bottom: none; 
-    padding: 12px 15px; 
-    color: #FFFFFF; 
-    font-weight: 700;
-    font-size: 0.95rem; 
-}
+    .directory-table thead th {
+        border-bottom: none;
+        padding: 12px 15px;
+        color: #FFFFFF;
+        font-weight: 700;
+        font-size: 0.95rem;
+    }
 
-.directory-table thead th:first-child {
-    border-top-left-radius: 15px;
-    border-bottom-left-radius: 15px;
-}
+        .directory-table thead th:first-child {
+            border-top-left-radius: 15px;
+            border-bottom-left-radius: 15px;
+        }
 
-.directory-table thead th:last-child {
-    border-top-right-radius: 15px;
-    border-bottom-right-radius: 15px;
-}
+        .directory-table thead th:last-child {
+            border-top-right-radius: 15px;
+            border-bottom-right-radius: 15px;
+        }
 
 .directory-row {
     background-color: rgba(217, 217, 217, 0.21);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.directory-row:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
+    .directory-row:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
 
-.directory-row td {
-    padding: 8px 15px;
-    font-size: 0.95rem;
-}
+    .directory-row td {
+        padding: 8px 15px;
+        font-size: 0.95rem;
+    }
 
-        
-.directory-row td:first-child {
-    border-top-left-radius: 12px;
-    border-bottom-left-radius: 12px;
-    font-weight: bold;
-    text-align: left;
-    padding-left: 25px;
-}
+        .directory-row td:first-child {
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
+            font-weight: bold;
+            text-align: left;
+            padding-left: 25px;
+        }
 
-.directory-row td:last-child {
-    border-top-right-radius: 12px;
-    border-bottom-right-radius: 12px;
-}
+        .directory-row td:last-child {
+            border-top-right-radius: 12px;
+            border-bottom-right-radius: 12px;
+        }
 
 .status-badge {
     padding: 6px 25px;
@@ -121,17 +139,36 @@
     transition: transform 0.1s ease;
 }
 
-.action-btn:hover {
-    transform: scale(1.2);
-}
+    .action-btn:hover {
+        transform: scale(1.2);
+    }
 
 .icon-edit {
     color: #38B2AC;
+    transition: color 0.2s ease;
 }
 
-.icon-delete {
-    color: #E53E3E;
+    .icon-edit:hover {
+        color: #2c8c87;
+    }
+
+.icon-deactivate {
+    color: #ef4444;
+    transition: color 0.2s ease;
 }
+
+    .icon-deactivate:hover {
+        color: #dc2626;
+    }
+
+.icon-reactivate {
+    color: #10b981; 
+    transition: color 0.2s ease;
+}
+
+    .icon-reactivate:hover {
+        color: #059669; 
+    }
 
 .d-none {
     display: none !important;
@@ -148,8 +185,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 0 30px; 
-    padding: 25px 0 15px 0; 
+    margin: 0 30px;
+    padding: 25px 0 15px 0;
     border-bottom: 2px solid #E2E8F0;
 }
 
@@ -175,10 +212,10 @@
     height: 48px;
 }
 
-.custom-input-pill:focus {
-    background-color: #CBD5E1 !important;
-    box-shadow: 0 0 0 3px rgba(56, 178, 172, 0.3) !important;
-}
+    .custom-input-pill:focus {
+        background-color: #CBD5E1 !important;
+        box-shadow: 0 0 0 3px rgba(56, 178, 172, 0.3) !important;
+    }
 
 .custom-select-pill {
     font-weight: 700;
@@ -197,16 +234,16 @@
     background-position: right 15px center;
 }
 
-.custom-select-pill option {
-    background-color: #FFFFFF;
-    color: #333;
-    font-weight: 600;
-}
+    .custom-select-pill option {
+        background-color: #FFFFFF;
+        color: #333;
+        font-weight: 600;
+    }
 
 .btn-add-pill {
     background-color: #4A89DC;
     color: #FFFFFF;
-    border-radius: 20px; 
+    border-radius: 20px;
     padding: 12px;
     font-weight: 700;
     font-size: 1.05rem;
@@ -214,16 +251,16 @@
     transition: all 0.2s ease;
 }
 
-.btn-add-pill:hover {
-    background-color: #3572C6;
-    color: #FFFFFF;
-    transform: translateY(-2px);
-}
+    .btn-add-pill:hover {
+        background-color: #3572C6;
+        color: #FFFFFF;
+        transform: translateY(-2px);
+    }
 
 .btn-cancel-pill {
     background-color: #E67474;
     color: #FFFFFF;
-    border-radius: 20px; 
+    border-radius: 20px;
     padding: 12px;
     font-weight: 700;
     font-size: 1.05rem;
@@ -231,8 +268,157 @@
     transition: all 0.2s ease;
 }
 
-.btn-cancel-pill:hover {
-    background-color: #D45B5B;
-    color: #FFFFFF;
-    transform: translateY(-2px);
+    .btn-cancel-pill:hover {
+        background-color: #D45B5B;
+        color: #FFFFFF;
+        transform: translateY(-2px);
+    }
+
+.custom-rounded-menu {
+    background-color: #0b1e33;
+    border: 1px solid rgba(56, 163, 165, 0.4);
+    border-radius: 16px !important;
+    padding: 8px;
+    width: 250px;
+    margin-top: 5px !important;
+}
+
+    .custom-rounded-menu .dropdown-item {
+        color: #ffffff;
+        font-weight: 600;
+        border-radius: 8px;
+        padding: 10px 15px;
+        transition: all 0.2s ease;
+    }
+
+        .custom-rounded-menu .dropdown-item:hover,
+        .custom-rounded-menu .dropdown-item:focus {
+            background-color: #1e293b;
+            color: #38a3a5;
+        }
+
+        .custom-rounded-menu .dropdown-item.active {
+            background-color: rgba(56, 163, 165, 0.2);
+            color: #38a3a5;
+        }
+
+.custom-toast {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    background-color: #ffffff;
+    color: #1a365d;
+    border-left: 6px solid #0b508a;
+    padding: 15px 25px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+    font-size: 1.05rem;
+    animation: slideInRight 0.4s ease-out forwards;
+}
+
+    .custom-toast.error-toast {
+        border-left: 6px solid #ef4444;
+    }
+
+    .custom-toast i {
+        font-size: 1.25rem;
+    }
+
+    .custom-toast.slide-out {
+        animation: slideOutRight 0.4s ease-in forwards !important;
+    }
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(120%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateX(120%);
+        opacity: 0;
+    }
+}
+
+.modern-popup {
+    border-radius: 20px !important;
+    padding: 2rem 2rem 2.5rem 2rem !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+    width: 480px !important;
+    max-width: 90vw !important;
+    overflow-y: hidden !important;
+}
+
+.modern-btn-common {
+    border-radius: 10px !important;
+    padding: 10px 22px !important;
+    font-weight: 700 !important;
+    margin: 8px !important;
+    border: none !important;
+    cursor: pointer !important;
+    font-size: 0.95rem;
+    transition: all 0.2s ease !important;
+}
+
+.modern-confirm-btn {
+    background-color: #38B2AC !important;
+    color: white !important;
+}
+
+    .modern-confirm-btn:hover {
+        background-color: #2c8c87 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(56, 178, 172, 0.3) !important;
+    }
+
+.modern-confirm-btn-danger {
+    background-color: #ef4444 !important;
+    color: white !important;
+}
+
+    .modern-confirm-btn-danger:hover {
+        background-color: #dc2626 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3) !important;
+    }
+
+.modern-cancel-btn {
+    background-color: #f1f5f9 !important;
+    color: #1a365d !important;
+}
+
+    .modern-cancel-btn:hover {
+        background-color: #e2e8f0 !important;
+        transform: translateY(-2px);
+    }
+
+.modern-html-container {
+    overflow: visible !important;
+    margin-top: 20px !important;
+    margin-bottom: 20px !important;
+    font-size: 1.05rem !important;
+    line-height: 1.8 !important;
+    min-height: 50px !important;
+}
+
+.modern-popup .swal2-html-container {
+    overflow: hidden !important;
+    margin-top: 15px !important;
 }

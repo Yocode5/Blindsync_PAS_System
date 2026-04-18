@@ -6,7 +6,9 @@ using Blindsync_PAS_System.Data;
 using Blindsync_PAS_System.Models;
 using Blindsync_PAS_System.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 using System;
 using System.Threading.Tasks;
 using Xunit;
@@ -25,11 +27,19 @@ namespace BlindSync_PAS_System.Tests
             return new AppDbContext(option);
         }
 
+        private ITempDataDictionary GetRealTempData()
+        {
+            return new TempDataDictionary(new DefaultHttpContext(), Mock.Of<ITempDataProvider>());
+        }
+
         [Fact]
         public async Task AddNewUser_ReturnsError_WhenEmailAlreadyExists()
         {
             var context = GetInMemoryDbContext();
-            var controller = new AdminController(context);
+            var controller = new AdminController(context)
+            {
+                TempData = GetRealTempData()
+            };
 
             // Seed the DB with a user 
             context.Users.Add(new User
@@ -49,7 +59,7 @@ namespace BlindSync_PAS_System.Tests
             {
                 FirstName = "Thief",
                 LastName = "Guy",
-                Email = "test@uni.ac.lk", 
+                Email = "test@uni.ac.lk",
                 Role = "Student",
                 Password = "password123",
                 StudentId = "STU999"
@@ -63,14 +73,17 @@ namespace BlindSync_PAS_System.Tests
             var data = JsonDocument.Parse(jsonString).RootElement;
 
             Assert.False(data.GetProperty("success").GetBoolean());
-            Assert.Equal("A user with this email already exists.", data.GetProperty("message").GetString());
+            Assert.Equal("A user with this email already exists.", controller.TempData["ErrorMessage"]);
         }
 
         [Fact]
         public async Task ToggleUserStatus_DeactivatesActiveUser_InsteadOfHardDelete()
         {
             var context = GetInMemoryDbContext();
-            var controller = new AdminController(context);
+            var controller = new AdminController(context)
+            {
+                TempData = GetRealTempData()
+            };
 
             // Create a user who's status is currently active
             var testUser = new User
@@ -96,7 +109,7 @@ namespace BlindSync_PAS_System.Tests
             var data = JsonDocument.Parse(jsonString).RootElement;
 
             Assert.True(data.GetProperty("success").GetBoolean());
-            Assert.Equal("User Had been Deactivated", data.GetProperty("message").GetString());
+            Assert.Equal("User has been Deactivated!", controller.TempData["SuccessMessage"]);
 
             var userInDb = await context.Users.FindAsync(testUser.Id);
             Assert.False(userInDb.IsActive);
@@ -106,7 +119,10 @@ namespace BlindSync_PAS_System.Tests
         public async Task AddNewUser_CreatesSupervisor_WithCorrectQuota()
         {
             var context = GetInMemoryDbContext();
-            var controller = new AdminController(context);
+            var controller = new AdminController(context)
+            {
+                TempData = GetRealTempData()
+            };
 
             // Create a payload specifically for a new supervisor
             var payload = new AddUserDTO
@@ -117,7 +133,7 @@ namespace BlindSync_PAS_System.Tests
                 Role = "Supervisor",
                 Password = "securepassword123",
                 SupervisorId = "SUP007",
-                ProjectQuota = 5 
+                ProjectQuota = 5
             };
 
             var result = await controller.AddNewUser(payload) as JsonResult;
@@ -145,7 +161,10 @@ namespace BlindSync_PAS_System.Tests
         public async Task Overview_ReturnsCorrectViewModel_WithAggregatedData()
         {
             var context = GetInMemoryDbContext();
-            var controller = new AdminController(context);
+            var controller = new AdminController(context)
+            {
+                TempData = GetRealTempData()
+            };
 
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
                 {
@@ -196,7 +215,10 @@ namespace BlindSync_PAS_System.Tests
         public async Task ReassignSupervisor_UpdatesProject_AndChangesStatusToMatched()
         {
             var context = GetInMemoryDbContext();
-            var controller = new AdminController(context);
+            var controller = new AdminController(context)
+            {
+                TempData = GetRealTempData()
+            };
 
             // Seeding a supervisor
             var supUser = new User { Email = "newsup@uni.ac.lk", FirstName = "Doc", LastName = "Brown", Role = "Supervisor", IsActive = true, PasswordHash = "x" };
@@ -221,15 +243,14 @@ namespace BlindSync_PAS_System.Tests
 
             Assert.NotNull(result);
 
-            var jsonString = System.Text.Json.JsonSerializer.Serialize(result.Value);
-            var data = System.Text.Json.JsonDocument.Parse(jsonString).RootElement;
+            var jsonString = JsonSerializer.Serialize(result.Value);
+            var data = JsonDocument.Parse(jsonString).RootElement;
 
             Assert.True(data.GetProperty("success").GetBoolean());
 
             var updatedProject = await context.Projects.FindAsync(project.Id);
 
             Assert.Equal(supervisor.Id, updatedProject.SupervisorId);
-
             Assert.Equal(ProjectStatus.Matched, updatedProject.Status);
         }
     }
