@@ -1,9 +1,8 @@
-﻿function switchTab(tabId) {
+﻿function switchTab(tabId, element) {
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
 
-    event.target.classList.add('active');
-
+    element.classList.add('active');
     document.getElementById('tab-' + tabId).classList.add('active');
 }
 
@@ -18,5 +17,26 @@ function toggleVisibility(inputId, iconElement) {
         passwordInput.type = "password";
         iconElement.classList.remove("fa-eye-slash");
         iconElement.classList.add("fa-eye");
+    }
+}
+
+async function submitProfileForm(event) {
+    event.preventDefault(); 
+    event.stopImmediatePropagation(); 
+
+    const form = event.target;
+    const formData = new FormData(form);
+
+    try {
+        await fetch('/Home/UpdateProfile', {
+            method: 'POST',
+            body: formData
+        });
+
+        window.location.reload();
+
+    } catch (error) {
+        console.error("Profile Update Error: ", error);
+        window.location.reload();
     }
 }

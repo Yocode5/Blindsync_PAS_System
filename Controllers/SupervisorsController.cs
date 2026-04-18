@@ -32,7 +32,7 @@ namespace Blindsync_PAS_System.Controllers
 
             var pendingProjects = await _context.Projects
                 .Include(p => p.Area)
-                .Where(p => p.Status == ProjectStatus.Pending || (p.Status == ProjectStatus.UnderReview && p.SupervisorId == supervisor.Id))
+                .Where(p => p.Status == ProjectStatus.Pending)
                 .ToListAsync();
 
             var allResearchAreas = await _context.ResearchAreas

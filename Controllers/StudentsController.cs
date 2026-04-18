@@ -98,11 +98,13 @@ namespace Blindsync_PAS_System.Controllers
             {
                 if (project.Status != ProjectStatus.Pending)
                 {
-                    TempData["ErrorMessage"] = $"Action Denied: You cannot withdraw a proposal that is currently {project.Status}.";
+                    TempData["ErrorMessage"] = $"Action Denied: You cannot withdraw this proposal because it is already {project.Status}.";
                     return RedirectToAction("Dashboard");
                 }
 
                 project.Status = ProjectStatus.Withdrawn;
+
+                project.SupervisorId = null;
 
                 _context.Projects.Update(project);
                 await _context.SaveChangesAsync();
