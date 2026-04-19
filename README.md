@@ -2,8 +2,7 @@
 
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](#)
 [![.NET Core](https://img.shields.io/badge/.NET%20Core-8.0-blue)](#)
-[![Tests](https://img.shields.io/badge/tests-19%20passed-success)](#)
-[![License](https://img.shields.io/badge/license-MIT-green)](#)
+[![Tests](https://img.shields.io/badge/tests-18%20passed-success)](#)
 
 The **Blind-Match Project Approval System** is a secure, enterprise-grade web application built to facilitate anonymous project proposal matching between university students and academic supervisors. Engineered with a strict focus on data integrity, Role-Based Access Control (RBAC), and automated Quality Assurance.
 
