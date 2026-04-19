@@ -71,14 +71,23 @@
                     <div class="match-divider"></div>
 
                     <div class="match-col-student">
-                        <a href="mailto:@project.Creator.UserAccount.Email?subject=Regarding Project Proposal: @project.Title"
-                           class="btn-chat" title="Email Student">
-                            <i class="fas fa-comment-alt"></i>
-                        </a>
+                        @if (project.Status == Blindsync_PAS_System.Models.ProjectStatus.Matched)
+                        {
+                            <a href="mailto:@project.Creator.UserAccount.Email?subject=Regarding Project Proposal: @project.Title"
+                               class="btn-chat" title="Email Student">
+                                <i class="fas fa-comment-alt"></i>
+                            </a>
 
-                        <p class="student-info"><strong>Student ID:</strong> @project.Creator.StudentId</p>
-                        <p class="student-info"><strong>Student Name:</strong> @project.Creator.UserAccount.FirstName @project.Creator.UserAccount.LastName</p>
-                        <p class="student-info"><strong>Student Email:</strong> @project.Creator.UserAccount.Email</p>
+                            <p class="student-info"><strong>Student ID:</strong> @project.Creator.StudentId</p>
+                            <p class="student-info"><strong>Student Name:</strong> @project.Creator.UserAccount.FirstName @project.Creator.UserAccount.LastName</p>
+                            <p class="student-info"><strong>Student Email:</strong> @project.Creator.UserAccount.Email</p>
+                        }
+                        else
+                        {
+                            <p class="student-info" style="color: #8fa0b3; font-style: italic; margin-bottom: 20px;">
+                                <i class="fas fa-user-secret" style="margin-right: 5px;"></i> Student details hidden during review.
+                            </p>
+                        }
 
                         <div class="match-bottom-actions">
                             <a href="javascript:void(0);" class="link-read-proposal"
