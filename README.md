@@ -56,4 +56,26 @@ This application is protected by a multi-tiered testing suite acting as an autom
 ### Local Setup
 1. **Clone the repository**
    ```bash
-   git clone [https://github.com/your-repo/blind-match-pas.git](https://github.com/your-repo/blind-match-pas.git)
+   git clone https://github.com/Yocode5/Blindsync_PAS_System.git
+
+---
+
+## Default Test Credentials
+
+Use the following credentials to explore the different Role-Based workflows:
+
+**Admin** 
+Email: `admin@uni.ac.lk` 
+Password: `admin123`
+
+**Student** 
+Email: `student@uni.ac.lk` 
+Password: `student123` 
+
+**Supervisor**
+Email: `supervisor@uni.ac.lk` 
+Password: `super123`
+
+**⚠️ Important Note:** Before running the application, you must update the connection string in `appsettings.json` to match your local SQL Server instance so the system can successfully connect to the database.
+
+
