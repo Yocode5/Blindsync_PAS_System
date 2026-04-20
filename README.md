@@ -76,6 +76,6 @@ Password: `student123`
 Email: `supervisor@uni.ac.lk` 
 Password: `super123`
 
-**⚠️ Important Note:** Before running the application, you must update the connection string in `appsettings.json` to match your local SQL Server instance so the system can successfully connect to the database.
+**⚠️ Important Note:** Before running the application, you must update the connection string in `appsettings.Development.json` to match your local SQL Server instance so the system can successfully connect to the database.
 
 
